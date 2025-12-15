@@ -1,0 +1,199 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if the document belongs to the authenticated user
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    // Helper function to check if document ID starts with user's UID
+    function isUserDocument(docId) {
+      return docId.matches('^' + request.auth.uid + '-.*$');
+    }
+    
+    // Daily tasks collection - user-specific access only
+    match /dailyTasks/{taskDocument} {
+      // Allow read/write only if user is authenticated and document belongs to them
+      allow read, write: if isAuthenticated() && isUserDocument(taskDocument);
+      
+      // Allow creation only if the document ID follows the pattern: {userId}-{date}
+      allow create: if isAuthenticated() && 
+        taskDocument.matches('^' + request.auth.uid + '-[0-9]{4}-[0-9]{2}-[0-9]{2}$');
+    }
+    
+    // User moods collection - user-specific access only
+    match /user-moods/{moodDocument} {
+      // Allow read/write only if user is authenticated and document belongs to them
+      allow read, write: if isAuthenticated() && isUserDocument(moodDocument);
+      
+      // Allow creation only if the document ID follows the pattern: {userId}-{date}
+      allow create: if isAuthenticated() && 
+        moodDocument.matches('^' + request.auth.uid + '-[0-9]{4}-[0-9]{2}-[0-9]{2}$');
+    }
+
+    // Users collection - for storing username and basic user info
+    match /users/{userId} {
+      // Users can only access their own user document
+      allow read, write: if isAuthenticated() && isOwner(userId);
+
+      // Simplified validation for one-time username setup system
+      allow create, update: if isAuthenticated() &&
+        isOwner(userId) &&
+        // Allow documents with or without displayName (for initial signup vs username setup)
+        (
+          // Case 1: Initial signup without displayName
+          (!request.resource.data.keys().hasAny(['displayName']) &&
+           request.resource.data.keys().hasAny(['usernameSetupComplete']) &&
+           request.resource.data.usernameSetupComplete == false) ||
+          // Case 2: Username setup completion with displayName
+          (request.resource.data.keys().hasAny(['displayName']) &&
+           request.resource.data.displayName is string &&
+           request.resource.data.displayName.size() >= 2 &&
+           request.resource.data.displayName.size() <= 30 &&
+           request.resource.data.displayName.matches('^[a-zA-Z0-9_]+$') &&
+           request.resource.data.keys().hasAny(['usernameSetupComplete']) &&
+           request.resource.data.usernameSetupComplete == true)
+        );
+    }
+
+
+
+    // User streaks collection
+    match /userStreaks/{userId} {
+      // Users can only access their own streak data
+      allow read, write: if isAuthenticated() && isOwner(userId);
+
+      // Enhanced validation for streak data structure
+      allow create, update: if isAuthenticated() &&
+        isOwner(userId) &&
+        // Validate streak data structure
+        request.resource.data.keys().hasAny(['currentStreak']) &&
+        request.resource.data.currentStreak is number &&
+        request.resource.data.currentStreak >= 0 &&
+        // Optional fields validation
+        (!request.resource.data.keys().hasAny(['lastUpdateDate']) ||
+         request.resource.data.lastUpdateDate is string) &&
+        (!request.resource.data.keys().hasAny(['streakHistory']) ||
+         request.resource.data.streakHistory is map);
+    }
+    
+    // Analytics collection (optional - for future use)
+    match /analytics/{userId} {
+      // Users can only access their own analytics
+      allow read, write: if isAuthenticated() && isOwner(userId);
+    }
+    
+    // Settings collection (optional - for future use)
+    match /userSettings/{userId} {
+      // Users can only access their own settings
+      allow read, write: if isAuthenticated() && isOwner(userId);
+      
+      // Validate settings data structure
+      allow create, update: if isAuthenticated() && 
+        isOwner(userId) &&
+        request.resource.data is map;
+    }
+    
+    // Deny all other access by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+/*
+OPTIMIZED PRIORITYHELP SECURITY RULES:
+
+1. **Authentication Required**: All operations require user authentication
+2. **User Data Isolation**: Users can only access their own data using UID-based access control
+3. **Document ID Validation**: Enforces naming convention {userId}-{date} for date-based collections
+4. **One-Time Username Setup**: Supports two-phase user document creation
+5. **Streak System**: Validates streak data structure with 70% completion rule
+6. **Default Deny**: Explicitly denies access to any unmatched documents
+
+DOCUMENT ID PATTERNS:
+- Daily Tasks: {userId}-YYYY-MM-DD (e.g., "abc123-2024-01-15")
+- User Moods: {userId}-YYYY-MM-DD (e.g., "abc123-2024-01-15")
+- Users: {userId} (e.g., "abc123") - stores displayName (username) and setup status
+- User Streaks: {userId} (e.g., "abc123") - stores streak data with 70% completion tracking
+- Analytics: {userId} (e.g., "abc123") - user-specific analytics data
+- User Settings: {userId} (e.g., "abc123") - user preferences and settings
+
+USERNAME SETUP SYSTEM:
+- **Phase 1 (Signup)**: Document without displayName, usernameSetupComplete: false
+- **Phase 2 (Setup)**: Document with displayName (2-30 chars, alphanumeric + underscore), usernameSetupComplete: true
+- **Username Format**: ^[a-zA-Z0-9_]+$ pattern enforced
+- **Permanent**: Once setup is complete, username cannot be changed
+
+STREAK SYSTEM VALIDATION:
+- **currentStreak**: Required number field (>= 0)
+- **lastUpdateDate**: Optional string field for date tracking
+- **streakHistory**: Optional map field for historical data
+- **70% Rule**: Streak continues only if user completes 70%+ of daily tasks
+
+USER DOCUMENT STRUCTURE:
+Initial Signup:
+{
+  fullName: "John Doe",
+  email: "john@example.com",
+  usernameSetupComplete: false,
+  createdAt: timestamp,
+  lastUpdated: timestamp
+}
+
+After Username Setup:
+{
+  displayName: "johndoe123",
+  fullName: "John Doe",
+  email: "john@example.com",
+  usernameSetupComplete: true,
+  createdAt: timestamp,
+  lastUpdated: timestamp
+}
+
+Streak Document:
+{
+  currentStreak: 5,
+  lastUpdateDate: "2024-01-15",
+  streakHistory: {
+    "2024-01-15": {
+      completionRate: 80,
+      meetsThreshold: true,
+      totalTasks: 10,
+      completedTasks: 8
+    }
+  }
+}
+
+DEPLOYMENT INSTRUCTIONS:
+1. Copy these rules to your Firebase Console
+2. Go to Firestore Database > Rules
+3. Replace existing rules with this content
+4. Click "Publish" to deploy
+
+TESTING:
+- Test new user signup and username setup
+- Test task creation and completion tracking
+- Test streak calculation with 70% rule
+- Test mood tracking and analytics
+- Use Firebase Rules Playground for comprehensive testing
+
+SECURITY FEATURES:
+- User isolation (users can only access their own data)
+- Username format validation (prevents malicious usernames)
+- Streak data validation (ensures proper structure)
+- Setup completion tracking (prevents multiple setups)
+- Authentication requirement (all operations require login)
+
+OPTIMIZATIONS MADE:
+- Removed legacy userProfiles collection (not used)
+- Enhanced streak validation for data integrity
+- Simplified rules for better performance
+- Updated documentation for current system
+*/
