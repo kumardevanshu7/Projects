@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevMoodMirror ✨ - Sign In</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>"
+    />
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Modern CSS Reset */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #2d3748;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        overflow-x: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      /* Floating Blurry Emojis Background */
+      .emoji-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .floating-emoji {
+        position: absolute;
+        font-size: 4rem;
+        opacity: 0.1;
+        filter: blur(2px);
+        animation: floatEmoji 15s linear infinite;
+        user-select: none;
+      }
+
+      @keyframes floatEmoji {
+        0% {
+          transform: translateY(100vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.1;
+        }
+        90% {
+          opacity: 0.1;
+        }
+        100% {
+          transform: translateY(-100px) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      /* Auth Container */
+      .auth-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        width: 100%;
+        max-width: 450px;
+        position: relative;
+      }
+
+      .auth-header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .auth-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .auth-header p {
+        color: #64748b;
+        font-size: 1rem;
+      }
+
+      /* Form Styles */
+      .auth-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .form-label {
+        font-weight: 600;
+        color: #374151;
+        font-size: 0.9rem;
+      }
+
+      .form-input {
+        padding: 1rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.8);
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        background: white;
+      }
+
+      .form-input.error {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+      }
+
+      .error-message {
+        color: #ef4444;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+      }
+
+      /* Button Styles */
+      .btn {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+        display: inline-block;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+      }
+
+      .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #667eea;
+        border: 2px solid #667eea;
+      }
+
+      .btn-secondary:hover {
+        background: #667eea;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      /* Toggle between Login/Signup */
+      .auth-toggle {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .auth-toggle p {
+        color: #64748b;
+        margin-bottom: 1rem;
+      }
+
+      .auth-toggle button {
+        background: none;
+        border: none;
+        color: #667eea;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: underline;
+        font-size: 1rem;
+      }
+
+      .auth-toggle button:hover {
+        color: #5a67d8;
+      }
+
+      /* Back to Landing */
+      .back-link {
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50px;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+      }
+
+      .back-link:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(-5px);
+      }
+
+      /* Loading State */
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-height: 100vh;
+        }
+
+        .auth-container {
+          padding: 2rem;
+          margin: 1rem auto;
+          width: 100%;
+          max-width: 400px;
+        }
+
+        .auth-header h1 {
+          font-size: 2rem;
+        }
+
+        .back-link {
+          position: absolute;
+          top: 1rem;
+          left: 1rem;
+          margin-bottom: 0;
+        }
+      }
+
+      @media (max-width: 480px) {
+        body {
+          padding: 0.5rem;
+        }
+
+        .auth-container {
+          padding: 1.5rem;
+          margin: 0.5rem auto;
+          max-width: 350px;
+        }
+
+        .floating-emoji {
+          font-size: 3rem;
+        }
+
+        .back-link {
+          top: 0.5rem;
+          left: 0.5rem;
+          font-size: 0.9rem;
+          padding: 0.4rem 0.8rem;
+        }
+      }
+
+      /* Hidden class for form switching */
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Floating Blurry Emojis Background -->
+    <div class="emoji-background" id="emojiBackground"></div>
+
+    <!-- Back to Landing -->
+    <a href="landingpage.html" class="back-link">
+      <span><i class="fas fa-arrow-left"></i></span>
+      Back to Home
+    </a>
+
+    <!-- Auth Container -->
+    <div class="auth-container">
+      <!-- Login Form -->
+      <div id="loginForm" class="auth-form-container">
+        <div class="auth-header">
+          <h1>
+            <span><i class="fas fa-sparkles"></i></span>Welcome Back
+          </h1>
+          <p>Sign in to continue your mood tracking journey</p>
+        </div>
+
+        <form class="auth-form" id="loginFormElement">
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">Email</label>
+            <input
+              type="email"
+              id="loginEmail"
+              class="form-input"
+              placeholder="Enter your email"
+              required
+            />
+            <div class="error-message" id="loginEmailError"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">Password</label>
+            <input
+              type="password"
+              id="loginPassword"
+              class="form-input"
+              placeholder="Enter your password"
+              required
+            />
+            <div class="error-message" id="loginPasswordError"></div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="loginButton">
+            <span id="loginButtonText"
+              ><i class="fas fa-sign-in-alt"></i> Sign In</span
+            >
+            <div class="loading hidden" id="loginLoading"></div>
+          </button>
+        </form>
+
+        <div class="auth-toggle">
+          <p>Don't have an account?</p>
+          <button type="button" id="showSignup">Create an account</button>
+        </div>
+      </div>
+
+      <!-- Signup Form -->
+      <div id="signupForm" class="auth-form-container hidden">
+        <div class="auth-header">
+          <h1>
+            <span><i class="fas fa-sparkles"></i></span>Join DevMoodMirror
+          </h1>
+          <p>Create your account to start tracking your emotions</p>
+        </div>
+
+        <form class="auth-form" id="signupFormElement">
+          <div class="form-group">
+            <label class="form-label" for="signupName">Full Name</label>
+            <input
+              type="text"
+              id="signupName"
+              class="form-input"
+              placeholder="Enter your full name"
+              required
+            />
+            <div class="error-message" id="signupNameError"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signupEmail">Email</label>
+            <input
+              type="email"
+              id="signupEmail"
+              class="form-input"
+              placeholder="Enter your email"
+              required
+            />
+            <div class="error-message" id="signupEmailError"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signupPassword">Password</label>
+            <input
+              type="password"
+              id="signupPassword"
+              class="form-input"
+              placeholder="Create a password (min 6 characters)"
+              required
+              minlength="6"
+            />
+            <div class="error-message" id="signupPasswordError"></div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="signupButton">
+            <span id="signupButtonText"
+              ><i class="fas fa-user-plus"></i> Create Account</span
+            >
+            <div class="loading hidden" id="signupLoading"></div>
+          </button>
+        </form>
+
+        <div class="auth-toggle">
+          <p>Already have an account?</p>
+          <button type="button" id="showLogin">Sign in instead</button>
+        </div>
+      </div>
+    </div>
+    <!-- Firebase SDK -->
+    <script type="module">
+      // Import Firebase functions
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        updateProfile,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+        serverTimestamp,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyA7Y7M-HQjnWmwTSlgSKxEPCctuUsGvqJI",
+        authDomain: "mood-tracker-bccff.firebaseapp.com",
+        databaseURL: "https://mood-tracker-bccff-default-rtdb.firebaseio.com",
+        projectId: "mood-tracker-bccff",
+        storageBucket: "mood-tracker-bccff.firebasestorage.app",
+        messagingSenderId: "235334198263",
+        appId: "1:235334198263:web:2adbceb86a9577c46b84f2",
+        measurementId: "G-D9LRH4MS7R",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // DOM Elements
+      const loginForm = document.getElementById("loginForm");
+      const signupForm = document.getElementById("signupForm");
+      const showSignupBtn = document.getElementById("showSignup");
+      const showLoginBtn = document.getElementById("showLogin");
+      const loginFormElement = document.getElementById("loginFormElement");
+      const signupFormElement = document.getElementById("signupFormElement");
+
+      // Check URL hash for signup
+      if (window.location.hash === "#signup") {
+        showSignupForm();
+      }
+
+      // Form switching
+      showSignupBtn.addEventListener("click", showSignupForm);
+      showLoginBtn.addEventListener("click", showLoginForm);
+
+      function showSignupForm() {
+        loginForm.classList.add("hidden");
+        signupForm.classList.remove("hidden");
+        window.history.replaceState(null, null, "#signup");
+      }
+
+      function showLoginForm() {
+        signupForm.classList.add("hidden");
+        loginForm.classList.remove("hidden");
+        window.history.replaceState(null, null, "#");
+      }
+
+      // Auth state observer
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, redirect to main app
+          window.location.href = "index.html";
+        }
+      });
+
+      // Login form submission
+      loginFormElement.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+        const loginButton = document.getElementById("loginButton");
+        const loginButtonText = document.getElementById("loginButtonText");
+        const loginLoading = document.getElementById("loginLoading");
+
+        // Clear previous errors
+        clearErrors("login");
+
+        // Show loading state
+        loginButton.disabled = true;
+        loginButtonText.classList.add("hidden");
+        loginLoading.classList.remove("hidden");
+
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+          // Redirect will happen automatically via onAuthStateChanged
+        } catch (error) {
+          console.error("Login error:", error);
+          showError("login", getErrorMessage(error.code));
+        } finally {
+          // Reset button state
+          loginButton.disabled = false;
+          loginButtonText.classList.remove("hidden");
+          loginLoading.classList.add("hidden");
+        }
+      });
+
+      // Signup form submission
+      signupFormElement.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById("signupName").value;
+        const email = document.getElementById("signupEmail").value;
+        const password = document.getElementById("signupPassword").value;
+        const signupButton = document.getElementById("signupButton");
+        const signupButtonText = document.getElementById("signupButtonText");
+        const signupLoading = document.getElementById("signupLoading");
+
+        // Clear previous errors
+        clearErrors("signup");
+
+        // Show loading state
+        signupButton.disabled = true;
+        signupButtonText.classList.add("hidden");
+        signupLoading.classList.remove("hidden");
+
+        try {
+          // Create user account
+          const userCredential = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+          const user = userCredential.user;
+
+          // Update user profile with display name
+          await updateProfile(user, {
+            displayName: name,
+          });
+
+          // Create user document in Firestore
+          await setDoc(doc(db, "users", user.uid), {
+            uid: user.uid,
+            email: user.email,
+            displayName: name,
+            createdAt: serverTimestamp(),
+            currentStreak: 0,
+            highestStreak: 0,
+            totalMoodEntries: 0,
+            lastMoodDate: null,
+          });
+
+          // Redirect will happen automatically via onAuthStateChanged
+        } catch (error) {
+          console.error("Signup error:", error);
+          showError("signup", getErrorMessage(error.code));
+        } finally {
+          // Reset button state
+          signupButton.disabled = false;
+          signupButtonText.classList.remove("hidden");
+          signupLoading.classList.add("hidden");
+        }
+      });
+
+      // Helper functions
+      function clearErrors(formType) {
+        const errorElements = document.querySelectorAll(
+          `#${formType}Form .error-message`
+        );
+        const inputElements = document.querySelectorAll(
+          `#${formType}Form .form-input`
+        );
+
+        errorElements.forEach((el) => (el.textContent = ""));
+        inputElements.forEach((el) => el.classList.remove("error"));
+      }
+
+      function showError(formType, message) {
+        // Show general error - you can customize this to show field-specific errors
+        const errorElement = document.querySelector(
+          `#${formType}Form .error-message`
+        );
+        if (errorElement) {
+          errorElement.textContent = message;
+          errorElement.previousElementSibling.classList.add("error");
+        }
+      }
+
+      function getErrorMessage(errorCode) {
+        switch (errorCode) {
+          case "auth/user-not-found":
+            return "No account found with this email address.";
+          case "auth/wrong-password":
+            return "Incorrect password. Please try again.";
+          case "auth/email-already-in-use":
+            return "An account with this email already exists.";
+          case "auth/weak-password":
+            return "Password should be at least 6 characters long.";
+          case "auth/invalid-email":
+            return "Please enter a valid email address.";
+          case "auth/too-many-requests":
+            return "Too many failed attempts. Please try again later.";
+          default:
+            return "An error occurred. Please try again.";
+        }
+      }
+    </script>
+
+    <script>
+      // Create floating blurry emojis
+      function createFloatingEmojis() {
+        const background = document.getElementById("emojiBackground");
+        const emojis = [
+          "😊",
+          "😢",
+          "😡",
+          "😴",
+          "🤔",
+          "😍",
+          "😎",
+          "🥳",
+          "😌",
+          "🤗",
+          "😅",
+          "😇",
+          "🥺",
+          "😋",
+          "🤩",
+          "😭",
+          "🥰",
+          "🤯",
+          "😤",
+          "🥱",
+        ];
+
+        function createEmoji() {
+          const emoji = document.createElement("div");
+          emoji.className = "floating-emoji";
+          emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          emoji.style.left = Math.random() * 100 + "%";
+          emoji.style.animationDuration = Math.random() * 10 + 10 + "s";
+          emoji.style.animationDelay = Math.random() * 5 + "s";
+          background.appendChild(emoji);
+
+          // Remove emoji after animation completes
+          setTimeout(() => {
+            if (emoji.parentNode) {
+              emoji.parentNode.removeChild(emoji);
+            }
+          }, 20000);
+        }
+
+        // Create initial emojis
+        for (let i = 0; i < 20; i++) {
+          setTimeout(createEmoji, i * 500);
+        }
+
+        // Continue creating emojis
+        setInterval(createEmoji, 1000);
+      }
+
+      // Initialize floating emojis when page loads
+      document.addEventListener("DOMContentLoaded", createFloatingEmojis);
+    </script>
+  </body>
+</html>
