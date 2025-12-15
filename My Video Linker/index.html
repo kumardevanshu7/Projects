@@ -1,0 +1,3930 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouTube Link Saver</title>
+    <link rel="shortcut icon" href="assets/yt-logo.png" type="image/x-icon" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+    <style>
+      :root {
+        --primary-bg-light: #f3f9f3;
+        --accent-green-light-theme: #a3d9a5;
+        --accent-green-medium-light-theme: #77c179;
+        --accent-green-dark-light-theme: #4caf50;
+        --card-bg-light: #ffffff;
+        --text-main-light: #34495e;
+        --text-light-theme: #5f8575;
+        --border-color-light: #dce8dc;
+
+        --primary-bg-dark: #2c3e50;
+        --accent-green-light-theme-dark: #5f8575;
+        --accent-green-medium-dark-theme: #6b9c6d;
+        --accent-green-dark-dark-theme: #8fbc8f;
+        --card-bg-dark: #34495e;
+        --text-main-dark: #ecf0f1;
+        --text-light-theme-dark: #bdc3c7;
+        --border-color-dark: #4a637b;
+
+        --primary-bg: var(--primary-bg-light);
+        --accent-green-light: var(--accent-green-light-theme);
+        --accent-green-medium: var(--accent-green-medium-light-theme);
+        --accent-green-dark: var(--accent-green-dark-light-theme);
+        --card-bg: var(--card-bg-light);
+        --text-main: var(--text-main-light);
+        --text-light: var(--text-light-theme);
+        --border-color: var(--border-color-light);
+
+        --button-dark-bg: #2c3e50;
+        --button-dark-text: #ffffff;
+        --border-radius-soft: 16px;
+        --border-radius-large: 24px;
+        --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.07);
+        --shadow-medium: 0 8px 24px rgba(0, 0, 0, 0.1);
+        --font-family-main: "Poppins", sans-serif;
+        --font-family-site-saver: "Caveat", cursive;
+      }
+
+      body.dark-mode {
+        --primary-bg: var(--primary-bg-dark);
+        --accent-green-light: var(--accent-green-light-theme-dark);
+        --accent-green-medium: var(--accent-green-medium-dark-theme);
+        --accent-green-dark: var(--accent-green-dark-dark-theme);
+        --card-bg: var(--card-bg-dark);
+        --text-main: var(--text-main-dark);
+        --text-light: var(--text-light-theme-dark);
+        --border-color: var(--border-color-dark);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: var(--font-family-main);
+        background-color: var(--primary-bg);
+        color: var(--text-main);
+        line-height: 1.6;
+        overflow-x: hidden !important;
+        transition: background-color 0.3s, color 0.3s;
+        position: relative;
+      }
+      body::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+      }
+      .particle {
+        position: absolute;
+        background-color: var(--accent-green-light);
+        border-radius: 50%;
+        opacity: 0.6;
+        animation: float 20s infinite linear;
+      }
+      @keyframes float {
+        0% {
+          transform: translateY(0px) translateX(0px);
+        }
+        25% {
+          transform: translateY(-20px) translateX(10px);
+        }
+        50% {
+          transform: translateY(0px) translateX(-10px);
+        }
+        75% {
+          transform: translateY(20px) translateX(5px);
+        }
+        100% {
+          transform: translateY(0px) translateX(0px);
+        }
+      }
+
+      html {
+        overflow-x: hidden !important;
+        scroll-behavior: smooth;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 0 20px 0;
+      }
+      .navbar-wrapper {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: var(--card-bg);
+        box-shadow: var(--shadow-soft);
+        transition: background-color 0.3s;
+      }
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 2%;
+      }
+
+      .navbar-logo-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
+      .navbar-logo-img {
+        height: 35px;
+        width: auto;
+        margin-right: 8px;
+        animation: logoWobble 3s infinite ease-in-out;
+      }
+      @keyframes logoWobble {
+        0%,
+        100% {
+          transform: rotate(0deg) scale(1);
+        }
+        25% {
+          transform: rotate(-3deg) scale(1.05);
+        }
+        75% {
+          transform: rotate(3deg) scale(1.05);
+        }
+      }
+      .navbar-logo-text {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--accent-green-dark);
+      }
+      .navbar-logo-text span {
+        color: var(--text-main);
+        transition: color 0.3s;
+      }
+
+      .navbar-nav {
+        list-style: none;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+        flex-grow: 1;
+        justify-content: center;
+      }
+      .navbar-nav a.nav-link-item {
+        text-decoration: none;
+        color: var(--text-main);
+        font-weight: 500;
+        transition: color 0.3s ease, border-color 0.3s ease,
+          background-color 0.3s ease;
+        padding: 0.5rem 0.25rem;
+        white-space: nowrap;
+        font-size: 0.9rem;
+        border-bottom: 2px solid transparent;
+      }
+      .navbar-nav.desktop-nav a.nav-link-item:hover,
+      .navbar-nav.desktop-nav a.nav-link-item.active {
+        color: var(--accent-green-dark);
+        border-bottom-color: var(--accent-green-dark);
+      }
+
+      .navbar-actions-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-left: auto;
+        position: relative;
+      }
+      .navbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .navbar-actions .btn {
+        background-color: var(--button-dark-bg);
+        color: var(--button-dark-text);
+        padding: 0.6rem 1rem;
+        border-radius: var(--border-radius-soft);
+        text-decoration: none;
+        font-weight: 500;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: var(--shadow-soft);
+        font-size: 0.85rem;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        white-space: nowrap;
+      }
+      .navbar-actions .btn .btn-text {
+        display: inline;
+      }
+      .navbar-actions .btn:hover {
+        background-color: #3e5770;
+        transform: translateY(-2px);
+      }
+      body.dark-mode .navbar-actions .btn {
+        background-color: var(--accent-green-medium);
+        color: var(--primary-bg-dark);
+      }
+      body.dark-mode .navbar-actions .btn:hover {
+        background-color: var(--accent-green-dark);
+      }
+
+      .profile-section {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-left: 0.75rem;
+      }
+      .profile-info-icon,
+      .profile-info-img,
+      .logout-icon-btn,
+      .theme-toggle-btn {
+        font-size: 1.3rem;
+        color: var(--button-dark-bg);
+        background: none;
+        border: none;
+        padding: 0.4rem;
+        cursor: pointer;
+        transition: color 0.3s ease, background-color 0.2s ease, opacity 0.3s;
+        border-radius: 50%;
+      }
+      .profile-info-img {
+        width: 30px;
+        height: 30px;
+        object-fit: cover;
+        padding: 0;
+        border: 1px solid var(--border-color); /* Thin blackish border */
+      }
+      body.dark-mode .profile-info-img {
+        border-color: var(--border-color-dark);
+      }
+
+      body.dark-mode .profile-info-icon,
+      body.dark-mode .profile-info-img,
+      body.dark-mode .logout-icon-btn,
+      body.dark-mode .theme-toggle-btn {
+        color: var(--text-main-dark);
+      }
+      .profile-info-icon:hover,
+      .profile-info-img:hover,
+      .logout-icon-btn:hover,
+      .theme-toggle-btn:hover {
+        color: var(--accent-green-dark);
+        background-color: var(--primary-bg);
+      }
+      body.dark-mode .profile-info-icon:hover,
+      body.dark-mode .profile-info-img:hover,
+      body.dark-mode .logout-icon-btn:hover,
+      body.dark-mode .theme-toggle-btn:hover {
+        color: var(--accent-green-dark-dark-theme);
+        background-color: var(--text-main-light);
+      }
+      .profile-info-text {
+        font-size: 0.8rem;
+        color: var(--text-light);
+        margin-right: 0.25rem;
+        display: none;
+        white-space: nowrap;
+      }
+      .profile-popup {
+        display: none;
+        position: absolute;
+        top: calc(100% + 5px);
+        right: 0;
+        background-color: var(--card-bg);
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-soft);
+        padding: 1rem;
+        box-shadow: var(--shadow-medium);
+        z-index: 1010;
+        min-width: 200px;
+        text-align: left;
+      }
+      .profile-popup.active {
+        display: block;
+      }
+      .profile-popup p {
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+      }
+      .profile-popup p:last-child {
+        margin-bottom: 0;
+      }
+      .profile-popup strong {
+        color: var(--accent-green-dark);
+      }
+
+      .mobile-nav-chips-container {
+        display: none;
+        padding: 0.75rem 2% 0.5rem 2%;
+        background-color: var(--card-bg);
+        border-top: 1px solid var(--border-color);
+        margin-bottom: 1.5rem;
+        transition: background-color 0.3s, border-color 0.3s;
+      }
+      .mobile-nav-chips-container .navbar-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.6rem 0.8rem;
+      }
+      .mobile-nav-chips-container .navbar-nav a.nav-link-item {
+        background-color: var(--primary-bg);
+        color: var(--text-main);
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        border: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+      }
+      .mobile-nav-chips-container .navbar-nav a.nav-link-item.active,
+      .mobile-nav-chips-container .navbar-nav a.nav-link-item:hover {
+        background-color: var(--accent-green-medium);
+        color: white;
+        border-color: var(--accent-green-medium);
+      }
+
+      .page-section {
+        padding: 1rem 0;
+      }
+      .main-content-layout {
+        display: flex;
+        gap: 2rem;
+        padding: 0 5%;
+      }
+      .hero-section-wrapper {
+        flex: 2;
+        min-width: 0;
+      }
+      .sidebar-wrapper {
+        flex: 1;
+        min-width: 0;
+      }
+      .hero-section {
+        padding: 1rem 0 1.5rem 0;
+        text-align: left;
+      }
+      .hero-heading {
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+        color: var(--text-main);
+      }
+      .hero-heading .highlight {
+        color: var(--accent-green-dark);
+        font-weight: 800;
+      }
+      .hero-subtext {
+        font-size: 1.1rem;
+        color: var(--text-light);
+        margin-bottom: 1.5rem;
+        max-width: 600px;
+      }
+      .hero-section .btn-hero {
+        background-color: var(--accent-green-medium);
+        color: white;
+        padding: 0.8rem 1.8rem;
+        border-radius: var(--border-radius-soft);
+        text-decoration: none;
+        font-size: 1.1rem;
+        font-weight: 600;
+        box-shadow: var(--shadow-medium);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        border: none;
+        cursor: pointer;
+        margin-bottom: 1.5rem;
+      }
+      .hero-section .btn-hero:hover {
+        background-color: var(--accent-green-dark);
+        transform: translateY(-3px);
+      }
+      .hero-illustration {
+        margin-top: 2rem;
+        text-align: center;
+        height: 10px;
+      }
+
+      .btn-hero-sitesaver {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: linear-gradient(
+          135deg,
+          var(--accent-green-light),
+          var(--accent-green-medium)
+        );
+        color: var(--text-main);
+        padding: 0.7rem 1.5rem;
+        border-radius: var(--border-radius-soft);
+        text-decoration: none;
+        font-size: 1.1rem;
+        font-weight: 600;
+        font-family: var(--font-family-main);
+        box-shadow: var(--shadow-soft);
+        transition: all 0.3s ease;
+        border: 1px solid var(--accent-green-dark);
+        cursor: pointer;
+        margin-top: 0.5rem;
+        width: auto;
+      }
+      .btn-hero-sitesaver #siteSaverAnimatedText {
+        font-family: var(--font-family-site-saver);
+        font-weight: 700;
+        font-size: 1.15em;
+        color: var(--accent-green-dark);
+        transition: color 0.3s ease;
+      }
+      .btn-hero-sitesaver:hover {
+        background: linear-gradient(
+          135deg,
+          var(--accent-green-medium),
+          var(--accent-green-dark)
+        );
+        color: white;
+        border-color: var(--accent-green-dark);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: var(--shadow-medium);
+      }
+      .btn-hero-sitesaver:hover #siteSaverAnimatedText {
+        color: white;
+      }
+      .btn-hero-sitesaver i.fa-leaf {
+        font-size: 1.1em;
+        color: var(--accent-green-dark);
+        transition: color 0.3s ease;
+      }
+      .btn-hero-sitesaver:hover i.fa-leaf {
+        color: white;
+      }
+
+      body.dark-mode .btn-hero-sitesaver {
+        background: linear-gradient(
+          135deg,
+          var(--accent-green-light-theme-dark),
+          var(--accent-green-medium-dark-theme)
+        );
+        color: var(--text-main-dark);
+        border-color: var(--accent-green-dark-dark-theme);
+      }
+      body.dark-mode .btn-hero-sitesaver #siteSaverAnimatedText {
+        color: var(--accent-green-dark-dark-theme);
+      }
+      body.dark-mode .btn-hero-sitesaver i.fa-leaf {
+        color: var(--accent-green-dark-dark-theme);
+      }
+      body.dark-mode .btn-hero-sitesaver:hover {
+        background: linear-gradient(
+          135deg,
+          var(--accent-green-medium-dark-theme),
+          var(--accent-green-dark-dark-theme)
+        );
+        color: var(--primary-bg-dark);
+      }
+      body.dark-mode .btn-hero-sitesaver:hover #siteSaverAnimatedText,
+      body.dark-mode .btn-hero-sitesaver:hover i.fa-leaf {
+        color: var(--primary-bg-dark);
+      }
+
+      .sidebar-best-of-week {
+        padding: 1.5rem;
+        background-color: var(--card-bg);
+        border-radius: var(--border-radius-large);
+        box-shadow: var(--shadow-soft);
+        height: fit-content;
+        transition: background-color 0.3s, box-shadow 0.3s;
+      }
+      .sidebar-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+      .sidebar-tagline {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        margin-bottom: 1.5rem;
+      }
+      .sidebar-tagline i {
+        color: var(--accent-green-dark);
+      }
+      .best-of-week-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        max-height: 450px;
+        overflow-y: auto;
+        padding-right: 5px;
+      }
+      .best-of-week-list::-webkit-scrollbar {
+        width: 6px;
+      }
+      .best-of-week-list::-webkit-scrollbar-track {
+        background: var(--primary-bg);
+        border-radius: 10px;
+      }
+      .best-of-week-list::-webkit-scrollbar-thumb {
+        background: var(--accent-green-light);
+        border-radius: 10px;
+      }
+      .best-of-week-list::-webkit-scrollbar-thumb:hover {
+        background: var(--accent-green-medium);
+      }
+      .sidebar-list-video-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem;
+        background-color: var(--primary-bg);
+        border-radius: var(--border-radius-soft);
+        box-shadow: var(--shadow-soft);
+        transition: transform 0.3s ease, box-shadow 0.3s ease,
+          background-color 0.3s;
+        cursor: pointer;
+      }
+      .sidebar-list-video-item:hover {
+        transform: translateX(3px);
+        box-shadow: var(--shadow-medium);
+      }
+      .sidebar-list-video-item-thumbnail {
+        width: 80px;
+        height: 45px;
+        object-fit: cover;
+        border-radius: calc(var(--border-radius-soft) - 8px);
+        flex-shrink: 0;
+      }
+      .sidebar-list-video-item-info {
+        flex-grow: 1;
+        min-width: 0;
+      }
+      .sidebar-list-video-item-title {
+        font-weight: 600;
+        font-size: 0.9rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 0.2rem;
+      }
+      .sidebar-list-video-item-creator {
+        font-size: 0.75rem;
+        color: var(--text-light);
+      }
+      .sidebar-list-video-item-added-by {
+        font-size: 0.7rem;
+        color: var(--accent-green-medium);
+        margin-top: 2px;
+      }
+
+      .tags-carousel-section {
+        padding: 2rem 5%;
+      }
+      .tags-carousel-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+      .tags-carousel-title i {
+        color: var(--accent-green-dark);
+      }
+      .tags-carousel {
+        display: flex;
+        gap: 0.75rem;
+        overflow-x: auto;
+        padding-block: 0.75rem;
+        margin-bottom: 1rem;
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+      }
+      .tags-carousel::-webkit-scrollbar {
+        display: none;
+      }
+      .tags-carousel {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .tag-chip {
+        background-color: var(--card-bg);
+        color: var(--accent-green-dark);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-soft);
+        border: 1px solid var(--border-color);
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .tag-chip.user-tag {
+        background-color: var(--accent-green-light);
+        color: var(--text-main);
+        border-color: var(--accent-green-medium);
+      }
+      .tag-chip:hover,
+      .tag-chip.active {
+        background-color: var(--accent-green-medium);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-medium);
+      }
+      .tag-chip.user-tag.active {
+        background-color: var(--accent-green-dark);
+        color: white;
+      }
+      .autocomplete-suggestions {
+        border: 1px solid var(--border-color);
+        border-top: none;
+        max-height: 150px;
+        overflow-y: auto;
+        position: absolute;
+        background-color: var(--card-bg);
+        z-index: 999;
+        width: calc(100% - 2px);
+        box-shadow: var(--shadow-soft);
+        border-radius: 0 0 var(--border-radius-soft) var(--border-radius-soft);
+      }
+      .autocomplete-suggestion {
+        padding: 0.5rem 0.75rem;
+        cursor: pointer;
+      }
+      .autocomplete-suggestion:hover,
+      .autocomplete-suggestion.active {
+        background-color: var(--primary-bg);
+      }
+
+      .video-grid-section {
+        padding: 1rem 5%;
+      }
+      .video-grid-title-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        position: relative;
+      }
+      .video-grid-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        text-align: center;
+        flex-grow: 1;
+      }
+      .video-grid-title i {
+        color: var(--accent-green-dark);
+      }
+
+      .column-toggle-btn {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-light);
+        padding: 0.4rem 0.6rem;
+        border-radius: var(--border-radius-soft);
+        cursor: pointer;
+        font-size: 1rem;
+        margin-left: 1rem;
+        box-shadow: var(--shadow-soft);
+        transition: all 0.2s ease;
+      }
+      .column-toggle-btn:hover {
+        background-color: var(--primary-bg);
+        color: var(--accent-green-dark);
+        box-shadow: var(--shadow-medium);
+      }
+      .column-options {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-soft);
+        box-shadow: var(--shadow-medium);
+        z-index: 10;
+        overflow: hidden;
+      }
+      .column-options.active {
+        display: block;
+      }
+      .column-options button {
+        display: block;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: none;
+        border: none;
+        color: var(--text-main);
+        text-align: left;
+        cursor: pointer;
+      }
+      .column-options button:hover {
+        background-color: var(--primary-bg);
+      }
+      .column-options button.active {
+        background-color: var(--accent-green-light);
+        color: var(--text-main);
+        font-weight: 600;
+      }
+
+      .video-grid {
+        display: grid;
+        gap: 1.5rem;
+        transition: grid-template-columns 0.5s ease-in-out;
+      }
+      .video-card {
+        background-color: var(--card-bg);
+        border-radius: var(--border-radius-large);
+        box-shadow: var(--shadow-soft);
+        overflow: visible; /* Allow delete button to slightly overflow if needed */
+        transition: transform 0.3s ease, box-shadow 0.3s ease,
+          background-color 0.3s;
+        display: flex;
+        flex-direction: column;
+        cursor: default;
+        position: relative;
+      }
+      .video-card.deleting {
+        animation: cardDeleteAnimation 3.8s forwards;
+      }
+      @keyframes cardDeleteAnimation {
+        0% {
+          opacity: 1;
+          transform: scale(1) rotate(0deg);
+        }
+        20% {
+          transform: scale(1.05) rotate(1deg);
+        }
+        80% {
+          opacity: 0.2;
+          transform: scale(0.6) rotate(-3deg);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0.4);
+          height: 0;
+          padding: 0;
+          margin: 0;
+          border: 0;
+        }
+      }
+      .delete-video-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background-color: rgba(231, 76, 60, 0.8);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        font-size: 0.9rem;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 5;
+        transition: background-color 0.2s, transform 0.2s;
+      }
+      .delete-video-btn:hover {
+        background-color: #c0392b;
+        transform: scale(1.1);
+      }
+      .video-card.owner-hover .delete-video-btn {
+        display: inline-flex;
+      }
+
+      .video-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-medium);
+      }
+      .video-card-thumbnail-container {
+        position: relative;
+        cursor: pointer;
+      }
+      .video-card-thumbnail {
+        width: 100%;
+        aspect-ratio: 16/9;
+        object-fit: cover;
+        display: block;
+      }
+      .video-card-play-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 3rem;
+        color: white;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+      }
+      .video-card-thumbnail-container:hover .video-card-play-overlay {
+        opacity: 1;
+      }
+      /* Removed .video-card-duration */
+
+      .video-card-content {
+        padding: 1rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+      }
+      .video-card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .video-card-creator {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        margin-bottom: 0.75rem;
+      }
+      .video-card-tags {
+        margin-bottom: 0.75rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .video-card-tags .tag-item {
+        background-color: var(--accent-green-light);
+        color: var(--text-main);
+        padding: 0.2rem 0.6rem;
+        border-radius: 10px;
+        font-size: 0.75rem;
+      }
+      .video-hidden-indicator {
+        background-color: #e74c3c;
+        color: white;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        text-align: center;
+        margin-bottom: 0.5rem;
+      }
+      .video-card-actions {
+        margin-top: auto;
+        padding-top: 0.5rem;
+      }
+      .hide-toggle-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+        color: var(--text-light);
+        padding: 0.25rem 0;
+      }
+      .hide-toggle-container label {
+        cursor: pointer;
+      }
+      .hide-toggle-container input[type="checkbox"] {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 34px;
+        height: 20px;
+        background-color: var(--border-color);
+        border-radius: 10px;
+        position: relative;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        outline: none;
+      }
+      .hide-toggle-container input[type="checkbox"]::before {
+        content: "";
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background-color: white;
+        top: 2px;
+        left: 2px;
+        transition: transform 0.2s ease-in-out;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      }
+      .hide-toggle-container input[type="checkbox"]:checked {
+        background-color: var(--accent-green-medium);
+      }
+      .hide-toggle-container input[type="checkbox"]:checked::before {
+        transform: translateX(14px);
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden; /* Prevent body scroll when modal is open */
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+      }
+      .modal.active {
+        display: flex;
+      }
+      .modal-content {
+        background-color: var(--card-bg);
+        padding: 1.5rem;
+        border-radius: var(--border-radius-large);
+        box-shadow: var(--shadow-medium);
+        width: 90%;
+        max-width: 500px;
+        position: relative;
+        animation: modalOpen 0.3s ease-out;
+        transition: background-color 0.3s;
+        max-height: 90vh;
+        overflow-y: auto;
+        overflow-x: hidden; /* Prevent horizontal scroll in modal content */
+      }
+      @keyframes modalOpen {
+        from {
+          opacity: 0;
+          transform: scale(0.9) translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+      .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 1.5rem;
+        color: var(--text-light);
+        cursor: pointer;
+        background: none;
+        border: none;
+      }
+      .modal-close:hover {
+        color: var(--text-main);
+      }
+      .modal-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: var(--accent-green-dark);
+        text-align: center;
+      }
+      .modal-title i {
+        margin-right: 10px;
+      }
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+      }
+      .form-group input[type="text"],
+      .form-group input[type="url"],
+      .form-group textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-soft);
+        font-family: var(--font-family-main);
+        font-size: 1rem;
+        background-color: var(--primary-bg);
+        color: var(--text-main);
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+      }
+      .form-group input:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: var(--accent-green-medium);
+        box-shadow: 0 0 0 2px rgba(119, 193, 121, 0.3);
+      }
+      .modal-btn {
+        background-color: var(--accent-green-medium);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: var(--border-radius-soft);
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 1rem;
+        width: 100%;
+      }
+      .modal-btn:hover {
+        background-color: var(--accent-green-dark);
+      }
+      #addLinkModal #videoPreviewContainer {
+        margin-top: 1rem;
+        text-align: center;
+      }
+      #addLinkModal #videoPreviewThumbnail {
+        max-width: 100%;
+        border-radius: var(--border-radius-soft);
+        box-shadow: var(--shadow-soft);
+      }
+      #addLinkModal #fetchDetailsSpinner {
+        margin-left: 10px;
+        display: none;
+      }
+      #addLinkModal #fetchDetailsSpinner.fa-spin {
+        display: inline-block;
+      }
+
+      /* Profile Edit Modal Styles */
+      #profileEditModal .modal-content {
+        max-width: 450px;
+      }
+      #profileEditModal .profile-picture-container {
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+      #profileEditModal .profile-picture-display {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--accent-green-medium);
+        cursor: pointer;
+        margin: 0 auto 0.5rem;
+        display: block;
+      }
+      #profileEditModal .profile-picture-picker {
+        display: none;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+        padding: 0.5rem;
+        border: 1px dashed var(--border-color);
+        border-radius: var(--border-radius-soft);
+        margin-top: 0.5rem;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+      #profileEditModal .profile-picture-picker.active {
+        display: flex;
+      }
+      #profileEditModal .profile-picker-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: border-color 0.2s;
+      }
+      #profileEditModal .profile-picker-img:hover,
+      #profileEditModal .profile-picker-img.selected {
+        border-color: var(--accent-green-dark);
+        transform: scale(1.1);
+      }
+
+      #infoModal p {
+        margin-bottom: 1rem;
+        color: var(--text-light);
+      }
+      #infoModal ul {
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 1rem;
+      }
+      #infoModal ul li {
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+      }
+      #infoModal ul li i {
+        color: var(--accent-green-medium);
+        margin-right: 10px;
+        font-size: 1.2rem;
+        width: 20px;
+        text-align: center;
+      }
+      #infoModal .developer-credit {
+        font-size: 0.9rem;
+        text-align: center;
+        margin-top: 1.5rem;
+        color: var(--text-main);
+      }
+      #infoModal .developer-credit strong {
+        color: var(--accent-green-dark);
+      }
+      #infoModal .dev-image-container {
+        text-align: center;
+        margin-bottom: 1rem;
+        position: relative;
+      }
+      #infoModal .dev-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        cursor: pointer;
+        border: 3px solid var(--accent-green-medium);
+      }
+      .heart-particle {
+        position: absolute;
+        font-size: 1rem;
+        color: #e74c3c;
+        animation: floatUp 1s ease-out forwards;
+        pointer-events: none;
+      }
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-50px) scale(0.5);
+          opacity: 0;
+        }
+      }
+
+      #siteSaverAnimatedText {
+        display: inline-block;
+        position: relative;
+        min-width: 110px;
+        text-align: left;
+        font-weight: 700;
+        transition: color 0.3s ease;
+        vertical-align: middle;
+      }
+
+      .word-slide-in {
+        animation: slideInWord 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+          forwards;
+      }
+      .word-slide-out {
+        animation: slideOutWord 0.6s cubic-bezier(0.55, 0.085, 0.68, 0.53)
+          forwards;
+      }
+      @keyframes slideInWord {
+        0% {
+          opacity: 0;
+          transform: translateY(20px) scale(0.9);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      @keyframes slideOutWord {
+        0% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-20px) scale(0.9);
+        }
+      }
+
+      #featuresViewContent .section-title {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 2rem;
+      }
+      #featuresViewContent ul {
+        list-style: none;
+        padding-left: 0;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+      #featuresViewContent ul li {
+        margin-bottom: 1rem;
+        font-size: 1.05rem;
+        display: flex;
+        align-items: center;
+        background: var(--card-bg);
+        padding: 1rem 1.5rem;
+        border-radius: var(--border-radius-soft);
+        box-shadow: var(--shadow-soft);
+        transition: transform 0.2s ease, background-color 0.3s, box-shadow 0.3s;
+      }
+      #featuresViewContent ul li:hover {
+        transform: translateY(-3px);
+      }
+      #featuresViewContent ul li i {
+        color: var(--accent-green-dark);
+        margin-right: 15px;
+        font-size: 1.6rem;
+        width: 30px;
+        text-align: center;
+      }
+
+      #videoPlayerModal .modal-content {
+        max-width: 800px;
+      }
+      #youtubeEmbedContainer {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        background-color: #000;
+        border-radius: var(--border-radius-soft);
+        margin-bottom: 1rem;
+      }
+      #youtubeEmbedContainer iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+      #playerModalVideoInfo #playerModalVideoTitle {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+      #playerModalVideoInfo #playerModalVideoCreator {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        margin-bottom: 0.75rem;
+      }
+      #playerModalVideoInfo #playerModalVideoTags {
+        margin-bottom: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      #playerModalVideoTags .tag-item {
+        background-color: var(--accent-green-light);
+        color: var(--text-main);
+        padding: 0.2rem 0.6rem;
+        border-radius: 10px;
+        font-size: 0.75rem;
+      }
+      #watchOnYouTubeBtn {
+        background-color: var(--button-dark-bg);
+        text-align: center;
+      }
+      #watchOnYouTubeBtn:hover {
+        background-color: #3e5770;
+      }
+      body.dark-mode #watchOnYouTubeBtn {
+        background-color: var(--accent-green-medium);
+      }
+      body.dark-mode #watchOnYouTubeBtn:hover {
+        background-color: var(--accent-green-dark);
+      }
+
+      .footer {
+        text-align: center;
+        padding: 2rem 5%;
+        background-color: var(--card-bg);
+        margin-top: 3rem;
+        color: var(--text-light);
+        font-size: 0.9rem;
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+        transition: background-color 0.3s, color 0.3s;
+      }
+      .footer p i {
+        color: var(--accent-green-dark);
+      }
+      .footer a {
+        color: var(--accent-green-dark);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .footer a:hover {
+        text-decoration: underline;
+      }
+
+      .login-prompt-modal .modal-content {
+        max-width: 400px;
+        text-align: center;
+      }
+      .login-prompt-modal .modal-title i {
+        font-size: 2.5rem;
+        display: block;
+        margin-bottom: 1rem;
+        animation: emojiWobble 1.5s ease-in-out infinite;
+      }
+      @keyframes emojiWobble {
+        0%,
+        100% {
+          transform: rotate(0deg) scale(1);
+        }
+        20% {
+          transform: rotate(-10deg) scale(1.1);
+        }
+        40% {
+          transform: rotate(10deg) scale(1.1);
+        }
+        60% {
+          transform: rotate(-5deg) scale(1.05);
+        }
+        80% {
+          transform: rotate(5deg) scale(1.05);
+        }
+      }
+      .login-prompt-modal p {
+        margin-bottom: 1.5rem;
+      }
+      .login-prompt-modal .modal-btn {
+        width: auto;
+        padding: 0.7rem 2rem;
+      }
+
+      /* Custom Alert Modal Styles */
+      #customAlertModal .modal-content {
+        max-width: 380px;
+        text-align: center;
+      }
+      #customAlertModal .modal-title {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+      }
+      #customAlertModal #customAlertMessage {
+        margin-bottom: 1.5rem;
+        font-size: 1rem;
+        color: var(--text-main);
+      }
+      #customAlertModal #customAlertOkBtn {
+        width: auto;
+        padding: 0.6rem 1.8rem;
+        display: inline-block; /* Center button */
+      }
+
+      @media (min-width: 769px) {
+        .profile-info-text {
+          display: inline;
+        }
+        .mobile-nav-chips-container {
+          display: none !important;
+        }
+      }
+      @media (max-width: 768px) {
+        .navbar {
+          flex-wrap: wrap;
+          align-items: center;
+        }
+        .navbar-logo-link {
+          order: 1;
+          flex-basis: auto;
+          margin-right: auto;
+        }
+        .navbar-nav-desktop {
+          display: none;
+        }
+        .navbar-actions-group {
+          order: 2;
+          margin-left: 1rem;
+        }
+        .mobile-nav-chips-container {
+          order: 3;
+          display: block;
+          width: 100%;
+        }
+        .main-content-layout {
+          flex-direction: column;
+          padding: 0 2.5%;
+        }
+        .hero-heading {
+          font-size: 2rem;
+        }
+        .sidebar-best-of-week {
+          margin-top: 1rem;
+        }
+        .profile-info-text {
+          display: none;
+        }
+        .btn-hero-sitesaver {
+          font-size: 1.1rem;
+          padding: 0.7rem 1.5rem;
+        }
+        .video-grid-title-container {
+          flex-direction: column;
+          gap: 0.5rem;
+          align-items: center;
+        }
+        .column-toggle-btn {
+          margin-left: 0;
+        }
+      }
+      @media (max-width: 480px) {
+        .navbar-logo-text {
+          font-size: 1.2rem;
+        }
+        .navbar-logo-img {
+          height: 28px;
+          animation: none;
+        }
+        .navbar-actions .btn .btn-text {
+          display: none;
+        }
+        .navbar-actions .btn i {
+          margin-right: 0;
+        }
+        .navbar-actions .btn {
+          padding: 0.5rem 0.7rem;
+        }
+        .profile-section {
+          gap: 0.3rem;
+        }
+        .profile-info-icon,
+        .profile-info-img,
+        .logout-icon-btn,
+        .theme-toggle-btn {
+          font-size: 1.1rem;
+          padding: 0.25rem;
+        }
+        .profile-info-img {
+          width: 26px;
+          height: 26px;
+        }
+        .profile-popup {
+          min-width: 180px;
+          padding: 0.75rem;
+        }
+        .profile-popup p {
+          font-size: 0.85rem;
+        }
+        .mobile-nav-chips-container .navbar-nav a.nav-link-item {
+          font-size: 0.75rem;
+          padding: 0.3rem 0.6rem;
+        }
+        .hero-heading {
+          font-size: 1.8rem;
+        }
+        .hero-subtext {
+          font-size: 0.9rem;
+        }
+        .hero-section .btn-hero {
+          padding: 0.7rem 1.5rem;
+          font-size: 1rem;
+        }
+        .btn-hero-sitesaver {
+          font-size: 1rem;
+          padding: 0.6rem 1.2rem;
+        }
+        .tags-carousel-title,
+        .video-grid-title {
+          font-size: 1.5rem;
+        }
+        #featuresViewContent ul li {
+          font-size: 0.95rem;
+          padding: 0.8rem 1rem;
+        }
+        #featuresViewContent ul li i {
+          font-size: 1.3rem;
+          margin-right: 10px;
+        }
+        #siteSaverAnimatedText {
+          min-width: 90px;
+        }
+        .modal-content {
+          padding: 1.2rem;
+        }
+        .modal-title {
+          font-size: 1.5rem;
+          margin-bottom: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar-wrapper">
+      <nav class="navbar">
+        <a href="#" class="navbar-logo-link" data-filter="all">
+          <img
+            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi06OpiHEhCIZ_6WRJpBNoXuZ_u04gtyiLSCKUhwwE38hrudFkvLYmPoHFBm6Tw1O-LaKQ8hhijwQi-3HHTpdNXLb0A97Yn7-nlY-panahjYpxLeZatDURg-Vpp9u8CD1tEiE-T6ythn6fKaRV7uByvIChPzqjo64YPrVB7l7MHwrOpAC4vyU-Y3yCbBPyD/s602/Screenshot%202025-05-31%20200827%20(1).png"
+            alt="YouTubeSaver Logo"
+            class="navbar-logo-img"
+          />
+          <span class="navbar-logo-text"
+            >YouTube<span style="color: var(--text-main)">Saver</span></span
+          >
+        </a>
+
+        <ul class="navbar-nav navbar-nav-desktop" id="navbarNavDesktop">
+          <li>
+            <a href="#" class="nav-link-item active" data-filter="all">Home</a>
+          </li>
+          <li>
+            <a href="#" class="nav-link-item" data-filter="features"
+              >Features</a
+            >
+          </li>
+          <li>
+            <a href="#" class="nav-link-item" data-filter="tags_page">Tags</a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="nav-link-item info-icon-trigger"
+              id="infoNavTriggerDesktop"
+              >About <i class="fas fa-info-circle"></i
+            ></a>
+          </li>
+        </ul>
+
+        <div class="navbar-actions-group">
+          <div class="navbar-actions" id="navbarActions">
+            <!-- Dynamically populated: Add Video button, Profile Section -->
+          </div>
+          <button
+            class="theme-toggle-btn"
+            id="themeToggleBtn"
+            title="Toggle Theme"
+          >
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </nav>
+      <div class="mobile-nav-chips-container" id="mobileNavChips">
+        <ul class="navbar-nav" id="mobileNavChipLinks">
+          <li>
+            <a href="#" class="nav-link-item active" data-filter="all">Home</a>
+          </li>
+          <li>
+            <a href="#" class="nav-link-item" data-filter="features"
+              >Features</a
+            >
+          </li>
+          <li>
+            <a href="#" class="nav-link-item" data-filter="tags_page">Tags</a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="nav-link-item info-icon-trigger"
+              id="infoNavTriggerMobile"
+              >About</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="main-layout-wrapper container">
+      <div id="homeViewContent" class="page-section">
+        <div class="main-content-layout">
+          <div class="hero-section-wrapper">
+            <section class="hero-section" data-aos="fade-right">
+              <h1 class="hero-heading">
+                Your
+                <span class="highlight">YouTube</span> Links,<br />Beautifully
+                <span id="heroOrganizedText">Organized</span>
+              </h1>
+              <p class="hero-subtext">
+                Save, manage, and explore your favorite YouTube videos. Build
+                your personal library with tags, previews, and categories.
+              </p>
+              <button class="btn-hero" id="getStartedBtnHero">
+                Login to Get Started <i class="fas fa-arrow-right"></i>
+              </button>
+              <a
+                href="sitesaver.html"
+                class="btn-hero-sitesaver"
+                id="siteSaverLinkHero"
+              >
+                <i class="fas fa-leaf"></i> Explore
+                <span id="siteSaverAnimatedText">Websites</span>
+              </a>
+              <div
+                class="hero-illustration"
+                data-aos="fade-up"
+                data-aos-delay="200"
+              ></div>
+            </section>
+          </div>
+          <div class="sidebar-wrapper" data-aos="fade-left">
+            <aside class="sidebar-best-of-week">
+              <h2 class="sidebar-title">
+                Best of the Week
+                <i class="fas fa-star" style="color: #f1c40f"></i>
+              </h2>
+              <p class="sidebar-tagline">
+                <span id="sidebarSavedCount">+0 Saved</span>
+                <i class="fas fa-leaf"></i>
+              </p>
+              <div class="best-of-week-list" id="bestOfWeekList">
+                <p
+                  style="
+                    font-size: 0.85rem;
+                    color: var(--text-light);
+                    text-align: center;
+                  "
+                >
+                  Loading best videos...
+                </p>
+              </div>
+            </aside>
+          </div>
+        </div>
+        <section
+          class="tags-carousel-section"
+          id="homeTagsCarouselSection"
+          data-aos="fade-up"
+          style="display: none"
+        >
+          <h2 class="tags-carousel-title">
+            <i class="fas fa-tags"></i> Filter Your Videos
+          </h2>
+          <div class="tags-carousel" id="homeTagsCarousel"></div>
+        </section>
+        <section
+          class="video-grid-section"
+          id="homeVideoGridSection"
+          data-aos="fade-up"
+          style="display: none"
+        >
+          <div class="video-grid-title-container">
+            <h2 class="video-grid-title" id="homeVideoGridTitle">
+              <i class="fas fa-stream"></i> Your Saved Videos
+            </h2>
+            <div id="columnToggleContainer" style="position: relative">
+              <button class="column-toggle-btn" id="columnToggleBtn">
+                <i class="fas fa-th-large"></i>
+              </button>
+              <div class="column-options" id="columnOptions">
+                <button data-columns="1">1 Column</button>
+                <button data-columns="2">2 Columns</button>
+                <button data-columns="3" class="active">3 Columns</button>
+                <button data-columns="4">4 Columns</button>
+              </div>
+            </div>
+          </div>
+          <div class="video-grid" id="homeVideoGrid" data-aos-delay="100">
+            <p
+              id="noUserVideosMessage"
+              style="
+                text-align: center;
+                width: 100%;
+                color: var(--text-light);
+                padding: 2rem 0;
+              "
+            >
+              Login to save and view your videos!
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <div
+        id="featuresViewContent"
+        class="page-section"
+        style="display: none"
+        data-aos="fade-in"
+      >
+        <h2 class="section-title"><i class="fas fa-cogs"></i> App Features</h2>
+        <ul>
+          <li><i class="fas fa-link"></i> Save and preview any YouTube link</li>
+          <li>
+            <i class="fas fa-tags"></i> Create dynamic tags for easy filtering
+          </li>
+          <li><i class="fas fa-user-check"></i> User accounts with Firebase</li>
+          <li>
+            <i class="fas fa-cloud-upload-alt"></i> Videos saved to the cloud
+            (Firestore)
+          </li>
+          <li><i class="fas fa-play-circle"></i> In-app video playback</li>
+          <li><i class="fas fa-desktop"></i> Responsive on all devices</li>
+          <li>
+            <i class="fas fa-star"></i> "Best of the Week" section (public
+            videos)
+          </li>
+          <li>
+            <i class="fas fa-users"></i> Discover videos added by other users
+            via tags
+          </li>
+          <li><i class="fas fa-adjust"></i> Light/Dark Mode Toggle</li>
+          <li>
+            <i class="fas fa-swatchbook"></i> Modern, clean, leaf-themed UI
+          </li>
+        </ul>
+      </div>
+
+      <div
+        id="tagsPageViewContent"
+        class="page-section"
+        style="display: none"
+        data-aos="fade-in"
+      >
+        <section
+          class="tags-carousel-section"
+          id="publicTagsCarouselSection"
+          data-aos="fade-up"
+        >
+          <h2 class="tags-carousel-title">
+            <i class="fas fa-globe-americas"></i> Explore All Content by Tags
+          </h2>
+          <div class="tags-carousel" id="publicTagsCarousel"></div>
+        </section>
+        <section
+          class="video-grid-section"
+          id="publicVideoGridSection"
+          data-aos="fade-up"
+        >
+          <div class="video-grid-title-container">
+            <h2 class="video-grid-title" id="publicVideoGridTitle">
+              <i class="fas fa-broadcast-tower"></i> Public Videos
+            </h2>
+          </div>
+          <div class="video-grid" id="publicVideoGrid" data-aos-delay="100">
+            <p
+              id="noPublicVideosMessage"
+              style="
+                text-align: center;
+                width: 100%;
+                color: var(--text-light);
+                padding: 2rem 0;
+              "
+            >
+              No public videos found for this filter, or no videos shared yet!
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>
+        <i class="fas fa-leaf"></i> YouTube Link Saver ©
+        <span id="currentYear"></span>. Developed with
+        <i class="fas fa-heart" style="color: #e74c3c"></i> by
+        <strong>Devan</strong>.
+      </p>
+      <p>Organize your digital world, one video at a time.</p>
+    </footer>
+
+    <!-- Add Link Modal -->
+    <div id="addLinkModal" class="modal">
+      <div class="modal-content">
+        <button class="modal-close" id="closeAddLinkModal">×</button>
+        <h2 class="modal-title">
+          <i class="fas fa-plus-circle"></i> Add New YouTube Link
+        </h2>
+        <form id="addLinkForm">
+          <div class="form-group">
+            <label for="videoUrl"
+              >YouTube Video URL <span style="color: red">*</span>
+              <i id="fetchDetailsSpinner" class="fas fa-spinner fa-spin"></i
+            ></label>
+            <input
+              type="url"
+              id="videoUrl"
+              placeholder="e.g., https://www.youtube.com/watch?v=VIDEO_ID"
+              required
+            />
+          </div>
+          <div
+            id="videoPreviewContainer"
+            style="display: none; margin-bottom: 1rem"
+          >
+            <img id="videoPreviewThumbnail" src="#" alt="Video Preview" />
+          </div>
+          <div class="form-group">
+            <label for="videoTitle"
+              >Video Title <span style="color: red">*</span></label
+            >
+            <input
+              type="text"
+              id="videoTitle"
+              placeholder="e.g., Awesome Development Tricks"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="videoCreator">Creator (Channel Name)</label>
+            <input
+              type="text"
+              id="videoCreator"
+              placeholder="e.g., Dev Explained"
+            />
+          </div>
+          <div class="form-group">
+            <label for="videoTags">Tags (comma-separated)</label>
+            <input
+              type="text"
+              id="videoTags"
+              placeholder="e.g., tutorial, javascript, cool"
+            />
+            <div
+              class="autocomplete-suggestions"
+              id="tagAutocompleteSuggestions"
+            ></div>
+          </div>
+          <button type="submit" class="modal-btn">
+            Save Video <i class="fas fa-save"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Info Modal -->
+    <div id="infoModal" class="modal">
+      <div class="modal-content">
+        <button class="modal-close" id="closeInfoModal">×</button>
+        <h2 class="modal-title">
+          <i class="fas fa-info-circle"></i> About YouTubeSaver
+        </h2>
+        <div class="dev-image-container">
+          <img
+            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjwW5r2b6O2msVy1jyGGPg-jJMnWWKGRwR9Yz0ut3aaeBuL5IKdghn7ZragAeDq9xJ5xXesAbbO6wSVnmbSjirf-FStUR81pqvirdcAy7FbhFs06JQKBzj6uJRlFbCjpcCuhl1Hd-QgMO45ntR4Lxk-Fb8vJHAhRmr9HR4eSvHAmi5SOFG0UvfqjudFGmBN/s2013/1748876414837%20(1).jpg"
+            alt="Developer Devan"
+            class="dev-image"
+            id="devImage"
+          />
+        </div>
+        <p>
+          Save all your favorite YouTube links in one place. Create tags, get
+          previews, and revisit videos whenever you want. This tool helps you
+          build a personal, organized library of YouTube content that matters to
+          you.
+        </p>
+        <h3>
+          <i class="fas fa-star" style="color: var(--accent-green-medium)"></i>
+          Core Features:
+        </h3>
+        <ul>
+          <li><i class="fas fa-link"></i> Save and preview any YouTube link</li>
+          <li>
+            <i class="fas fa-tags"></i> Create dynamic tags for easy filtering
+          </li>
+          <li><i class="fas fa-user-check"></i> User accounts with Firebase</li>
+          <li>
+            <i class="fas fa-cloud-upload-alt"></i> Videos links saved to the
+            cloud (Firestore)
+          </li>
+          <li><i class="fas fa-play-circle"></i> In-app video playback</li>
+          <li><i class="fas fa-desktop"></i> Responsive on all devices</li>
+          <li><i class="fas fa-adjust"></i> Light/Dark Mode Toggle</li>
+        </ul>
+        <p class="developer-credit">
+          <i class="fas fa-leaf"></i> Developed by <strong>Devan</strong> with a
+          passion for clean UI and useful tools.
+        </p>
+      </div>
+    </div>
+
+    <!-- Video Player Modal -->
+    <div id="videoPlayerModal" class="modal">
+      <div class="modal-content">
+        <button class="modal-close" id="closeVideoPlayerModal">×</button>
+        <h2 class="modal-title" id="playerModalDialogTitle">
+          <i class="fab fa-youtube"></i> Now Playing
+        </h2>
+        <div id="youtubeEmbedContainer">
+          <iframe
+            id="youtubePlayer"
+            src=""
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div id="playerModalVideoInfo">
+          <h3 id="playerModalVideoTitle">Video Title</h3>
+          <p id="playerModalVideoCreator">Creator</p>
+          <div id="playerModalVideoTags"></div>
+        </div>
+        <a href="#" id="watchOnYouTubeBtn" target="_blank" class="modal-btn"
+          >Watch on YouTube <i class="fab fa-youtube"></i
+        ></a>
+      </div>
+    </div>
+
+    <!-- Login Prompt Modal -->
+    <div id="loginPromptModal" class="modal login-prompt-modal">
+      <div class="modal-content">
+        <button class="modal-close" id="closeLoginPromptModal">×</button>
+        <h2 class="modal-title" id="loginPromptTitle">
+          <i class="fas fa-kiss-wink-heart"></i> Hey there!
+        </h2>
+        <p id="loginPromptMessage">
+          Please log in to explore all the amazing videos shared by our
+          community!
+        </p>
+        <button id="loginPromptGoToLoginBtn" class="modal-btn">
+          Login / Sign Up
+        </button>
+      </div>
+    </div>
+
+    <!-- Profile Edit Modal -->
+    <div id="profileEditModal" class="modal">
+      <div class="modal-content">
+        <button class="modal-close" id="closeProfileEditModal">&times;</button>
+        <h2 class="modal-title">
+          <i class="fas fa-user-edit"></i> Edit Profile
+        </h2>
+        <form id="profileEditForm">
+          <div class="profile-picture-container">
+            <img
+              src=""
+              alt="Profile Picture"
+              class="profile-picture-display"
+              id="profilePictureEditDisplay"
+            />
+            <small>Click image to change</small>
+          </div>
+          <div class="profile-picture-picker" id="profilePicturePicker">
+            <!-- Placeholder for 30 images -->
+            <!-- Example: <img src="url1.jpg" class="profile-picker-img" data-url="url1.jpg"> -->
+          </div>
+
+          <div class="form-group">
+            <label for="usernameInput">Username</label>
+            <input
+              type="text"
+              id="usernameInput"
+              placeholder="Enter new username"
+            />
+          </div>
+          <button type="submit" class="modal-btn">
+            Save Profile <i class="fas fa-save"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Shorts Not Allowed Modal -->
+    <div id="shortsNotAllowedModal" class="modal login-prompt-modal">
+      <div class="modal-content">
+        <button class="modal-close" id="closeShortsNotAllowedModal">
+          &times;
+        </button>
+        <h2 class="modal-title">
+          <i class="fas fa-sad-tear" style="color: #f39c12"></i> Oops!
+        </h2>
+        <p id="shortsNotAllowedMessage">
+          Sorry bacha, shorts are not allowed here. <br />100 shorts dekhoge toh
+          yahan thodi upload karoge 🤣
+        </p>
+        <button
+          id="okShortsNotAllowedBtn"
+          class="modal-btn"
+          style="width: auto; padding: 0.6rem 1.5rem"
+        >
+          Okay, Got It!
+        </button>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteConfirmModal" class="modal login-prompt-modal">
+      <div class="modal-content">
+        <button class="modal-close" id="closeDeleteConfirmModal">
+          &times;
+        </button>
+        <h2 class="modal-title" id="deleteConfirmTitle">
+          <i class="fas fa-exclamation-triangle" style="color: #e74c3c"></i>
+          Confirm Deletion
+        </h2>
+        <p id="deleteConfirmMessage">
+          Are you sure you want to delete this video? This action cannot be
+          undone.
+        </p>
+        <p id="mathProblemText" style="font-weight: bold; margin: 10px 0"></p>
+        <div class="form-group">
+          <input
+            type="text"
+            id="mathAnswerInput"
+            placeholder="Your Answer"
+            style="text-align: center"
+          />
+        </div>
+        <div style="display: flex; gap: 10px">
+          <button
+            id="cancelDeleteBtn"
+            class="modal-btn"
+            style="background-color: var(--text-light); width: 48%"
+          >
+            Cancel
+          </button>
+          <button
+            id="confirmDeleteBtnFinal"
+            class="modal-btn"
+            style="background-color: #e74c3c; width: 48%"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom Alert Modal -->
+    <div id="customAlertModal" class="modal login-prompt-modal">
+      <div class="modal-content">
+        <h2 class="modal-title" id="customAlertTitle">
+          <i class="fas fa-info-circle"></i> Notification
+        </h2>
+        <p id="customAlertMessage">This is a custom alert message.</p>
+        <button
+          id="customAlertOkBtn"
+          class="modal-btn"
+          style="width: auto; padding: 0.6rem 1.8rem"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyBbrrbGswfzO3K67MivbRNgUS4viJ7s0EY",
+        authDomain: "devvl-31b06.firebaseapp.com",
+        projectId: "devvl-31b06",
+        storageBucket: "devvl-31b06.appspot.com",
+        messagingSenderId: "517697411890",
+        appId: "1:517697411890:web:4e8fa383838a8a2872552b",
+        measurementId: "G-CMNLTED9N0",
+      };
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+      const analytics = firebase.analytics();
+
+      AOS.init({ duration: 800, once: true });
+      if (document.getElementById("heroOrganizedText")) {
+        new Typed("#heroOrganizedText", {
+          strings: ["Organized.", "Accessible.", "Fun!"],
+          typeSpeed: 70,
+          backSpeed: 50,
+          backDelay: 1500,
+          loop: true,
+          smartBackspace: true,
+        });
+      }
+      document.getElementById("currentYear").textContent =
+        new Date().getFullYear();
+
+      const navbarActions = document.getElementById("navbarActions");
+      const getStartedBtnHero = document.getElementById("getStartedBtnHero");
+      const addLinkModal = document.getElementById("addLinkModal");
+      const closeAddLinkModalBtn = document.getElementById("closeAddLinkModal");
+      const addLinkForm = document.getElementById("addLinkForm");
+      const videoUrlInput = document.getElementById("videoUrl");
+      const videoPreviewContainer = document.getElementById(
+        "videoPreviewContainer"
+      );
+      const videoPreviewThumbnail = document.getElementById(
+        "videoPreviewThumbnail"
+      );
+      const videoTitleInput = document.getElementById("videoTitle");
+      const videoCreatorInput = document.getElementById("videoCreator");
+      const videoTagsInput = document.getElementById("videoTags");
+      const tagAutocompleteSuggestionsEl = document.getElementById(
+        "tagAutocompleteSuggestions"
+      );
+      const fetchDetailsSpinner = document.getElementById(
+        "fetchDetailsSpinner"
+      );
+      const infoNavTriggerDesktop = document.getElementById(
+        "infoNavTriggerDesktop"
+      );
+      const infoNavTriggerMobile = document.getElementById(
+        "infoNavTriggerMobile"
+      );
+      const infoModal = document.getElementById("infoModal");
+      const closeInfoModalBtn = document.getElementById("closeInfoModal");
+      const devImage = document.getElementById("devImage");
+      const allNavLinks = document.querySelectorAll(
+        ".navbar-logo-link, #navbarNavDesktop .nav-link-item, #mobileNavChipLinks .nav-link-item"
+      );
+      const sidebarSavedCountEl = document.getElementById("sidebarSavedCount");
+      const bestOfWeekListEl = document.getElementById("bestOfWeekList");
+      const homeViewContent = document.getElementById("homeViewContent");
+      const featuresViewContent = document.getElementById(
+        "featuresViewContent"
+      );
+      const tagsPageViewContent = document.getElementById(
+        "tagsPageViewContent"
+      );
+      const homeTagsCarouselSection = document.getElementById(
+        "homeTagsCarouselSection"
+      );
+      const homeVideoGridSection = document.getElementById(
+        "homeVideoGridSection"
+      );
+      const homeTagsCarousel = document.getElementById("homeTagsCarousel");
+      const homeVideoGrid = document.getElementById("homeVideoGrid");
+      const noUserVideosMessage = document.getElementById(
+        "noUserVideosMessage"
+      );
+      const homeVideoGridTitle = document.getElementById("homeVideoGridTitle");
+      const publicTagsCarousel = document.getElementById("publicTagsCarousel");
+      const publicVideoGrid = document.getElementById("publicVideoGrid");
+      const noPublicVideosMessage = document.getElementById(
+        "noPublicVideosMessage"
+      );
+      const publicVideoGridTitle = document.getElementById(
+        "publicVideoGridTitle"
+      );
+      const videoPlayerModal = document.getElementById("videoPlayerModal");
+      const closeVideoPlayerModalBtn = document.getElementById(
+        "closeVideoPlayerModal"
+      );
+      const youtubePlayerIframe = document.getElementById("youtubePlayer");
+      const playerModalVideoTitle = document.getElementById(
+        "playerModalVideoTitle"
+      );
+      const playerModalVideoCreator = document.getElementById(
+        "playerModalVideoCreator"
+      );
+      const playerModalVideoTags = document.getElementById(
+        "playerModalVideoTags"
+      );
+      const watchOnYouTubeBtn = document.getElementById("watchOnYouTubeBtn");
+      const loginPromptModal = document.getElementById("loginPromptModal");
+      const closeLoginPromptModalBtn = document.getElementById(
+        "closeLoginPromptModal"
+      );
+      const loginPromptGoToLoginBtn = document.getElementById(
+        "loginPromptGoToLoginBtn"
+      );
+      const loginPromptTitle = document.getElementById("loginPromptTitle");
+      const loginPromptMessage = document.getElementById("loginPromptMessage");
+      const themeToggleBtn = document.getElementById("themeToggleBtn");
+      const siteSaverAnimatedTextEl = document.getElementById(
+        "siteSaverAnimatedText"
+      );
+      const siteSaverLinkHeroEl = document.getElementById("siteSaverLinkHero");
+      const columnToggleBtn = document.getElementById("columnToggleBtn");
+      const columnOptionsEl = document.getElementById("columnOptions");
+      const profileEditModal = document.getElementById("profileEditModal");
+      const closeProfileEditModalBtn = document.getElementById(
+        "closeProfileEditModal"
+      );
+      const profileEditForm = document.getElementById("profileEditForm");
+      const profilePictureEditDisplay = document.getElementById(
+        "profilePictureEditDisplay"
+      );
+      const profilePicturePicker = document.getElementById(
+        "profilePicturePicker"
+      );
+      const usernameInput = document.getElementById("usernameInput");
+      const shortsNotAllowedModal = document.getElementById(
+        "shortsNotAllowedModal"
+      );
+      const closeShortsNotAllowedModalBtn = document.getElementById(
+        "closeShortsNotAllowedModal"
+      );
+      const okShortsNotAllowedBtn = document.getElementById(
+        "okShortsNotAllowedBtn"
+      );
+      const deleteConfirmModal = document.getElementById("deleteConfirmModal");
+      const closeDeleteConfirmModalBtn = document.getElementById(
+        "closeDeleteConfirmModal"
+      );
+      const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+      const confirmDeleteBtnFinal = document.getElementById(
+        "confirmDeleteBtnFinal"
+      );
+      const mathProblemTextEl = document.getElementById("mathProblemText");
+      const mathAnswerInputEl = document.getElementById("mathAnswerInput");
+      const customAlertModal = document.getElementById("customAlertModal");
+      const customAlertTitle = document.getElementById("customAlertTitle");
+      const customAlertMessage = document.getElementById("customAlertMessage");
+      const customAlertOkBtn = document.getElementById("customAlertOkBtn");
+
+      let currentUser = null;
+      let userVideos = [];
+      let allPublicVideos = [];
+      let allPublicTagsSet = new Set();
+      let userVideosUnsubscribe = null;
+      let publicVideosUnsubscribe = null;
+      let bestOfWeekUnsubscribe = null;
+      let currentHomeFilter = "all";
+      let currentPublicFilter = "all";
+      let currentPublicFilterType = "tag";
+      let siteSaverAnimationInterval;
+      let profilePopup = null;
+      let userTagsSet = new Set();
+      let mathProblemSolution = null;
+      let videoToDeleteInfo = null;
+
+      const SPECIAL_USER_UID = "8WfxpXNpQ2eu3pYu8kNE1YD5EQC3";
+      const DEFAULT_PROFILE_PIC = "https://avatar.iran.liara.run/public/boy";
+
+      function capitalizeFirstLetter(string) {
+        if (!string) return string;
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      }
+
+      let siteSaverObserver;
+      const siteSaverWords = ["Websites", "Articles", "Tools", "Gems"];
+      let siteSaverWordIndex = 0;
+
+      function updateSiteSaverAnimatedText() {
+        if (!siteSaverAnimatedTextEl) return;
+        siteSaverAnimatedTextEl.classList.remove("word-slide-in");
+        siteSaverAnimatedTextEl.classList.add("word-slide-out");
+        setTimeout(() => {
+          siteSaverWordIndex = (siteSaverWordIndex + 1) % siteSaverWords.length;
+          siteSaverAnimatedTextEl.textContent =
+            siteSaverWords[siteSaverWordIndex];
+          siteSaverAnimatedTextEl.classList.remove("word-slide-out");
+          siteSaverAnimatedTextEl.classList.add("word-slide-in");
+        }, 600);
+      }
+
+      function startSiteSaverAnimation() {
+        if (!siteSaverAnimatedTextEl || siteSaverAnimationInterval) return;
+        siteSaverAnimatedTextEl.textContent = siteSaverWords[0];
+        siteSaverAnimatedTextEl.classList.remove("word-slide-out");
+        siteSaverAnimatedTextEl.classList.add("word-slide-in");
+        siteSaverAnimationInterval = setInterval(
+          updateSiteSaverAnimatedText,
+          3000
+        );
+      }
+
+      function stopSiteSaverAnimation() {
+        if (!siteSaverAnimationInterval) return;
+        clearInterval(siteSaverAnimationInterval);
+        siteSaverAnimationInterval = null;
+      }
+
+      if (siteSaverLinkHeroEl && siteSaverAnimatedTextEl) {
+        siteSaverObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                startSiteSaverAnimation();
+              } else {
+                stopSiteSaverAnimation();
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+      }
+
+      const originalOpenModal = (modal) => {
+        modal.classList.add("active");
+        document.body.style.overflow = "hidden";
+      };
+      const originalCloseModal = (modal) => {
+        modal.classList.remove("active");
+        document.body.style.overflow = "";
+      };
+
+      function openModal(modal) {
+        originalOpenModal(modal);
+      }
+
+      function closeModal(modal) {
+        originalCloseModal(modal);
+        if (modal === addLinkModal) {
+          addLinkForm.reset();
+          videoPreviewContainer.style.display = "none";
+          fetchDetailsSpinner.classList.remove("fa-spin");
+          tagAutocompleteSuggestionsEl.innerHTML = "";
+          tagAutocompleteSuggestionsEl.style.display = "none";
+        }
+        if (modal === videoPlayerModal) youtubePlayerIframe.src = "";
+        if (modal === loginPromptModal) {
+          loginPromptTitle.innerHTML =
+            '<i class="fas fa-kiss-wink-heart"></i> Hey there!';
+          loginPromptMessage.textContent =
+            "Please log in to explore all the amazing videos shared by our community!";
+        }
+        if (modal === profileEditModal) {
+          profilePicturePicker.classList.remove("active");
+          profileEditForm.reset();
+        }
+        if (modal === deleteConfirmModal) {
+          mathAnswerInputEl.value = "";
+        }
+      }
+
+      // Custom Alert Function
+      function showCustomAlert(title, message) {
+        if (customAlertTitle)
+          customAlertTitle.innerHTML =
+            title || '<i class="fas fa-info-circle"></i> Notification';
+        if (customAlertMessage) customAlertMessage.textContent = message;
+        if (customAlertModal) openModal(customAlertModal);
+      }
+      if (customAlertOkBtn)
+        customAlertOkBtn.addEventListener("click", () =>
+          closeModal(customAlertModal)
+        );
+
+      if (closeAddLinkModalBtn)
+        closeAddLinkModalBtn.addEventListener("click", () =>
+          closeModal(addLinkModal)
+        );
+      function handleInfoTrigger(e) {
+        e.preventDefault();
+        openModal(infoModal);
+      }
+      if (infoNavTriggerDesktop)
+        infoNavTriggerDesktop.addEventListener("click", handleInfoTrigger);
+      if (infoNavTriggerMobile)
+        infoNavTriggerMobile.addEventListener("click", handleInfoTrigger);
+      if (closeInfoModalBtn)
+        closeInfoModalBtn.addEventListener("click", () =>
+          closeModal(infoModal)
+        );
+      if (closeVideoPlayerModalBtn)
+        closeVideoPlayerModalBtn.addEventListener("click", () =>
+          closeModal(videoPlayerModal)
+        );
+      if (closeLoginPromptModalBtn)
+        closeLoginPromptModalBtn.addEventListener("click", () =>
+          closeModal(loginPromptModal)
+        );
+      if (loginPromptGoToLoginBtn) {
+        loginPromptGoToLoginBtn.addEventListener("click", () => {
+          closeModal(loginPromptModal);
+          window.location.href = "loginsignup.html";
+        });
+      }
+      if (closeProfileEditModalBtn)
+        closeProfileEditModalBtn.addEventListener("click", () =>
+          closeModal(profileEditModal)
+        );
+      if (closeShortsNotAllowedModalBtn)
+        closeShortsNotAllowedModalBtn.addEventListener("click", () =>
+          closeModal(shortsNotAllowedModal)
+        );
+      if (okShortsNotAllowedBtn)
+        okShortsNotAllowedBtn.addEventListener("click", () =>
+          closeModal(shortsNotAllowedModal)
+        );
+      if (closeDeleteConfirmModalBtn)
+        closeDeleteConfirmModalBtn.addEventListener("click", () =>
+          closeModal(deleteConfirmModal)
+        );
+      if (cancelDeleteBtn)
+        cancelDeleteBtn.addEventListener("click", () =>
+          closeModal(deleteConfirmModal)
+        );
+
+      window.addEventListener("click", (event) => {
+        if (event.target === addLinkModal) closeModal(addLinkModal);
+        if (event.target === infoModal) closeModal(infoModal);
+        if (event.target === videoPlayerModal) closeModal(videoPlayerModal);
+        if (event.target === loginPromptModal) closeModal(loginPromptModal);
+        if (event.target === profileEditModal) closeModal(profileEditModal);
+        if (event.target === shortsNotAllowedModal)
+          closeModal(shortsNotAllowedModal);
+        if (event.target === deleteConfirmModal) closeModal(deleteConfirmModal);
+        if (event.target === customAlertModal) closeModal(customAlertModal);
+
+        if (
+          profilePopup &&
+          profilePopup.classList.contains("active") &&
+          !navbarActions.contains(event.target) &&
+          event.target !== profilePopup &&
+          !profilePopup.contains(event.target)
+        ) {
+          profilePopup.classList.remove("active");
+        }
+        if (
+          columnOptionsEl &&
+          columnOptionsEl.classList.contains("active") &&
+          !columnToggleBtn.contains(event.target) &&
+          !columnOptionsEl.contains(event.target)
+        ) {
+          columnOptionsEl.classList.remove("active");
+        }
+        if (
+          tagAutocompleteSuggestionsEl &&
+          tagAutocompleteSuggestionsEl.style.display === "block" &&
+          !videoTagsInput.contains(event.target) &&
+          !tagAutocompleteSuggestionsEl.contains(event.target)
+        ) {
+          tagAutocompleteSuggestionsEl.style.display = "none";
+        }
+      });
+
+      function showLoginPrompt(userName = null) {
+        let greeting = '<i class="fas fa-kiss-wink-heart"></i> Hey there!';
+        if (userName)
+          greeting = `<i class="fas fa-kiss-wink-heart"></i> Hey ${capitalizeFirstLetter(
+            userName
+          )}!`;
+        loginPromptTitle.innerHTML = greeting;
+        loginPromptMessage.textContent =
+          "Please log in to explore all the amazing videos shared by our community or to save your own!";
+        openModal(loginPromptModal);
+      }
+
+      function applyTheme(theme) {
+        if (theme === "dark") {
+          document.body.classList.add("dark-mode");
+          themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+        } else {
+          document.body.classList.remove("dark-mode");
+          themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+        }
+      }
+      if (themeToggleBtn) {
+        themeToggleBtn.addEventListener("click", () => {
+          const currentTheme = document.body.classList.contains("dark-mode")
+            ? "light"
+            : "dark";
+          localStorage.setItem("theme", currentTheme);
+          applyTheme(currentTheme);
+        });
+      }
+      applyTheme(localStorage.getItem("theme") || "light");
+
+      if (devImage) {
+        devImage.addEventListener("click", (e) => {
+          for (let i = 0; i < 10; i++) {
+            const heart = document.createElement("i");
+            heart.classList.add("fas", "fa-heart", "heart-particle");
+            const x =
+              e.clientX -
+              devImage.getBoundingClientRect().left +
+              (Math.random() - 0.5) * 40;
+            const y =
+              e.clientY -
+              devImage.getBoundingClientRect().top +
+              (Math.random() - 0.5) * 40;
+            heart.style.left = `${x}px`;
+            heart.style.top = `${y}px`;
+            heart.style.setProperty("--tx", `${(Math.random() - 0.5) * 100}px`);
+            heart.style.setProperty("--ty", `${-50 - Math.random() * 50}px`);
+            heart.style.fontSize = `${0.5 + Math.random() * 0.8}rem`;
+            devImage.parentElement.appendChild(heart);
+            setTimeout(() => heart.remove(), 1000);
+          }
+        });
+      }
+
+      auth.onAuthStateChanged((user) => {
+        currentUser = user;
+        updateNavbarForAuthState(user);
+        if (user) {
+          noUserVideosMessage.textContent = "Loading your videos...";
+          attachUserVideosListener();
+          getStartedBtnHero.textContent = "Add New Video";
+          getStartedBtnHero.onclick = () => openModal(addLinkModal);
+          homeTagsCarouselSection.style.display = "block";
+          homeVideoGridSection.style.display = "block";
+          if (columnToggleBtn) columnToggleBtn.style.display = "inline-block";
+        } else {
+          if (userVideosUnsubscribe) userVideosUnsubscribe();
+          userVideos = [];
+          userTagsSet.clear();
+          allPublicTagsSet.clear();
+          renderUserVideos();
+          renderUserTags();
+          noUserVideosMessage.textContent =
+            "Login to save and view your videos!";
+          getStartedBtnHero.textContent = "Login to Get Started";
+          getStartedBtnHero.onclick = () =>
+            (window.location.href = "loginsignup.html");
+          if (sidebarSavedCountEl) sidebarSavedCountEl.textContent = "+0 Saved";
+          homeTagsCarouselSection.style.display = "none";
+          homeVideoGridSection.style.display = "none";
+          if (columnToggleBtn) columnToggleBtn.style.display = "none";
+          if (columnOptionsEl) columnOptionsEl.classList.remove("active");
+        }
+        attachPublicVideosListener();
+        attachBestOfWeekListener();
+        const activeNavLinkDesktop = document.querySelector(
+          "#navbarNavDesktop .nav-link-item.active"
+        );
+        const activeNavLinkMobile = document.querySelector(
+          "#mobileNavChipLinks .nav-link-item.active"
+        );
+        const currentView = activeNavLinkDesktop
+          ? activeNavLinkDesktop.dataset.filter
+          : activeNavLinkMobile
+          ? activeNavLinkMobile.dataset.filter
+          : "all";
+        switchView(currentView, true);
+      });
+
+      function createParticles() {
+        const particleContainer = document.body;
+        const particleCount = 20; // Reduced count for subtlety
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement("div");
+          particle.classList.add("particle");
+          const size = Math.random() * 4 + 1.5; // Smaller particles
+          particle.style.width = `${size}px`;
+          particle.style.height = `${size}px`;
+          particle.style.left = `${Math.random() * 100}%`;
+          particle.style.top = `${Math.random() * 100}%`;
+          particle.style.animationDelay = `${Math.random() * 20}s`;
+          particle.style.animationDuration = `${15 + Math.random() * 15}s`; // Slower, longer duration
+          particle.style.opacity = `${0.3 + Math.random() * 0.4}`; // More subtle opacity
+          particleContainer.appendChild(particle);
+        }
+      }
+      createParticles();
+
+      function updateNavbarForAuthState(user) {
+        const navbarActionsContainer = document.getElementById("navbarActions");
+        navbarActionsContainer.innerHTML = "";
+
+        const existingProfileIconContainer = document.getElementById(
+          "dynamicProfileIconContainer"
+        );
+        if (existingProfileIconContainer) existingProfileIconContainer.remove();
+
+        if (profilePopup) {
+          profilePopup.remove();
+          profilePopup = null;
+        }
+
+        if (user) {
+          const addVideoButton = document.createElement("button");
+          addVideoButton.classList.add("btn");
+          addVideoButton.innerHTML =
+            '<i class="fas fa-plus-circle"></i><span class="btn-text"> Add Video</span>';
+          addVideoButton.title = "Add New Video";
+          addVideoButton.onclick = () => openModal(addLinkModal);
+
+          const profileSection = document.createElement("div");
+          profileSection.classList.add("profile-section");
+
+          // Container for the profile icon/image
+          const profileIconContainer = document.createElement("div");
+          profileIconContainer.id = "dynamicProfileIconContainer"; // For easier selection
+          profileIconContainer.style.display = "inline-block"; // To keep it in flow
+
+          let profileDisplayElement;
+          if (user.photoURL) {
+            profileDisplayElement = document.createElement("img");
+            profileDisplayElement.src = user.photoURL;
+            profileDisplayElement.alt = "Profile";
+            profileDisplayElement.classList.add("profile-info-img");
+          } else {
+            profileDisplayElement = document.createElement("button");
+            profileDisplayElement.innerHTML =
+              '<i class="fas fa-user-circle"></i>';
+            profileDisplayElement.classList.add("profile-info-icon");
+          }
+          profileDisplayElement.title = `Edit Profile / View Info`;
+          profileDisplayElement.style.cursor = "pointer";
+          profileIconContainer.appendChild(profileDisplayElement);
+
+          const userNameForTitle = user.displayName || user.email.split("@")[0];
+          const profileTextDesktop = document.createElement("span");
+          profileTextDesktop.classList.add("profile-info-text");
+          profileTextDesktop.innerHTML = `Hi, <strong>${capitalizeFirstLetter(
+            userNameForTitle
+          )}</strong>`;
+
+          profilePopup = document.createElement("div");
+          profilePopup.classList.add("profile-popup");
+          profilePopup.innerHTML = `
+              <p>Hi, <strong>${capitalizeFirstLetter(
+                userNameForTitle
+              )}</strong>!</p>
+              <p style="font-size:0.8em; color: var(--text-light);">Logged in as: ${
+                user.email
+              }</p>
+              <button class="modal-btn" id="editProfileFromPopupBtn" style="font-size:0.8em; padding: 0.4rem 0.8rem; margin-top:0.5rem; width:auto;">Edit Profile</button>
+          `;
+
+          const navbarActionsGroup = document.querySelector(
+            ".navbar-actions-group"
+          );
+          if (navbarActionsGroup) navbarActionsGroup.appendChild(profilePopup);
+
+          profileDisplayElement.addEventListener("click", (e) => {
+            e.stopPropagation();
+            if (profileEditModal.classList.contains("active")) {
+              closeModal(profileEditModal);
+              if (profilePopup) profilePopup.classList.remove("active");
+            } else {
+              // Always open profile edit modal when icon/image is clicked
+              openProfileEditModal();
+              if (profilePopup) profilePopup.classList.remove("active"); // Close small popup if open
+            }
+          });
+
+          const editProfileBtnInPopup = profilePopup.querySelector(
+            "#editProfileFromPopupBtn"
+          );
+          if (editProfileBtnInPopup) {
+            // This button is inside the small popup which is removed
+            editProfileBtnInPopup.addEventListener("click", () => {
+              if (profilePopup) profilePopup.classList.remove("active");
+              openProfileEditModal();
+            });
+          }
+
+          const logoutButton = document.createElement("button");
+          logoutButton.id = "logoutBtn";
+          logoutButton.classList.add("logout-icon-btn");
+          logoutButton.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
+          logoutButton.title = "Logout";
+          logoutButton.addEventListener("click", logoutUser);
+
+          navbarActionsContainer.appendChild(addVideoButton);
+          profileSection.appendChild(profileIconContainer);
+          profileSection.appendChild(profileTextDesktop);
+          profileSection.appendChild(logoutButton);
+          navbarActionsContainer.appendChild(profileSection);
+        } else {
+          const loginBtn = document.createElement("a");
+          loginBtn.href = "loginsignup.html";
+          loginBtn.classList.add("btn");
+          loginBtn.innerHTML =
+            '<i class="fas fa-sign-in-alt"></i><span class="btn-text"> Login / Sign Up</span>';
+          navbarActionsContainer.appendChild(loginBtn);
+        }
+      }
+
+      function logoutUser() {
+        if (profilePopup) profilePopup.classList.remove("active");
+        auth
+          .signOut()
+          .catch((error) => showCustomAlert("Logout Error", error.message));
+      }
+
+      function getYouTubeVideoId(url) {
+        const regex =
+          /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+        const match = url.match(regex);
+        return match ? match[1] : null;
+      }
+
+      function isYouTubeShorts(url) {
+        if (typeof url !== "string") return false;
+        return url.includes("/shorts/");
+      }
+
+      async function getYouTubeVideoDetails(videoUrl) {
+        if (isYouTubeShorts(videoUrl)) {
+          showCustomAlert(
+            "Shorts Not Allowed",
+            "Sorry bacha, shorts are not allowed here. \n100 shorts dekhoge toh yahan thodi upload karoge 🤣"
+          );
+          videoUrlInput.value = "";
+          return null;
+        }
+        fetchDetailsSpinner.classList.add("fa-spin");
+        try {
+          const proxyUrl = `https://noembed.com/embed?url=${encodeURIComponent(
+            videoUrl
+          )}`;
+          const response = await fetch(proxyUrl);
+          if (!response.ok) {
+            console.warn(
+              `oEmbed fetch failed: ${response.status} for ${videoUrl}`
+            );
+            fetchDetailsSpinner.classList.remove("fa-spin");
+            return null;
+          }
+          const data = await response.json();
+          if (data && data.title && data.author_name) {
+            fetchDetailsSpinner.classList.remove("fa-spin");
+            return { title: data.title, author_name: data.author_name };
+          } else {
+            console.warn("oEmbed data incomplete for:", videoUrl, data);
+            fetchDetailsSpinner.classList.remove("fa-spin");
+            return null;
+          }
+        } catch (error) {
+          console.error("oEmbed error:", error);
+        }
+        fetchDetailsSpinner.classList.remove("fa-spin");
+        return null;
+      }
+
+      videoUrlInput.addEventListener("input", async () => {
+        const url = videoUrlInput.value;
+        if (isYouTubeShorts(url)) {
+          showCustomAlert(
+            "Shorts Not Allowed",
+            "Sorry bacha, shorts are not allowed here. \n100 shorts dekhoge toh yahan thodi upload karoge 🤣"
+          );
+          videoUrlInput.value = "";
+          videoPreviewContainer.style.display = "none";
+          return;
+        }
+        const videoId = getYouTubeVideoId(url);
+        if (videoId) {
+          videoPreviewThumbnail.src = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+          videoPreviewContainer.style.display = "block";
+          const details = await getYouTubeVideoDetails(url);
+          if (details) {
+            if (details.title && !videoTitleInput.value)
+              videoTitleInput.value = details.title;
+            if (details.author_name && !videoCreatorInput.value)
+              videoCreatorInput.value = details.author_name;
+          }
+        } else {
+          videoPreviewContainer.style.display = "none";
+        }
+      });
+
+      async function saveVideoToFirestore(videoData) {
+        if (!currentUser || !currentUser.uid) {
+          loginPromptMessage.textContent = "Please log in to save videos.";
+          showLoginPrompt();
+          return;
+        }
+        try {
+          const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+          const userVideoRef = db
+            .collection("users")
+            .doc(currentUser.uid)
+            .collection("videos")
+            .doc(videoData.id);
+          await userVideoRef.set({
+            ...videoData,
+            userId: currentUser.uid,
+            addedAt: timestamp,
+            isHidden: false,
+          });
+          const publicVideoRef = db
+            .collection("publicVideos")
+            .doc(videoData.id);
+          await publicVideoRef.set({
+            ...videoData,
+            userId: currentUser.uid,
+            addedByUsername:
+              currentUser.displayName || currentUser.email.split("@")[0],
+            addedAt: timestamp,
+            isHidden: false,
+          });
+        } catch (error) {
+          console.error("Error saving video to Firestore: ", error);
+          showCustomAlert("Save Error", "Error saving video. " + error.message);
+        }
+      }
+
+      async function toggleVideoVisibility(videoId, isHidden) {
+        if (!currentUser || currentUser.uid !== SPECIAL_USER_UID) {
+          console.warn(
+            "Unauthorized attempt to toggle video visibility or not the special user."
+          );
+          return;
+        }
+        try {
+          const userVideoRef = db
+            .collection("users")
+            .doc(currentUser.uid)
+            .collection("videos")
+            .doc(videoId);
+          const publicVideoRef = db.collection("publicVideos").doc(videoId);
+          const batch = db.batch();
+          batch.update(userVideoRef, { isHidden: isHidden });
+          const publicDoc = await publicVideoRef.get();
+          if (publicDoc.exists)
+            batch.update(publicVideoRef, { isHidden: isHidden });
+          else
+            console.warn(
+              `Public video document for ${videoId} not found. User video updated.`
+            );
+          await batch.commit();
+          console.log(`Video ${videoId} visibility updated to ${isHidden}`);
+        } catch (error) {
+          console.error("Error toggling video visibility:", error);
+          showCustomAlert(
+            "Visibility Error",
+            "Failed to update video visibility. Please try again."
+          );
+          const checkbox = document.getElementById(`hide-toggle-${videoId}`);
+          if (checkbox) checkbox.checked = !isHidden;
+        }
+      }
+
+      function attachUserVideosListener() {
+        if (!currentUser) return;
+        if (userVideosUnsubscribe) userVideosUnsubscribe();
+        userVideosUnsubscribe = db
+          .collection("users")
+          .doc(currentUser.uid)
+          .collection("videos")
+          .orderBy("addedAt", "desc")
+          .onSnapshot(
+            (snapshot) => {
+              userVideos = snapshot.docs.map((doc) => ({
+                firestoreId: doc.id,
+                ...doc.data(),
+              }));
+              userTagsSet.clear();
+              userVideos.forEach((video) => {
+                if (video.tags)
+                  video.tags.forEach((tag) =>
+                    userTagsSet.add(tag.toLowerCase())
+                  );
+              });
+              if (homeViewContent.style.display === "block") {
+                renderUserVideos();
+                renderUserTags();
+              }
+              if (sidebarSavedCountEl)
+                sidebarSavedCountEl.textContent = `+${userVideos.length} Saved by you`;
+              noUserVideosMessage.style.display =
+                userVideos.length === 0 && currentUser ? "block" : "none";
+              if (userVideos.length === 0 && currentUser)
+                noUserVideosMessage.textContent =
+                  'No videos saved yet. Click "Add Video" to start!';
+            },
+            (error) => {
+              console.error("User videos listener error: ", error);
+              noUserVideosMessage.textContent = "Error loading your videos.";
+              noUserVideosMessage.style.display = "block";
+            }
+          );
+      }
+      function attachPublicVideosListener() {
+        if (publicVideosUnsubscribe) publicVideosUnsubscribe();
+        publicVideosUnsubscribe = db
+          .collection("publicVideos")
+          .orderBy("addedAt", "desc")
+          .onSnapshot(
+            (snapshot) => {
+              allPublicVideos = snapshot.docs.map((doc) => ({
+                firestoreId: doc.id,
+                ...doc.data(),
+              }));
+              allPublicTagsSet.clear();
+              allPublicVideos.forEach((video) => {
+                if (video.tags && !video.isHidden)
+                  video.tags.forEach((tag) =>
+                    allPublicTagsSet.add(tag.toLowerCase())
+                  );
+              });
+              const visiblePublicVideos = allPublicVideos.filter(
+                (video) => !(video.isHidden === true)
+              );
+              if (tagsPageViewContent.style.display === "block") {
+                renderPublicTags(visiblePublicVideos);
+                filterPublicVideosBy(
+                  currentPublicFilter,
+                  currentPublicFilterType,
+                  visiblePublicVideos
+                );
+              }
+            },
+            (error) => {
+              console.error("Public videos listener error (Tags Page):", error);
+              if (noPublicVideosMessage) {
+                noPublicVideosMessage.textContent =
+                  "Error loading public videos. " + error.message;
+                noPublicVideosMessage.style.display = "block";
+              }
+            }
+          );
+      }
+      function attachBestOfWeekListener() {
+        if (bestOfWeekUnsubscribe) bestOfWeekUnsubscribe();
+        bestOfWeekUnsubscribe = db
+          .collection("publicVideos")
+          .orderBy("addedAt", "desc")
+          .limit(10)
+          .onSnapshot(
+            (snapshot) => {
+              const bestVideos = snapshot.docs
+                .map((doc) => ({ firestoreId: doc.id, ...doc.data() }))
+                .filter((video) => !(video.isHidden === true))
+                .slice(0, 7);
+              renderBestOfTheWeek(bestVideos);
+            },
+            (error) => {
+              console.error("Best of week listener error: ", error);
+              if (bestOfWeekListEl)
+                bestOfWeekListEl.innerHTML =
+                  '<p style="font-size: 0.85rem; color: var(--text-light); text-align: center;">Error loading.</p>';
+            }
+          );
+      }
+
+      addLinkForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!currentUser) {
+          loginPromptMessage.textContent = "Please log in to add a video.";
+          showLoginPrompt();
+          return;
+        }
+        const url = videoUrlInput.value;
+        if (isYouTubeShorts(url)) {
+          showCustomAlert(
+            "Shorts Not Allowed",
+            "Sorry bacha, shorts are not allowed here. \n100 shorts dekhoge toh yahan thodi upload karoge 🤣"
+          );
+          videoUrlInput.value = "";
+          return;
+        }
+        const videoId = getYouTubeVideoId(url);
+        if (!videoId) {
+          showCustomAlert("Invalid URL", "Invalid YouTube URL provided.");
+          return;
+        }
+        if (userVideos.some((video) => video.id === videoId)) {
+          showCustomAlert(
+            "Duplicate Video",
+            "This video is already in your list!"
+          );
+          return;
+        }
+        let details = await getYouTubeVideoDetails(url);
+        const newVideo = {
+          id: videoId,
+          url: url,
+          title:
+            videoTitleInput.value ||
+            (details ? details.title : "Untitled Video"),
+          creator:
+            videoCreatorInput.value || (details ? details.author_name : "N/A"),
+          duration: "N/A",
+          tags: videoTagsInput.value
+            .split(",")
+            .map((tag) => tag.trim().toLowerCase())
+            .filter((tag) => tag),
+        };
+        await saveVideoToFirestore(newVideo);
+        closeModal(addLinkModal);
+      });
+
+      function openVideoPlayer(videoId, title, creator, tags, originalUrl) {
+        youtubePlayerIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+        playerModalVideoTitle.textContent = title;
+        playerModalVideoCreator.textContent =
+          creator !== "N/A" ? `By: ${creator}` : "Creator not specified";
+        playerModalVideoTags.innerHTML = "";
+        if (tags && tags.length > 0) {
+          tags.forEach((tag) => {
+            const tagSpan = document.createElement("span");
+            tagSpan.classList.add("tag-item");
+            tagSpan.textContent = capitalizeFirstLetter(tag);
+            playerModalVideoTags.appendChild(tagSpan);
+          });
+        } else {
+          playerModalVideoTags.innerHTML =
+            '<span style="color: var(--text-light); font-style: italic;">No tags.</span>';
+        }
+        watchOnYouTubeBtn.href = originalUrl;
+        openModal(videoPlayerModal);
+      }
+
+      function setGridColumns(numColumns) {
+        const columnTemplate = `repeat(${numColumns}, 1fr)`;
+        if (homeVideoGrid)
+          homeVideoGrid.style.gridTemplateColumns = columnTemplate;
+        if (publicVideoGrid)
+          publicVideoGrid.style.gridTemplateColumns = columnTemplate;
+
+        if (columnOptionsEl) {
+          columnOptionsEl.querySelectorAll("button").forEach((btn) => {
+            btn.classList.remove("active");
+            if (parseInt(btn.dataset.columns) === numColumns) {
+              btn.classList.add("active");
+            }
+          });
+        }
+        localStorage.setItem("videoGridColumns", numColumns);
+      }
+
+      if (columnToggleBtn && columnOptionsEl) {
+        columnToggleBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          columnOptionsEl.classList.toggle("active");
+        });
+        columnOptionsEl.addEventListener("click", (e) => {
+          if (e.target.tagName === "BUTTON" && e.target.dataset.columns) {
+            const numCols = parseInt(e.target.dataset.columns);
+            setGridColumns(numCols);
+            columnOptionsEl.classList.remove("active");
+          }
+        });
+        const savedCols = localStorage.getItem("videoGridColumns");
+        setGridColumns(savedCols ? parseInt(savedCols) : 3);
+      } else {
+        if (homeVideoGrid)
+          homeVideoGrid.style.gridTemplateColumns =
+            "repeat(auto-fill, minmax(280px, 1fr))";
+        if (publicVideoGrid)
+          publicVideoGrid.style.gridTemplateColumns =
+            "repeat(auto-fill, minmax(280px, 1fr))";
+      }
+
+      function generateMathProblem() {
+        const num1 = Math.floor(Math.random() * 20) + 1;
+        const num2 = Math.floor(Math.random() * 20) + 1;
+        const num3 = Math.floor(Math.random() * 10) + 1;
+        const operators = ["+", "-", "+"];
+        const op1 = operators[Math.floor(Math.random() * operators.length)];
+        const op2 = operators[Math.floor(Math.random() * operators.length)];
+
+        let problemString = `${num1} ${op1} ${num2} ${op2} ${num3}`;
+        try {
+          mathProblemSolution = eval(problemString.replace(/−/g, "-"));
+        } catch (e) {
+          problemString = `${num1} + ${num2}`;
+          mathProblemSolution = num1 + num2;
+        }
+        mathProblemTextEl.textContent = `Solve: ${problemString} = ?`;
+      }
+
+      function confirmAndDeleteVideo() {
+        if (!videoToDeleteInfo) return;
+        const userAnswer = parseInt(mathAnswerInputEl.value);
+        if (userAnswer === mathProblemSolution) {
+          closeModal(deleteConfirmModal);
+          videoToDeleteInfo.cardElement.classList.add("deleting");
+          setTimeout(async () => {
+            try {
+              const userVideoRef = db
+                .collection("users")
+                .doc(currentUser.uid)
+                .collection("videos")
+                .doc(videoToDeleteInfo.videoId);
+              const publicVideoRef = db
+                .collection("publicVideos")
+                .doc(videoToDeleteInfo.videoId);
+              const batch = db.batch();
+              batch.delete(userVideoRef);
+              const publicDoc = await publicVideoRef.get();
+              if (publicDoc.exists) batch.delete(publicVideoRef);
+              await batch.commit();
+              console.log(
+                `Video ${videoToDeleteInfo.videoId} deleted successfully.`
+              );
+              showCustomAlert(
+                "Success",
+                `Video "${videoToDeleteInfo.cardElement.dataset.videoTitle}" deleted.`
+              );
+            } catch (error) {
+              console.error("Error deleting video:", error);
+              showCustomAlert(
+                "Deletion Error",
+                "Failed to delete video. Please try again."
+              );
+              videoToDeleteInfo.cardElement.classList.remove("deleting");
+            }
+            videoToDeleteInfo = null;
+          }, 3800);
+        } else {
+          showCustomAlert(
+            "Incorrect Answer",
+            "Incorrect answer. Please try again."
+          );
+          mathAnswerInputEl.value = "";
+          generateMathProblem();
+          mathAnswerInputEl.focus();
+        }
+      }
+
+      if (confirmDeleteBtnFinal)
+        confirmDeleteBtnFinal.addEventListener("click", confirmAndDeleteVideo);
+      if (mathAnswerInputEl)
+        mathAnswerInputEl.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") confirmAndDeleteVideo();
+        });
+
+      function triggerDeleteVideoFlow(videoId, cardElement, videoTitle) {
+        if (!currentUser) return;
+        const videoIsOwned = userVideos.some(
+          (v) => v.id === videoId && v.userId === currentUser.uid
+        );
+        if (!videoIsOwned) {
+          console.warn(
+            "Attempt to delete a video not owned by the current user."
+          );
+          return;
+        }
+        videoToDeleteInfo = { videoId, cardElement };
+        document.getElementById(
+          "deleteConfirmMessage"
+        ).textContent = `Are you sure you want to delete "${videoTitle}"? This action cannot be undone.`;
+        generateMathProblem();
+        mathAnswerInputEl.value = "";
+        openModal(deleteConfirmModal);
+        mathAnswerInputEl.focus();
+      }
+
+      function renderUserVideos() {
+        homeVideoGrid.innerHTML = "";
+        let videosToDisplay = userVideos;
+        if (currentHomeFilter !== "all") {
+          videosToDisplay = userVideos.filter(
+            (video) => video.tags && video.tags.includes(currentHomeFilter)
+          );
+        }
+        homeVideoGridTitle.innerHTML =
+          currentHomeFilter !== "all"
+            ? `<i class="fas fa-tag"></i> Your Videos: "${capitalizeFirstLetter(
+                currentHomeFilter
+              )}"`
+            : `<i class="fas fa-stream"></i> Your Saved Videos`;
+        if (!currentUser) {
+          noUserVideosMessage.style.display = "block";
+          noUserVideosMessage.textContent =
+            "Login to save and view your videos!";
+          homeVideoGrid.innerHTML = "";
+          homeTagsCarousel.innerHTML = "";
+          return;
+        }
+        if (videosToDisplay.length === 0) {
+          noUserVideosMessage.style.display = "block";
+          noUserVideosMessage.innerHTML =
+            userVideos.length > 0 && currentHomeFilter !== "all"
+              ? `No videos for filter "${capitalizeFirstLetter(
+                  currentHomeFilter
+                )}". <a href="#" onclick="clearHomeFilter(event); return false;">Clear</a>`
+              : 'No videos saved. Click "Add Video" to start!';
+        } else {
+          noUserVideosMessage.style.display = "none";
+          videosToDisplay.forEach((video) => {
+            const card = document.createElement("div");
+            card.classList.add("video-card");
+            card.setAttribute("data-aos", "zoom-in-up");
+            card.dataset.videoId = video.id;
+            card.dataset.videoTitle = video.title;
+            card.dataset.videoCreator = video.creator;
+            card.dataset.videoTags = JSON.stringify(video.tags || []);
+            card.dataset.videoUrl = video.url;
+
+            let hiddenIndicatorHTML = "";
+            let specialUserControlsHTML = "";
+            let deleteBtnHTML = "";
+
+            if (currentUser && video.userId === currentUser.uid) {
+              deleteBtnHTML = `<button class="delete-video-btn" title="Delete Video"><i class="fas fa-trash-alt"></i></button>`;
+            }
+
+            if (
+              currentUser &&
+              currentUser.uid === SPECIAL_USER_UID &&
+              video.userId === SPECIAL_USER_UID
+            ) {
+              if (video.isHidden)
+                hiddenIndicatorHTML = `<div class="video-hidden-indicator">This video is hidden</div>`;
+              const toggleId = `hide-toggle-${video.id}`;
+              specialUserControlsHTML = `<div class="video-card-actions"><div class="hide-toggle-container"><label for="${toggleId}">Hide from others:</label><input type="checkbox" id="${toggleId}" data-video-id="${
+                video.id
+              }" ${video.isHidden ? "checked" : ""}></div></div>`;
+            }
+
+            card.innerHTML = `
+                ${deleteBtnHTML} 
+                <div class="video-card-thumbnail-container">
+                    <img src="https://img.youtube.com/vi/${
+                      video.id
+                    }/mqdefault.jpg" alt="${
+              video.title
+            }" class="video-card-thumbnail">
+                    <div class="video-card-play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="video-card-content">
+                    <h3 class="video-card-title" title="${video.title}">${
+              video.title
+            }</h3>
+                    <p class="video-card-creator">${
+                      video.creator && video.creator !== "N/A"
+                        ? `By: ${video.creator}`
+                        : ""
+                    }</p>
+                    ${hiddenIndicatorHTML}
+                    ${
+                      video.tags && video.tags.length > 0
+                        ? `<div class="video-card-tags">${video.tags
+                            .map(
+                              (tag) =>
+                                `<span class="tag-item">${capitalizeFirstLetter(
+                                  tag
+                                )}</span>`
+                            )
+                            .join("")}</div>`
+                        : ""
+                    }
+                    ${specialUserControlsHTML}
+                </div>`;
+            homeVideoGrid.appendChild(card);
+
+            const thumbnailContainer = card.querySelector(
+              ".video-card-thumbnail-container"
+            );
+            const contentContainer = card.querySelector(".video-card-content");
+            const deleteButton = card.querySelector(".delete-video-btn");
+
+            const playVideoHandler = (e) => {
+              if (
+                e.target.closest(".hide-toggle-container") ||
+                e.target.closest(".delete-video-btn")
+              )
+                return;
+              openVideoPlayer(
+                video.id,
+                video.title,
+                video.creator,
+                video.tags || [],
+                video.url
+              );
+            };
+            if (thumbnailContainer)
+              thumbnailContainer.addEventListener("click", playVideoHandler);
+            if (contentContainer)
+              contentContainer.addEventListener("click", playVideoHandler);
+
+            if (deleteButton) {
+              card.addEventListener("mouseenter", () => {
+                // Show delete on hover for owner's cards
+                if (currentUser && video.userId === currentUser.uid)
+                  deleteButton.style.display = "inline-flex";
+              });
+              card.addEventListener("mouseleave", () => {
+                deleteButton.style.display = "none";
+              });
+              deleteButton.addEventListener("click", (e) => {
+                e.stopPropagation();
+                triggerDeleteVideoFlow(video.id, card, video.title);
+              });
+            }
+
+            if (
+              currentUser &&
+              currentUser.uid === SPECIAL_USER_UID &&
+              video.userId === SPECIAL_USER_UID
+            ) {
+              const toggleCheckbox = card.querySelector(
+                `#hide-toggle-${video.id}`
+              );
+              if (toggleCheckbox) {
+                toggleCheckbox.addEventListener("change", async (e) => {
+                  await toggleVideoVisibility(
+                    e.target.dataset.videoId,
+                    e.target.checked
+                  );
+                });
+              }
+            }
+          });
+        }
+      }
+      function clearHomeFilter(event) {
+        if (event) event.preventDefault();
+        filterUserVideosByTag("all");
+      }
+
+      function renderUserTags() {
+        homeTagsCarousel.innerHTML = "";
+        const allTags = new Set();
+        userVideos.forEach(
+          (video) => video.tags && video.tags.forEach((tag) => allTags.add(tag))
+        );
+        if (currentUser && (userVideos.length > 0 || allTags.size > 0)) {
+          const allChip = document.createElement("button");
+          allChip.classList.add("tag-chip");
+          allChip.textContent = "All Your Videos";
+          allChip.dataset.tag = "all";
+          if (currentHomeFilter === "all") allChip.classList.add("active");
+          allChip.addEventListener("click", () => filterUserVideosByTag("all"));
+          homeTagsCarousel.appendChild(allChip);
+        } else if (!currentUser) {
+          homeTagsCarousel.innerHTML = "";
+        }
+        allTags.forEach((tag) => {
+          const chip = document.createElement("button");
+          chip.classList.add("tag-chip");
+          chip.textContent = capitalizeFirstLetter(tag);
+          chip.dataset.tag = tag;
+          if (currentHomeFilter === tag) chip.classList.add("active");
+          chip.addEventListener("click", () => filterUserVideosByTag(tag));
+          homeTagsCarousel.appendChild(chip);
+        });
+      }
+      function filterUserVideosByTag(tag) {
+        currentHomeFilter = tag;
+        renderUserVideos();
+        document
+          .querySelectorAll("#homeTagsCarousel .tag-chip")
+          .forEach((chip) =>
+            chip.classList.toggle("active", chip.dataset.tag === tag)
+          );
+      }
+
+      function renderPublicVideos() {
+        if (!publicVideoGrid) return;
+        publicVideoGrid.innerHTML = "";
+
+        // **FIX START**
+        // First, create a new array containing only videos that are not hidden.
+        const publiclyVisibleVideos = allPublicVideos.filter(
+          (video) => !(video.isHidden === true)
+        );
+
+        // Use this new array as the source for all subsequent filtering.
+        let videosToDisplay = publiclyVisibleVideos;
+
+        if (
+          currentPublicFilterType === "tag" &&
+          currentPublicFilter !== "all"
+        ) {
+          videosToDisplay = publiclyVisibleVideos.filter(
+            (video) => video.tags && video.tags.includes(currentPublicFilter)
+          );
+        } else if (
+          currentPublicFilterType === "user" &&
+          currentPublicFilter !== "all"
+        ) {
+          videosToDisplay = publiclyVisibleVideos.filter(
+            (video) =>
+              video.addedByUsername &&
+              video.addedByUsername.toLowerCase() ===
+                currentPublicFilter.toLowerCase()
+          );
+        }
+        // **FIX END**
+
+        publicVideoGridTitle.innerHTML =
+          currentPublicFilter === "all"
+            ? `<i class="fas fa-broadcast-tower"></i> All Public Videos`
+            : currentPublicFilterType === "user"
+            ? `<i class="fas fa-user"></i> Videos by ${capitalizeFirstLetter(
+                currentPublicFilter
+              )}`
+            : `<i class="fas fa-tag"></i> Videos: "${capitalizeFirstLetter(
+                currentPublicFilter
+              )}"`;
+
+        if (videosToDisplay.length === 0) {
+          noPublicVideosMessage.style.display = "block";
+          // Use the count of visible videos for more accurate messaging
+          noPublicVideosMessage.innerHTML =
+            publiclyVisibleVideos.length > 0 && currentPublicFilter !== "all"
+              ? `No public videos for filter "${capitalizeFirstLetter(
+                  currentPublicFilter
+                )}". <a href="#" onclick="clearPublicFilter(event); return false;">Clear</a>`
+              : "No public videos or matching filter.";
+        } else {
+          noPublicVideosMessage.style.display = "none";
+          videosToDisplay.forEach((video) => {
+            const card = document.createElement("div");
+            card.classList.add("video-card");
+            card.setAttribute("data-aos", "zoom-in-up");
+            card.dataset.videoId = video.id;
+            card.dataset.videoTitle = video.title;
+            card.dataset.videoCreator = video.creator;
+            card.dataset.videoTags = JSON.stringify(video.tags || []);
+            card.dataset.videoUrl = video.url;
+            card.innerHTML = `
+                <div class="video-card-thumbnail-container">
+                    <img src="https://img.youtube.com/vi/${
+                      video.id
+                    }/mqdefault.jpg" alt="${
+              video.title
+            }" class="video-card-thumbnail">
+                    <div class="video-card-play-overlay"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="video-card-content">
+                    <h3 class="video-card-title" title="${video.title}">${
+              video.title
+            }</h3>
+                    <p class="video-card-creator">${
+                      video.creator && video.creator !== "N/A"
+                        ? `By: ${video.creator}`
+                        : ""
+                    }</p>
+                    <small style="font-size:0.75em; color:var(--text-light);">Added by: ${
+                      capitalizeFirstLetter(video.addedByUsername) || "Unknown"
+                    }</small>
+                    ${
+                      video.tags && video.tags.length > 0
+                        ? `<div class="video-card-tags" style="margin-top:0.5rem;">${video.tags
+                            .map(
+                              (tag) =>
+                                `<span class="tag-item">${capitalizeFirstLetter(
+                                  tag
+                                )}</span>`
+                            )
+                            .join("")}</div>`
+                        : ""
+                    }
+                </div>`;
+            const thumbnailContainer = card.querySelector(
+              ".video-card-thumbnail-container"
+            );
+            const contentContainer = card.querySelector(".video-card-content");
+            if (thumbnailContainer)
+              thumbnailContainer.addEventListener("click", () =>
+                openVideoPlayer(
+                  video.id,
+                  video.title,
+                  video.creator,
+                  video.tags || [],
+                  video.url
+                )
+              );
+            if (contentContainer)
+              contentContainer.addEventListener("click", () =>
+                openVideoPlayer(
+                  video.id,
+                  video.title,
+                  video.creator,
+                  video.tags || [],
+                  video.url
+                )
+              );
+            publicVideoGrid.appendChild(card);
+          });
+        }
+      }
+      function clearPublicFilter(event) {
+        if (event) event.preventDefault();
+        filterPublicVideosBy("all", "tag");
+      }
+
+      function renderPublicTags(videosForTags = allPublicVideos) {
+        if (!publicTagsCarousel) return;
+        publicTagsCarousel.innerHTML = "";
+        const allRegularTags = new Set();
+        const allUsernames = new Set();
+        videosForTags.forEach((video) => {
+          if (video.tags) video.tags.forEach((tag) => allRegularTags.add(tag));
+          if (video.addedByUsername) allUsernames.add(video.addedByUsername);
+        });
+        const allChip = document.createElement("button");
+        allChip.classList.add("tag-chip");
+        allChip.textContent = "All Public";
+        allChip.dataset.tag = "all";
+        allChip.dataset.filterType = "tag";
+        if (currentPublicFilter === "all" && currentPublicFilterType === "tag")
+          allChip.classList.add("active");
+        allChip.addEventListener("click", () =>
+          filterPublicVideosBy("all", "tag")
+        );
+        publicTagsCarousel.appendChild(allChip);
+        allRegularTags.forEach((tag) => {
+          const chip = document.createElement("button");
+          chip.classList.add("tag-chip");
+          chip.textContent = capitalizeFirstLetter(tag);
+          chip.dataset.tag = tag;
+          chip.dataset.filterType = "tag";
+          if (currentPublicFilter === tag && currentPublicFilterType === "tag")
+            chip.classList.add("active");
+          chip.addEventListener("click", () =>
+            filterPublicVideosBy(tag, "tag")
+          );
+          publicTagsCarousel.appendChild(chip);
+        });
+        allUsernames.forEach((username) => {
+          const chip = document.createElement("button");
+          chip.classList.add("tag-chip", "user-tag");
+          chip.textContent = `by: ${capitalizeFirstLetter(username)}`;
+          chip.dataset.tag = username;
+          chip.dataset.filterType = "user";
+          if (
+            currentPublicFilter === username &&
+            currentPublicFilterType === "user"
+          )
+            chip.classList.add("active");
+          chip.addEventListener("click", () =>
+            filterPublicVideosBy(username, "user")
+          );
+          publicTagsCarousel.appendChild(chip);
+        });
+      }
+
+      function filterPublicVideosBy(
+        filterValue,
+        type,
+        videosToFilter = allPublicVideos
+      ) {
+        currentPublicFilter = filterValue;
+        currentPublicFilterType = type;
+        renderPublicVideos();
+        document
+          .querySelectorAll("#publicTagsCarousel .tag-chip")
+          .forEach((chip) => {
+            chip.classList.toggle(
+              "active",
+              chip.dataset.tag === filterValue &&
+                chip.dataset.filterType === type
+            );
+          });
+      }
+
+      function renderBestOfTheWeek(bestVideosArray) {
+        if (!bestOfWeekListEl) return;
+        bestOfWeekListEl.innerHTML = "";
+        if (!bestVideosArray || bestVideosArray.length === 0) {
+          bestOfWeekListEl.innerHTML =
+            '<p style="font-size: 0.85rem; color: var(--text-light); text-align: center;">No public videos this week!</p>';
+          return;
+        }
+        bestVideosArray.forEach((video) => {
+          const item = document.createElement("div");
+          item.classList.add("sidebar-list-video-item");
+          item.innerHTML = `
+              <img src="https://img.youtube.com/vi/${
+                video.id
+              }/default.jpg" alt="${
+            video.title
+          }" class="sidebar-list-video-item-thumbnail">
+              <div class="sidebar-list-video-item-info">
+                  <h4 class="sidebar-list-video-item-title" title="${
+                    video.title
+                  }">${video.title}</h4>
+                  <p class="sidebar-list-video-item-creator">${
+                    video.creator !== "N/A" ? `By: ${video.creator}` : "Unknown"
+                  }</p>
+                  <p class="sidebar-list-video-item-added-by">Added by: ${
+                    capitalizeFirstLetter(video.addedByUsername) || "Anonymous"
+                  }</p>
+              </div>`;
+          item.addEventListener("click", () => {
+            if (!currentUser) {
+              loginPromptMessage.textContent =
+                "Pehle sign in bacha, then video dekho baby 😉";
+              openModal(loginPromptModal);
+              return;
+            }
+            openVideoPlayer(
+              video.id,
+              video.title,
+              video.creator,
+              video.tags || [],
+              video.url
+            );
+          });
+          bestOfWeekListEl.appendChild(item);
+        });
+      }
+
+      function switchView(viewName, isInitialLoad = false) {
+        homeViewContent.style.display = "none";
+        featuresViewContent.style.display = "none";
+        tagsPageViewContent.style.display = "none";
+        const heroAndSidebar = homeViewContent.querySelector(
+          ".main-content-layout"
+        );
+        const homeTagsSection = document.getElementById(
+          "homeTagsCarouselSection"
+        );
+        const homeGridSection = document.getElementById("homeVideoGridSection");
+
+        if (siteSaverObserver && siteSaverLinkHeroEl) {
+          if (viewName === "all")
+            siteSaverObserver.observe(siteSaverLinkHeroEl);
+          else {
+            siteSaverObserver.unobserve(siteSaverLinkHeroEl);
+            stopSiteSaverAnimation();
+          }
+        }
+
+        if (viewName === "all") {
+          homeViewContent.style.display = "block";
+          if (heroAndSidebar) heroAndSidebar.style.display = "flex";
+          if (currentUser) {
+            if (homeTagsSection) homeTagsSection.style.display = "block";
+            if (homeGridSection) homeGridSection.style.display = "block";
+            if (!isInitialLoad || userVideos.length > 0)
+              filterUserVideosByTag(currentHomeFilter);
+          } else {
+            if (homeTagsSection) homeTagsSection.style.display = "none";
+            if (homeGridSection) homeGridSection.style.display = "none";
+            renderUserVideos();
+          }
+        } else if (viewName === "features") {
+          featuresViewContent.style.display = "block";
+        } else if (viewName === "tags_page") {
+          if (!currentUser && !isInitialLoad) {
+            loginPromptMessage.textContent =
+              "Pehle sign in bacha, then explore karo baby 😉";
+            openModal(loginPromptModal);
+            allNavLinks.forEach((l) => l.classList.remove("active"));
+            document
+              .querySelectorAll('.nav-link-item[data-filter="all"]')
+              .forEach((l) => l.classList.add("active"));
+            switchView("all", true);
+            return;
+          }
+          tagsPageViewContent.style.display = "block";
+          if (!isInitialLoad || allPublicVideos.length > 0) {
+            renderPublicTags(allPublicVideos);
+            filterPublicVideosBy(
+              currentPublicFilter,
+              currentPublicFilterType,
+              allPublicVideos
+            );
+          } else if (!currentUser && isInitialLoad) {
+            noPublicVideosMessage.textContent =
+              "Login to explore videos by tags and users!";
+            noPublicVideosMessage.style.display = "block";
+            if (publicTagsCarousel) publicTagsCarousel.innerHTML = "";
+            if (publicVideoGrid) publicVideoGrid.innerHTML = "";
+          } else if (
+            currentUser &&
+            allPublicVideos.length === 0 &&
+            isInitialLoad
+          ) {
+            noPublicVideosMessage.textContent =
+              "No public videos found, or no videos shared yet!";
+            noPublicVideosMessage.style.display = "block";
+            if (publicTagsCarousel) publicTagsCarousel.innerHTML = "";
+            if (publicVideoGrid) publicVideoGrid.innerHTML = "";
+          }
+        }
+      }
+
+      allNavLinks.forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const filterValue = e.currentTarget.dataset.filter;
+          if (e.currentTarget.classList.contains("info-icon-trigger")) {
+            openModal(infoModal);
+            return;
+          }
+          if (filterValue === "tags_page" && !currentUser) {
+            loginPromptMessage.textContent =
+              "Pehle sign in bacha, then explore karo baby 😉";
+            openModal(loginPromptModal);
+            return;
+          }
+          allNavLinks.forEach((l) => l.classList.remove("active"));
+          document
+            .querySelectorAll(`.nav-link-item[data-filter="${filterValue}"]`)
+            .forEach((matchingLink) => matchingLink.classList.add("active"));
+          if (e.currentTarget.classList.contains("navbar-logo-link")) {
+            document
+              .querySelectorAll(`.nav-link-item[data-filter="all"]`)
+              .forEach((homeLink) => homeLink.classList.add("active"));
+          }
+          switchView(filterValue);
+        });
+      });
+
+      // --- New Feature: Profile Edit Modal ---
+      let selectedProfilePicUrl = null;
+      const dummyProfilePicUrls = [
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgKFaogS0UXxBMBsXpNNo-hJBPeZS6hzGHjPY2WCX99_-UPP1pSGFciBmGeqjT-QNaUgCc-oMh_ZHT1vu8SoJL55ywxk33Gq0lTqHSZ9uW3PWtRNRBLHAuD4Vs0kZ3lNHMQjAmGvkEanNhfop7rGhQ1DFvaa_mM-InpiQT-JMQ933R6vi-uphdjfjXdPV7t/s320/RP%20(1).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjORLxh2gkNk0yFN1_rgnUezkxzNyD76DkOZsjYGvpvdSsJjP0QD2ETQS9z9gPtNFJDWXDCRLMGocvnTBIMX8wP1csXFyBct_aFqnd8uMSLMGe1Dsi8EV5EdI5f8-niGucH-tOaErfMQSOFwQCBNoCK5m9l5XMX4AxLfB7FiPa5KdN49Yt9tdFZOl3z8h97/s320/RP%20(2).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiCDrm1eo0a3C5gXE_Lt6xTgQhPQLBJubK4g9vFDdrmKiN8mvfwSUaOowTkmzdPsCXUgeLKsLlLijekXxTF08S9agD2DmLrtQ3Ot_9LqnfWiA2YpmkUu7WNTQlV-tCeSmJDSDLdWu0MJI_CRX5FZQ9VLHPg4axEfKvHlDV7vCB1S1WIZQK7xVANF9C0LlXc/s320/RP%20(3).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjNztWcsovyYamY6ryqvHlcKtRrN6kR3ORsZQ5SGxPB005UHArPfn7wHdTTQN7HgSWbOexT7SDzstTovqgxjB8V8BmVe8_ghODnGMBju8xnfMkYrvZX2tXU0y_yE0G6GVJxT0LP3mUApqUTh1ThpAg0Zppa91xu1FXxDmH6hGGUT8-r5dbYHvaE60tw6e6H/s320/RP%20(4).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg0jmtX3tRf43RESpycZgupP2qLOISS0Kvrk96FQOIcLkL4n4krsCUsqXNslR84WAIyKcNmS5zPr5PVXpgzqCcnXah65jFEAybo64ImBp4xeip9VNZOmOemQv7UhyphenhyphenATczBDveyeWSNXL6Dj_S7a6Jj-EfPQR7yknhkxqogcy3d2sABe1jUweA6X2HLkxAe9/s320/RP%20(5).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgRbEX4QP47e0fwuymz-EvOYX4X9veMpRyJqUS-qQQHNkULrncJUN5aWbQNK5sF7NImcrrLLgJqaVFa-X3JMUz1tlkssxtD4jF6SrKSUvU4okGCBqztFu_BI09xKNztu1ntQkr64coYhatmlpkK4LU19GhzAcVA6N4ePcOIcG2eLHzY491d_V-NzuI68Amp/s320/RP%20(6).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9S6ImhY2HoC4oMjgYhabDdMSZ2DNzzV7EtGaX37q18CBulA24z6tG2YLgnyOhWaUMnB0nKJXAocUEYj9RU6owsX3OLuL3_kW86Wpsch-Nr_vtTx0608UjZOpwQkA7PPMgsMTwgpaRVbh_Z2a-AAREiqVkt5cOBDMb3XGoRiZkF9-pc9Qa-2ObfOWIfkcU/s320/RP%20(7).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjROgNtPKZUGuGQWiHknC-vNGL0CF-iRtHUFqw32v253L_frxq_FU2Z_kZsYeXwWyCTKzie71kMG4OuGM5MKcmhY4WY5ktMUIgVXyY5u1HXD9cpE-YRZNrHhKzqUzgko-LBGPWK65nJotMmbQ30g6w5EPBVKP52b5ZJRQ8Z-Vw1TS3ZmIYeam3Y_qlbiffs/s320/RP%20(8).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiW1EbqqFTCB004f1VFeDgw13aeqmx2dOaUo4P6sDid-tPlKTM8pzG3Sq6uCQnvq0S7gfpGwJuCtt4jdWTfKAsFHuIVsDujJ_RsFt9vCfnRU56Z0BtFrMrL3rQW20Iegxt3u0JlNGACUPaHYtlo6-Wboxf9cS-PChrvC53JQDuBGaabCFQU-6DLqgEP2nPK/s320/RP%20(9).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj9luPBX2QUgjO_ofxrA_LMFTb1D-knl5k3u-pyX8zHwgG59fLmCHrPp3lPfJSp8WPERLn4KZk-muFEiWf5vnD_SiQzWOXYh65ATkIUN3qyarMFQWf-0ftzDgQcsYzqB9DXhwbur8dckK2oECshYUdqLdgHFQC14M3JyFVpV-TZP9G0m76EY2nYZzQQjn0c/s320/RP%20(10).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh8i9z1_BOF0Rblbtc1hmhB5kweJDswmP2KYVZ1P1wvISj6dhyphenhyphenTS-6n_XFt6LF7b9Romlg4w6Awlc46xjF1oqqkIWX5qOGNbchEdECqe1iUZEQ_TlHuBRNmD6mugtglLakv1dHL-uojPQy3I-j9dDC75qUx1V_sOdKEufkxyg5vwwfJG118c4n6QNi4RbK6/s320/RP%20(11).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiDF8cxDmhYuElTkqrfJTQJa2dO3mpPVWi6yvdzW5q7ajbBoRPeneipQ26qbyuC39wy9-dkTmP4TSOlHYmjgbE40m6g6k9p71fzB-eKzk3jsA46LQGY18h14XhvLaWnCy9UHdXCaqm7IXEzZ6_7SN1MBayi1ILohRKCOHS-3-GpdQgn6-rOeDz2bTZSRksL/s320/RP%20(12).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiMHVACyOe2-2rYgnv1jUHLFnM8_ydLQzNc-1f9NGZWhwbTzLFErpZGjYaHPGiVjOujdQ6G92lDA7sjnLTpzraykUiz1ttO04k22mibKQdz8tW-u8kYd04oFL7FchxXfr84o6h1z3LWwxEjca4Wng-5Cx9SSoyJ7sC4YIyy4d_gecFK7DTt8DAlsvKrgSkz/s320/RP%20(13).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgEMuKxgy-WHgVFX0qi7jN9MQFm04E5sIQdHrHt96LsREc_HHdfQLUQu8o8QBP6BUIqozDn3NjKUSY3oxC2QdXnN6f9T07vAJYyHqXU3HnTdxLe9c7eDCBYjQuStqUYLKn98nmVKFplWidmZTY9Bdm3pyG79arXWbbLdJMlOT0Db9BRTQWHSAF_AMSVv1nh/s320/RP%20(14).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjB1dXNbhLDcI2YhhqbcIpg2Rn55eICEhu4Dct3_8yafMUZySM3VjIVhQZzh3VrnfLGrbTud5HjaeXUJwIjT778rZkxBdMVY2BACQ1MMBPLOOkcqP6lKlVJH7ZRyno781BRI1T0VCGfOQUvcZtRxBX__axNY7wgIh5TxCabU303bHBxdlQwFbC-RGQ_GPDS/s320/RP%20(15).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhbVlwkLcotSSrZd4moSwPZvfoz2Ky8dp2xN-Vc1NGhNlUzDwfnO4BDkhY-E2EcYK3YKpNZk1_wi0mIu9hoSvS-aBj80DSAq-qVr2M6LH5EY_eByVXAlYts5p5UFtaVUk1y79G-U087hyAEu-84WXU97EGWfRk1zSPBiMKTE7YgbN4xGLpltrIlWjKi7VU8/s320/RP%20(16).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgxnZcMzPAR3Z-L5ZYEzK7Rylq9Tr0NOPxuIyrRm4_fPF_BufKIVLF_8nSa72Bio0HyznUoaBcabN5KxkJkgVAACOrJkyEmhC0GNZTxc5CGBGDKzq8DQB9UEaJOWkI0HqDKfVorMoCNm7cwPOp0S93FNdEVLqH1JX8gWy7s6lSGNnWG74VyzK8JUXqyOEmP/s320/RP%20(17).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgKf4Em3cjrWNr2tX3V8DgBUa2ShsiXyACmnePVqiMJfvdz2Kr3uzerKWX3Z4A5kHz9CrzVM0TmVNLet2WXm_3U8bKShWpmFxcLhrYz1i1aoC-kB3hTNjfcAVxRZ97d9-IUSF9efWmf8GkHSq8ajrQoeTluRAcrQKtxMU8OhBzHnCPQ0RUIayQDwiVCIJM7/s320/RP%20(18).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjW3J0-fwMsoYIVYl1zeSYOtDUdpwVNcMs4-K6ef2Swv9D60SnHh50zrz5vf_eD5NjMcnCqhoyGzUr_z408S5s8n4JY_qzFNSzRBKwT1Utx4bvoMrEbsYAvrK_FL4_aiXN42ADcVEZ1xVYdQeIVLirYcAUlj-PNEHC128k-xvMwdFh-acHYzzfippf3hBT_/s320/RP%20(19).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgh8mxocyhcDKDkpT3c9SFEgQdJyAvZRUqMceisOXgpq2YRoKJ_neSdTlEK1oQ-AKgMBG9HejMWLJzfSypKIlUCzdFryypX4O__6dI-sGz893ub1fp_BUgM4yRG0-h-oC_K_KirS6qum5pojLVOPvsR6Ft-fudLxi7-hkVc3SWDCc89iIi7lqjzEq5i6SaU/s320/RP%20(20).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiUyyXm4gbM0qV-28Q-qq10_0KKoU87MJn8FhHsye6e4xl69DmnCYmHYCvYUdv4m9TDAUc12Ci2vsOa8JIqyzaSII5KSp4TjicEYFsCJmqVhxjSUnQmSKTqEZMKWiJ8tXt5qykZfJfpFRXe3hF8Hh-zZeEF5hjaovNUcqQ3om1zriduUXHikFQllW1bBNS7/s320/RP%20(21).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiymijMGCXONpLlAoyh8NLufDHCfEAuniAWM2S2w8BTsqG7GqHlokh9xCZFYZ3gjbhXJKMOufNI2PZ3GaPpNPjZ61_HXXyPMoTmHJKJbsrLdIbkWZQ9BgtMC8yW4b8To178ijx3abplyPEgsJD6CI_Vl5pawcxzfxAK6TwCk90tctxHpMEwSRa4XSNHMbkT/s320/RP%20(22).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhYIFKfri1Nb4Fv5x4MJTPSAFn1sMxjcYyxEzpE-vOpbiw057olk36Y1DqLTLxX6snJaRQ4R9yqwNneVeFHJZRjowza4_CcKWCSQf1GePQvVQhyzftdxSvP-h55IYgkWLkrSRlrdPUbvcGBHmesv1ARtbSFWqTTK5kk112ZTYBK_q4d2yOTXOeM2-09nVIG/s320/RP%20(23).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjxOzYup68UgiwVaUdF66-_OaoZ0spl5opq6UsrXp9gDFPOYWyLncoRZKjxvkm4X3zcwGgUPUGUx0JxnKmqU0mhgv0L95nb5rfK8mL8Lim0r9C6EAbnwV92N2jWILpMcRkoUTCyB1see3Zt9o9kRfOKUFypI_yUDDNhcNLlqBZ0wOdLj-3R5pq10_JVr3ZZ/s320/RP%20(24).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgWQnn_qCTaBE57prGkktUHVHRW-Yoi2HEXu6XCxLhnh1FPxADEhWIl_PADDbgmnISvrrWrdAiwKM7m392v-im-pD2nYxL-iLg34f83fog9aY-uQ6kwW2m75Y8jLEiZjVOqKY41srV3c1l-pum-b-m2Z9TTpkRYp9cXvpCpr950bdR2UY9wWuEJ6if8xG_O/s320/RP%20(25).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjz9fPEzD48e_YeqvqmWv7BuVUYNtKKgHWirhGUp4GPGUX7wzgDRSXJpqcx4LZ50UASLM3PVKYTEELM8nw1D2J270jWbIt1z_wlJnu_T5xBWpuJtTLU1hatlYmg9sUKL7_7VCJC8gGn_IUo63GAR8aFcTuJX8WiD1_3hUFjiYoVhEYtHAVDdkjofi60g3bG/s320/RP%20(26).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjwd3DpZ6zmh5MzHpcPtoXXHyPYcuXSLk0rgQI1dCaTZWObLwtDuUTk-jlv15yJ53oFfS7XYZEZlJFkq1_jnYaSM0ktq7ENi0H22XFxGos0e87301rVfVOMWY8G9RE-HU1EfEojf2E2cX_7QPpUruHXT-S_os0i2aZJ1HUhDv9VY6svxorq1zMVlm4jRE8a/s320/RP%20(27).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjJEFEdp1RmFcyRZHvbIUQaFGbMf5uXA98iIbaggKwlUMeBKk0Mum3c9GcMT2ubtscrrKmp2FC_TfbaQGzoHv-ipyTgPQA-Xgr6zCihnPGvdja9g38A3pFAj7hCfUGrvzaRbhOAyWzdxOMvNXD3DCeBFyga3nE4HGSmuh072CfirV1H9sNxb28VPl1lsQNY/s320/RP%20(28).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhHf8NZfvX6fYjy6-xHk_C7oYnZmYC2M6tUIS6rEY7vjGeWpjFY0vlpanQBj0zajoUJqB6qwXkMUuYmVxgOlIIP0Teh8S234YCzHDhKz9sqA74pvaaU_vE6zr_S-uMr5OBV_MtBVf7nKa1iROoYlMi8soKoQq_kThw1VBE9Yov-6KD7mNyVayXkZgZlT9HR/s320/RP%20(29).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjbG2GSTSH0ctT8y89L_BFzwlRvucV6LPz-pDYmGOwaALgKbd03bR4ZntHFgGLK6Y43SGLRoBxMoOir2iGe_7M4h4zjZR7l6iUwo-IJvtm81mU_Pgi_VDqBLyPXOQoVshgM7A8oTGVCdgETKj-sx7GW9hg-lONxGPH8i48xxO_JXNDGs0A64YtA7SqN9trA/s320/RP%20(30).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhyQrI0rqIFNTxPyACgud7QKcEGV0qRcqI09sMtI25T14y5_toBWAujpCfM8RDZYxppC1LpSTt4s9rJ_L40TsktqFxR-zioEbXSosbw6Hre7_XO8bkPf_j6AoLlbMu9Q-lxnKGp2gtfWcMjVr2hV_ZuL2k_5kYdOdBPF_4E8ap8QyjbfcxIzcf_1EZPGs8c/s320/RP%20(31).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjtOx4LHkMsmbsi9fe1Etb_lZ3_mHd3t9drfVHApLd-T89eXysBkYU57B1dKkw6-k_fMcdH3Or7DzdvjVykzB0z8EAtej8UXE1wVGb0yqm5gv0icLLUCa8WvgSh43_cUg1zHAOhpM8CuM2TWx2G4ogp7c8rc9ystw-YGxOn_jQBfNyue5avb0gMzKie5mYE/s320/RP%20(32).jpg",
+        // Demon Slayer
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgDrHombII_JneLBqexft9ZOeHTHQm-46cjCAUdRKnDhxMxfigjq6pPY35Q2KhKRTwbqlAb3uXXle8VZQeN0dH8BOMQIUdsDymka0JWDrl1mB1rypHtTfMvzRw9niB9TTFQPnff1VGdB0g6QWO96q8XZVJk6l9v0t_Q1jvMzb4jmjMUpAiOfF1cqzcH62C9/s320/Demon%20(30).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEivmiQaz6G1PDJKvEhPIYnbMxc1JSgDYJv54OjGMXrt9Z2Lb-DTdMsCPMfElS7zYJkO2OeMbhwN9K0_vMg1D7elYe0Wzwq6njOCdFTN1Y-9zUOqwCeDn5p3CB_MKuFsURMBGONSMyWcFta0s17mabdr7wcIfxjIG5jY7sqHcfXF76fjOw_5tQMAET5wcfd1/s320/Demon%20(29).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi4OZZnSRy1VW8iqdnP0dcQA4Avq1G_b6al2I-_OvG9MX-XTAXftWcTtKQnDZDYHp-RFL-5GIXRWbUFx523kUzdkYX6Q3UQ7RHHo4NwNeYK-wIful479uwqKNseTnHg6CsVU3A-A8HDHIOaTxBV8GzTom3x54tpP_ATLYHwFqZ7xkvGZ1LlK7hP8AUQ4DPO/s320/Demon%20(28).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhawcgExMRV325XvP1pR-7GTo9YfT1qdaTFNFciuWREJ_-yP1ras_L7hpymKX6DtNH-U_0jmZazAzjYZd65SI06bfFBVvVMnqZmjRt8scaW18px6VOekgRdqPYVCYjnHtuiSHmOFI4MMQvEQ0RDr4hoJYdsm55keT9Jx6MSXclkz71xho6q3_PE0yPElgoA/s320/Demon%20(27).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjibgM4V6VLSIf_hcCcNagPAIs0IH5coNyUdjW7Hg5-H5O-ESbOQFnp7MahKJ9uIQXHzopIz0ROy1S4jZBc06ySheO-ACBfgMAzO24hn-QjZAWGUltjerK6MGHEnzs-DazK7BZbEbC4D5roUlPEErtWNfDFrcfXnxEUlti5A4eINlSt7Bf5MIr3Pgz28ysB/s320/Demon%20(26).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhxTbhbfiflDpL2qQNKfPZ_hWsctlcG6rdPU78qJf0qsVq8NEdQ0P-es7rzUda-ur1YgoMhieSfPu08iilmrD_vPzQhbY8xdE_VmisfEY-h7EpZrCVKgRLo1QG0gpMFhH9gu2FcCVXIuYIEeizH1WLwZufBPVYtvKvz0ikeqPSfcqRF3ga2dE45R7SIomBj/s320/Demon%20(25).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjdQPs55p7aoISwFWM6zUkO_OxKlnM1-d6R834x5yVUZ1CcoXcDDlOWxXImHtiiO-UXJjEojXYJ_mEhgI7Zk4X8RseWLVO2d_grVAv93J6MOU1aHdwIj1gQ5niEBygfNz09J2I9QSZZ2kxtPrelTdpHesMpW4Uz5koE9JX5buq6R09b1uRUdTu40uBnr5Nm/s320/Demon%20(24).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhePcfS6UQJGSEKJl8Um6i9f-POYa2pw6VNauanCdnpQrWEyg5KFqQPuxH9nrQI-ihJZLdHt1OpPrHQPWNiMi6XUY-dVAn_8EaacDWaEwzr7MXkoFphG6xL3sluEjlqwj9BZsnOWFi9SLsPwIg_zbQ9erm78mEOoNzXsha_O9l2qgltgkJcDEureItH2T51/s320/Demon%20(23).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhZYY8J6hdJc2z8OutHB1jd9LAJM00ZcUU253gXFNrwamYNcMF3VMSxVp8hYHeBq3u-EIkkoBIgpAHbzwrYH_NlgUOeAjpd14sAKb4NrTPa5_xLPBv-sve3zcCotz6HLcR2TRJyPJ33l4Mn8xqtMSnq-cPiPIA4FUOcKbOtPMQwU2P5JBPGXrLeN0DqZGF6/s320/Demon%20(22).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi87BY7B4TR6A5zxhkoGmiXaM0FM5MDSEj6e9VWnv0_76NnQXta0G15CYvxjJ3cll6JSj3yYu_zaD5bMC6sr2tatg17qXmKKr204aCK8NnBsDXpHlzOi2BebmlSvk3KI_CRl268eEWFXyzK2Oq_x_Gk-NhU1TkDNaxCpBrBtYU2u6zZHwJuAM_XuJiszvKV/s320/Demon%20(21).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj-OD-nY90gWNF7LwxQvAxpOuk_9kbE0G3Pw8sA-CWK5F8sm413z8AyIyyDijkmSFpJYGiLGgem2094cMbTL1lcIHwyoWJcSlZDkMHHawBvts2XNPdu8eUHcAX5X-Eh9vtB3jejbMIXi-z4iUMmQPjIGyBFVqPxafV4WcGdbrnCEFapX8N0E6NQVHo5UQOm/s320/Demon%20(20).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgvppx9mvw0lMXXNShDMq5B1lkGMuKA_Y_WU05-Vs5doc8BCOc4hoKt_MMF6ULY_oAfkeCdOeBklgjUY9pQK3blKYSdIQqU49iCRZnQ89rdHX4HpDVrtrZnWOyQvRQrz3UUNCzxvGmt-QegyjxoatoBvufyr0lQg5g5fO7zUOQqrEoDF1G8rXsoB4VMC3qo/s1600/Demon%20(19).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgev5hxBrRG14dPADrPBsIldSPJ_2I9bC2csPF3cBN_u2WUCDlnpmGsBCIbHJIZC3q9va54vJIOX0VOEEXbTsWcck2C4jcV32rxBGN5EhPLdS5OkiZ9GCOcbUI1LNwkUBQDewNhJgPXUmTqq1dZnlcT-AnUZO2S0YGBBqIvBAshwk_5n_DUgCHz3zj_FABw/s320/Demon%20(18).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhk3BB4qK7PoTcpvjFrMMasgRwU8mm0-Gq2vT6PyJo0PA8bKRQwAkq8oE_S8xe18sBCClPQHmzR16_DEAOdxfnmDYZCpCqY8hZ9Xn2zwFj_Qy5Ox-xJNdtGRqT-SyUSjkCn5WnRLd6a6qJTsDk7Dsj2Ep2vsaJ7Obpz1zK5EiYE_3OfECeg4YDSJpKLVw7y/s320/Demon%20(17).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj3PBmhUxyTMvLIeAaK3yKtqVZLvKA-8m0sGccvP-PAV9w2NRhCMWyM0mphKL9wRwX6AJjlcwy2sQpmhpZJHO_JsH6R3uGWLGT4Gb4MzzPe3YI8zgLIQKGuQ9UdyqPF1l3e3OrYtDhCSxAKDpkBaN8QII4bus8-mb_ph9PTmXvuEd1aWd4S8G5gLvjuq2PS/s320/Demon%20(16).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg928-ITmQ2-680vF2MCKQc9q83fsDMt80WjmU3KlTdyPoik0MIyIMw1flFZgu90GExVi2rKBwmecu2s0JJh30ezBNfZaYNEhZV79XTB_D5kauPk9_qg5PYzZWJHhnIlvdoDY5QT_a8cKE4POOM_uqcIJqR8tdqiJwsTrehGcrJlYFwUOHH4vo896NsFcjs/s320/Demon%20(15).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgdmbZERIwvuLxUV9QPtpaFGWr0DiPKwIvafKGi_C3fkh6iWbOlNvqbsanNEaZjG949gDjIi_Czrz-LDBYeO4b-47i3QgL8bK2Nfj21ezJiWEZrUkgLwD40JWEZAFQj3pyZkaZyQ3jf4r-sAtBubGNEBREiMADt7bT5mlV-eZQNzvez88D8kEGTwEs5tL6T/s320/Demon%20(14).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEigFNE-kgjYuZTf988s-LwsVE65J0frjxrpln908DTHrtsqtqzr2BaIVnsPaTKzBND4BN4xsrWqlOPdQ5h4z4PPE5TuxRPOpVkmx2DOaN3T8EcWv9D_CTPQNrUUhFSWZR1nd2BPqv5yi2KNxP-3qzJ_FXzZoifR2X9gJivhyphenhyphencKjfmoS6TnrASMEiIZGyxJu/s320/Demon%20(13).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgCzr4PlTpHf-PevYw0F2SatxvoMrlRDWv4K3hPmfCy9XOiZ9VwwXBAkCQqC4zeGc6kIlI_Ldo7EpoLFKoOiix04rXH7sUx4mTDss8a-RtdDXMvw-0BeGC3IZQkEzD8qLQBUtKgFGjHBpxDejaGKNaVO2ftGPERpRy9KhfU3zg9DdQ448Rt-9y8DfMVMSQm/s320/Demon%20(12).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiEaN0va9b6FC5MS2LgGyzT1ItUaScHQynKC033VmcVHCEEpcuohE6a_7yrfFRE-dAFqW1IVin9tJrNsPqHJDKu4oTSnqKgyE1cRSJbvFE4-StmWsRm2Z-FD17ABvTzsUV3KXVZkTw0gYqAS51fwdT8Wx1hZ5eXWp5tkqNQ-6moi0zx5NqWL9BGnrErTKDO/s320/Demon%20(11).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjZh5A3tDwK6uojD0qbczayhSOgX__sgwJ2VeLEBKqKtRkik-6Kjtc-RDhEIqBkCOKneBqtqXt1y8X4iCcbh6Uhe0WiTDVt3kAgCTR3vY__vCCzhg5o1GTj-WMePKegJEKegpevrgrOyW61SxZqKdAGBKHTyYa7smKF-tOtPoATFwFSZGHOCg6Ra0k8OumT/s320/Demon%20(10).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi3skZW5DGibyreF1exLqt0OTl9nNcHhFxEJ3WzalWiCyAObbeJjGfgiBAxd-pNvhnUrxuX2tbf6fY2ckMtfw0ZliRUqh6Sp84AbbdJQYY_s_I3aksH6BuejXcSZnElxlMrV4ScL0vAEMryxXHr_NWhZHi-qpHh1kuE8qs0pCHs4SAomtGQybY5eKP_ZPvR/s320/Demon%20(9).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEje26zdbvZNPumPxLO0FEwfm1JvvyESVzZ68Yr6FNzd4B4GKr4oh0gIFZjps6Ezi93D5dWaPVs2k5JOG7bZFSLX-xK21MfwsRuCYSLIxZygHkicfvcW8u0_ZDY2KisZ95cLhRms9j-KVt3dYLQDoj9rdbJ0yRLAx6iT_G34eRjKBuYsFOrXZe9XqaB1Ekbh/s320/Demon%20(8).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEipCyOzieSdzqDncVjZ3fn9NMcgkgAH9C9OehMLTVF6U4KEs8qpCf2UZDmAirhJAlXN9REEhbhdprcWAIP6LFNaDQ8UyFA78O6rPehV8h_XyrNp-5rBLeCnJavHMdDGQTiLdm5IKszUMIs5L4G-zOodIWB8OqnwpIwXOIvA8FtgULRngaYI6bFMfujeqwEu/s320/Demon%20(7).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjbDSFojJhU30NzxrYTX86nQSSxSZKIAMDNebpc6cAXn2Yca4FOFsEehXdzmkzZ3f3FUBoPvWn-IXGiNiusncyzJEqIxnllTPAcanbGl1nTpdd0t7jobkNl2lpfvNUzZvZXudyOy_SqXTwkjVDNQAG10iZs4bQ_UIuajl8TElAOV-6abIdsZXOM-XufPupQ/s320/Demon%20(6).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEire70WPlU4SU0JEemKpzQ5qb_ZWsdirBBos4C_2E_HWXpmfROTUjaeBCMkkJL2O7m92ddfHFQwX20fkEluE_XS4YyRZY4HRXBIn2rD3VI-YOHpALHV6ptiY23UmarI5Jcegl4UZxXNqEkb22t6wI-KnOfZipNvcgMOlq82aG0FuXmkXvJopD9YCJWb845e/s1600/Demon%20(5).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg6tn39efpFsygjdYlXw6pL-8Ocq0lt49gAS7KXFPkQVUU3qlSD12iR71HZ2eXm-zqFqcP_9Qh4tPpdR44tT9X9E_Axkgf5yTHz53IdRsWNPWS7oIMD0wcOBbUuUbhSUvT8ETOTBw9oYGMtrfvW5ezGyK5fYz4V-2Vpp0xj7V444q2GnwD6QchnSFtoHMLr/s320/Demon%20(4).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi4HYlf_Y_46j2NtVYp-aTNhjOP6qHUAbMRXFI4t3vWKx7-WbaLjuYdJl7y3bt6hIygpWCDgHOl7vHxqnBIfTRg0H7FfiCAWKwfbG6D04epmQZeJK5U2ZSWTt7xmcZyCWhXFUfbCL4o7MPw2-IfZOCaShBGfvaIDW_DqmSPKRFk3Ni1aU8xiWXnSBZjYDNJ/s320/Demon%20(3).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgrthBvxTudMUxWLKWadcj0ZzmemGTN2YPlNILsW-RzogheFbv20sAwBt9N96t3paFa3FiLSrmUY7t4K1Uhe5xrRuwqPgN8lDd6mMuGz9MlF-iygJbl_uMdpeMxTjYqErwyTRWjm7juvqkvdh6Xhb1q-_PFTMUZwIgT1TwWVZwaIT-TvAb0_eY1u-zka62B/s320/Demon%20(2).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhr8NdaaoETDpL4W4H8YxHdadLISCL0DBYYs1lGNFPN3gZYJZXcG3tjI4m7uGV-OdOgvNpZ5iAvArzKxageAhu7jp1qWJKzaHIg9i7YROvMq11EaJrr7l3b9ocr5WDBk8r7fZQaTPAGaLpv5rEwMic7f4ZwOM7UVB4AhqlMw-mgI2nBJACA5phUttQeJLaC/s320/Demon%20(1).png",
+        // Haikyuu + Himouto + Spy X Family
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjyHHlmMaLlIqSqjbl3TPUAf2tCYw5QZhaGM5i9o6Eju5vU_s4HgUc2PcrKSRLRSaP7pXVNYU5rgMuxIxR_08oRJXBJayYPsegmOPNOWY_wpbWR9bUvBKlGWqBP5A39rMjpVdnS8iDyHZKPFyofttBFCQ_SvQIFvcWZiqqB8NUYsHpkTfaSnYzEV33flH7W/s320/Anya%20(1).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgUvHwqEEox7ddiMnqDpifnW27z7qC8r4qwDfOhhwN2BZX4L-I-3AWtbMFsZWdRiWRQx9t63tfC8mm_1q8F9GAmCv17H0LQA3iDZKaJNEbDRuhKSqWAdljyg8gTNj4QEZaPtQ95oKFUyY55axTJShCXdcHDSPMGbhaSnGcMAk8HVSBQkadyguA3fXFDYOH1/s320/Anya%20(2).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiKdZaDrqOv_xvDL91mIWOuyj7y1UP2BhE8D6KT9vvqiesdkJLtQkIZ8r8Zz2LVELrhEP-I4dIekHwivFgrLtS7unTAj-9lzvDftAAqrrpN97PFYavub73S86-vlyWMcBx98RDY-wABWjEbUKdpi6lCEbffzYYohSaEXRoAoV5WUgSNEdubBcKBCOuSvkkH/s320/Anya%20(3).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhOpfENmrrE-eMS9u3X5jBK_EBYhdD9Isck58Jk1VJ7xPLm-T7pBXA0cPJhTXT6L5GJk45YVMyHvvQeQrTrlBkcLd_-daaR1aldwOQ2LdTfkfr1eNRgLEdgAFBIl1Zdqp6m0xFn5D-Wil9hhuitAnZYkzg6hgaXzXBorAmkSIcnuYavl8g8gOHGTTggV-Wn/s320/Anya%20(4).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg0vPdNpw5a2LFOxr_yXJrbJWiwZTxbncZgKlLfEQIFGImsOudVWlSmmzpvoNpQiVnlMf7eq840fNrv6wVZfpoybZaNr4Os1VB8cisEAvvy-wbrr3775A00cwex4OKQPUm0DCHcwESB4l-xXenOSfOihFeZK1Z9XoAR6JLe7D1xpSfnoG1oSKGvR1Eleygf/s320/Anya%20(5).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiMOhu_EyBziPJgShRpjmWanMBH3iLhdE9OIqO0v2HpC-OkuhI02DnfbR2zeGF2f20UZkHbN1pt_XFDZO6wvUkXGlXe7cbcmJQHP3LTfmRaXQ9MPufPTGA40WzohkQWeJW6kgyFP3h-0qZxJZMKU1lOMaX4mMcir5MIAxWQCIdz7NHwB33fM5AznExZDRuy/s320/Anya%20(6).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiaTsZouLDsCuEExwUB7FRRVeqF_v8ioL4Q7pagcvUQ0xZtvmeJOxg_5ytpJoXzySlkhX1ceOwIBq5yYikT7wyIW2-I-Lb7M2kNlTWz9dCaHKFo5JerIUicn6W4YZSmyLcdUFELmrawF4pjklr4GXG5MINWwpOYEDEE7Su3jY6OiLPC0yAbsPbW-GQ2EKoO/s320/Anya%20(7).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgk9Dn0id43BoPcTcDik2q7GjGZOYc0blK4XEu9LV5JfYcs3lkavQvexQSjAZj9nBLCY7Cmt2lQ-KM3ckEFSVzw0Sq6zAWig-kM38QtUix11eESGhvl-Kh1eVuVdwRACJCCDdhcaoMuAx5kpG51Ina4MSV2BE2-pWceCTFOI67IuoZZLoWkLMTR3xiLvPWs/s320/Anya%20(8).png",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjwwOP8ImXx_fh1xvCWJycfJ78sb6PiK2tbDefRGjY8fX7_Gw2nE1bkiwaxAkwezuN5NiNWudztdJA8W57lwdjoT4GUmZJuXMJIwx4Xv_vbsTjS5kP0qeeyLbyswp8f8x7gKoP9_GQPKC7uxZ4GeUQFBFnUhizFOAvrpL66PcNCnr_tkYxvdGg6U_ebkVy2/s320/Haikyuu%20(1).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgvWnYKIFjYuVT9A_n-ASZv0SnlJyeH0P-LNMVsg822sCZFRn6cqnz-FLKFa77OIC3MsOUNpuQojeN1SiJUn9UQcPMvg-7E5CFCzD76U-Hfrl9q6_S-4UVaUaxg2nfg9YaaNgIAQ2bA7loEBNZjNwmoCh1UDPpqMNVHAA63ahyc-Ta-3dO_e6KZoxqws9fs/s320/Haikyuu%20(2).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiJPg8-crwMAJVxQhKcEHSODqnObZzS10Bv7B08fbvjtI7Sp_MfyAsy5TqkFtJNi5ooM0jRMjz81ivLQ4wb2ob-kdyf-y4yuKCYLILXjKD6PJvLFBYBM0rzx1eeVL4zHDYEx-flRXgNIccA6E5uMu0A5VkwmprmwvOpOhw2kBmuYqxwYyQ9iifafNebVll8/s320/Haikyuu%20(3).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh9qNj7_4oAPfqRTTasMOmwRVQXpsDTop8kyl3g_oBwGHzUB1DkQBL4I5C9KscJrr2PKPS94nv29V74a60vduPnz1TushuPH2NuA1RWFnY-Ful_wc25a7sE2ZnndABStlRPjv07INMd3ShWln5MtCRWuLqzOo8JO8AN0bq3S8fkP1bi4K-YVMYjep1BH9IN/s320/Haikyuu%20(4).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhgNep99CCWCEoKsdOEBMqYBnIWV-GlWOZVdydG7od9_npXa0G8bjkjsnDgy6KaiewDd2DXUpLe_w-A79qVvkTou085MtxpW-4c90U25pLid0KRn_KWiJWDmk19-s8SC-HbIAt5xKXMvoj_moIFuXSu7mo1ZjoPwHn3CaXeuac_aQZz2p7O5HyycU1kCUGJ/s320/Haikyuu%20(5).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjCo01f5RGS_EFutR9Ijc1zWb-4z96IWspxZU-4XqUyTzC8uWyRTUERwBs_z8QljUd2dT1s6QTydl2Nx4FBMIeOjBuH71nJgxsSRG_iJczZPsC0feGkyeX7r8bw99JTLfKh7dbS2OqfWF22EaJPY0zx39TkHbveEDBQBUZccvTnCTfHCmsVDGb8TgxyXRke/s320/Haikyuu%20(6).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhor30dB8WWVOQ9QDjh9o5emihevpGrGPyKNLDilJ0reenjpoOB5lh3CLpOIj2itFThuL-vyhqAe8KF_j5HdAmKFRRjodeGGcWsJUFquQK1xa8GEMY-0GB-7zuvJYl12MOtF82VgxX-JNTKSR8Ghh7KspJnjqoPlIHHGg8hyphenhypheni-86SRX050OnxgkSjpimF6-/s320/Haikyuu%20(7).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj79e5Un0Rw3boP-WAjNTTXngfG5OZnkSlxAvlEyJ_UoKJsIgi7ATiAKscpIhyphenhyphenUK8ipWa58tN_kROywI-dw3MFqfdsfY5w_GWqpCbT_P_dleWYswgM89cIYVXBvLx_TCKKeO-r4p6rcDB8XTF3YFgGZkKRF69zmINDdsKhSzHQWs40ZMvuM3B3-ySoBkVf-/s320/Haikyuu%20(8).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiUYNDA-H1gmbKNCrG4nbRT2f7G5L8D529O6mvg3LQ7GVNMuau44-9HO9fzYh5p6QPlL2HOIOrCJ0oHouWjnuDjbdspNfwrW1pjyUDuj0jcfB8YWAZhJuxKSEgA3c8oV4O4mWoy-m3-EDm2T8dVDMQ_42_uPQ3QTHp-QFeEF6q1YJSlPh8o8bgjgQn6dp9H/s320/Haikyuu%20(9).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhjfOBQXjXgWrDak83KvnYK2c6SFaiqOhKOSA2EdVIWG3FcinLyv8ZNGnNdUBz1iHRm8Ht1AxU7PGKMRpo5GJdoLd7cuR6LPS-JKrPt3JBiZhQGMHpIv1uVznyPazFTt4SZ_HFSViAJawAK8VYjAtt6IFqFU7MzlijzSjYIzRgXs4HTp5dvmacMAEixF7U1/s320/Haikyuu%20(10).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhNyEphad_dOH1ANehCSNQN17t8qUglMBnjISN_XlUvgbi_5vpIZD0yyUOZsQsfT5KqQOkV-3R1FUdnYp0JyT-0uRfapiJUPoXFMKgo9RbahRgZ76KEyWWXwTQUhZlMpA3z3eSzV-Q7Qe8ZFdRkttXCidZ249sPHBqks9dU3-S7CITfcHuTBmPpAkfAfgED/s320/himouto%20(1).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiUAJnbY5LyAECivr5gGQCSDJ15_zlSgc2aTIJrUyr-DWD7t5TYKGlLRGNonAULfBnIL69ku8qzi5sc6QrzMAdwBFx-m6DGyDks_XaS52FANerHSIfSLdLPyw4lD2_qEK3PyeZtvq9Hj0Q3lclYAcAUJriqp3mvw9hQZXpXNCGNzFcuUWvn0TvmTFtM_zmr/s320/himouto%20(2).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh72o8MLqd3wiA1zBM6LlZXlLxdQV1psMt_x3LmeBo4ayaYkjdKUXvbBqHPjSFUM2KIbheUXDtQp3Gnv0gLfZa6IdRCl0c8gbaTzVtgOMy4Pv9rTDE1bTIrq32qUoGz3Rfvg64FQSLtLh3iKavwDRIlXlWmquvFQWceMK_yTBRC2YHRVBlce-eKfQ9pbrNV/s320/himouto%20(3).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjXB8L0XW03LRXdgrwZk2xdOS6YPx4xT_NMsvTM5l6gtivTn9gkqjDKhMHY1Ezywv85140SrtZJHneTAKWa2IZhQXvdjx2JUUXY6ZeO0Fv_CbgIC7yxKkcDUjwxA-pJdRsqfAs1-gdEam877gD2qC8nEeSZxs-FOiFsDjxcm-VgTp2lD2a-PhjJCnnL0B9P/s320/himouto%20(4).jpg",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhcjaHQ2HfGRTFbrXfB7JWOxvZpq_5L5pAXjgFwCpcmDcCRr5vLN-2r3hD5ZibuFy084em26YYHi91VNYn4NdGOrHFazI1SDcxsSpWuTj3_jZXZkPFbNpEvUNEbPat-Bmaf7chEMSujc5WCXo2Xq5nrEO6jlgQYdyEIYjTzCrfBP7mFGXz2Dmq1S-hjporw/s320/himouto%20(5).jpg",
+      ]; // Will be empty as per your request
+      // Example: if you decide to add some later:
+      // 'https://avatar.iran.liara.run/public/boy?username=Scott',
+      // 'https://avatar.iran.liara.run/public/girl?username=Maria',
+      // ... add up to 30
+
+      function openProfileEditModal() {
+        // This function was missing
+        if (!currentUser) return;
+        usernameInput.value = currentUser.displayName || "";
+        profilePictureEditDisplay.src =
+          currentUser.photoURL || DEFAULT_PROFILE_PIC;
+        profilePictureEditDisplay.onerror = () => {
+          profilePictureEditDisplay.src = DEFAULT_PROFILE_PIC;
+        };
+
+        profilePicturePicker.innerHTML = ""; // Clear previous picker images
+        if (dummyProfilePicUrls.length === 0) {
+          const noPicMsg = document.createElement("p");
+          noPicMsg.textContent = "No profile picture options available yet.";
+          noPicMsg.style.fontSize = "0.8em";
+          noPicMsg.style.color = "var(--text-light)";
+          profilePicturePicker.appendChild(noPicMsg);
+        } else {
+          dummyProfilePicUrls.forEach((url) => {
+            const img = document.createElement("img");
+            img.src = url;
+            img.classList.add("profile-picker-img");
+            img.dataset.url = url;
+            img.alt = "Profile Pic Option";
+            img.addEventListener("click", () => {
+              profilePicturePicker
+                .querySelectorAll(".profile-picker-img")
+                .forEach((el) => el.classList.remove("selected"));
+              img.classList.add("selected");
+              selectedProfilePicUrl = url;
+              profilePictureEditDisplay.src = url; // Preview selection
+            });
+            profilePicturePicker.appendChild(img);
+          });
+        }
+        selectedProfilePicUrl = currentUser.photoURL; // Pre-select current or null
+        openModal(profileEditModal);
+      }
+
+      profilePictureEditDisplay.addEventListener("click", () => {
+        profilePicturePicker.classList.toggle("active");
+      });
+
+      profileEditForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!currentUser) return;
+        const newUsername = usernameInput.value.trim();
+        const updates = {};
+        let authProfileUpdates = {};
+
+        if (newUsername && newUsername !== currentUser.displayName) {
+          updates.displayName = newUsername;
+          authProfileUpdates.displayName = newUsername;
+        }
+        if (
+          selectedProfilePicUrl &&
+          selectedProfilePicUrl !== currentUser.photoURL
+        ) {
+          updates.photoURL = selectedProfilePicUrl;
+          authProfileUpdates.photoURL = selectedProfilePicUrl;
+        }
+
+        if (Object.keys(updates).length > 0) {
+          try {
+            await currentUser.updateProfile(authProfileUpdates);
+            await db.collection("users").doc(currentUser.uid).update(updates);
+
+            if (updates.displayName) {
+              const publicVideosQuery = db
+                .collection("publicVideos")
+                .where("userId", "==", currentUser.uid);
+              const publicVideosSnapshot = await publicVideosQuery.get();
+              const batch = db.batch();
+              publicVideosSnapshot.docs.forEach((doc) => {
+                batch.update(doc.ref, { addedByUsername: newUsername });
+              });
+              await batch.commit();
+            }
+            showCustomAlert("Success!", "Profile updated successfully!");
+            updateNavbarForAuthState(auth.currentUser); // Use auth.currentUser to get the freshest user object
+            renderUserVideos();
+            renderPublicVideos();
+            closeModal(profileEditModal);
+          } catch (error) {
+            console.error("Error updating profile:", error);
+            showCustomAlert(
+              "Profile Update Error",
+              "Failed to update profile: " + error.message
+            );
+          }
+        } else {
+          closeModal(profileEditModal);
+        }
+      });
+
+      // --- Tag Autocomplete Logic ---
+      videoTagsInput.addEventListener("input", (e) => {
+        const currentInput = e.target.value.toLowerCase();
+        const tagsArray = currentInput.split(",").map((tag) => tag.trim());
+        const currentTagFragment = tagsArray.pop() || "";
+
+        tagAutocompleteSuggestionsEl.innerHTML = "";
+        if (currentTagFragment.length < 1) {
+          tagAutocompleteSuggestionsEl.style.display = "none";
+          return;
+        }
+        const combinedTags = new Set([
+          ...Array.from(userTagsSet),
+          ...Array.from(allPublicTagsSet),
+        ]);
+        const suggestions = Array.from(combinedTags).filter((tag) =>
+          tag.toLowerCase().startsWith(currentTagFragment)
+        );
+        if (suggestions.length > 0) {
+          suggestions.slice(0, 5).forEach((suggestion) => {
+            const div = document.createElement("div");
+            div.classList.add("autocomplete-suggestion");
+            div.textContent = suggestion;
+            div.addEventListener("click", () => {
+              tagsArray.push(suggestion);
+              videoTagsInput.value = tagsArray.join(", ") + ", ";
+              tagAutocompleteSuggestionsEl.innerHTML = "";
+              tagAutocompleteSuggestionsEl.style.display = "none";
+              videoTagsInput.focus();
+            });
+            tagAutocompleteSuggestionsEl.appendChild(div);
+          });
+          tagAutocompleteSuggestionsEl.style.display = "block";
+        } else {
+          tagAutocompleteSuggestionsEl.style.display = "none";
+        }
+      });
+      videoTagsInput.addEventListener("blur", () => {
+        setTimeout(() => {
+          if (tagAutocompleteSuggestionsEl) {
+            tagAutocompleteSuggestionsEl.style.display = "none";
+          }
+        }, 150);
+      });
+    </script>
+  </body>
+</html>

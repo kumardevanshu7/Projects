@@ -1,0 +1,3119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SiteSaver - Curate Your Web</title>
+    <link rel="shortcut icon" href="assets/sls-logo.png" type="image/x-icon" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+    <style>
+      :root {
+        /* Leaf Theme Palette */
+        --ss-primary-bg-light: #f4f7f0; /* Very light green/beige */
+        --ss-accent-deep-green: #2e7d32; /* Deep forest green */
+        --ss-accent-medium-green: #4caf50; /* Vibrant leaf green */
+        --ss-accent-light-green: #aed581; /* Light, fresh green */
+        --ss-accent-brown: #795548; /* Earthy brown */
+        --ss-card-bg-light: #ffffff;
+        --ss-text-main-light: #37474f; /* Dark grey, slightly bluish */
+        --ss-text-muted-light: #607d8b; /* Softer grey */
+        --ss-border-color-light: #dce4d8; /* Lighter, slightly greenish border */
+
+        --ss-primary-bg-dark: #263238; /* Dark slate grey */
+        --ss-accent-deep-green-dark: #66bb6a; /* Lighter deep green for dark */
+        --ss-accent-medium-green-dark: #81c784; /* Lighter medium green */
+        --ss-accent-light-green-dark: #c5e1a5; /* Lighter light green */
+        --ss-accent-brown-dark: #a1887f; /* Lighter brown */
+        --ss-card-bg-dark: #37474f;
+        --ss-text-main-dark: #eceff1; /* Light grey for text */
+        --ss-text-muted-dark: #b0bec5; /* Softer light grey */
+        --ss-border-color-dark: #4a5d68; /* Darker, slightly bluish border */
+
+        /* Default to light theme variables for SiteSaver */
+        --ss-primary-bg: var(--ss-primary-bg-light);
+        --ss-accent-deep: var(--ss-accent-deep-green);
+        --ss-accent-medium: var(--ss-accent-medium-green);
+        --ss-accent-light: var(--ss-accent-light-green);
+        --ss-accent-alt: var(--ss-accent-brown);
+        --ss-card-bg: var(--ss-card-bg-light);
+        --ss-text-main: var(--ss-text-main-light);
+        --ss-text-muted: var(--ss-text-muted-light);
+        --ss-border-color: var(--ss-border-color-light);
+
+        --ss-button-primary-bg: var(--ss-accent-medium-green);
+        --ss-button-primary-text: #ffffff;
+        --ss-border-radius-soft: 12px;
+        --ss-border-radius-large: 20px;
+        --ss-shadow-soft: 0 5px 15px rgba(46, 125, 50, 0.1);
+        --ss-shadow-medium: 0 10px 30px rgba(46, 125, 50, 0.15);
+        --ss-font-family-main: "Poppins", sans-serif;
+        --ss-font-family-headings: "Playfair Display", serif;
+        --ss-font-family-body: "Merriweather", serif;
+        --ss-font-family-youtube-saver: "Caveat", cursive; /* For the new button */
+      }
+
+      body.dark-mode {
+        --ss-primary-bg: var(--ss-primary-bg-dark);
+        --ss-accent-deep: var(--ss-accent-deep-green-dark);
+        --ss-accent-medium: var(--ss-accent-medium-green-dark);
+        --ss-accent-light: var(--ss-accent-light-green-dark);
+        --ss-accent-alt: var(--ss-accent-brown-dark);
+        --ss-card-bg: var(--ss-card-bg-dark);
+        --ss-text-main: var(--ss-text-main-dark);
+        --ss-text-muted: var(--ss-text-muted-dark);
+        --ss-border-color: var(--ss-border-color-dark);
+        --ss-button-primary-bg: var(--ss-accent-medium-green-dark);
+        --ss-button-primary-text: var(--ss-primary-bg-dark);
+        --ss-shadow-soft: 0 5px 15px rgba(102, 187, 106, 0.12);
+        --ss-shadow-medium: 0 10px 30px rgba(102, 187, 106, 0.18);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: var(--ss-font-family-body);
+        background-color: var(--ss-primary-bg);
+        color: var(--ss-text-main);
+        line-height: 1.7;
+        overflow-x: hidden !important;
+        transition: background-color 0.4s, color 0.4s;
+        position: relative;
+      }
+      html {
+        overflow-x: hidden !important;
+        scroll-behavior: smooth;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="60" height="60"><path d="M50 0 C20 20 20 80 50 100 C80 80 80 20 50 0 Z" fill="rgba(174,213,129,0.07)"/></svg>'),
+          url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="45" height="45"><path d="M50 0 C20 20 20 80 50 100 C80 80 80 20 50 0 Z" fill="rgba(76,175,80,0.05)"/></svg>');
+        background-repeat: repeat;
+        animation: subtleLeafFall 60s linear infinite;
+        z-index: -1;
+        opacity: 0.7;
+        pointer-events: none;
+      }
+      @keyframes subtleLeafFall {
+        0% {
+          background-position: 0 0, 0 0;
+        }
+        100% {
+          background-position: 600px 1200px, -450px 900px;
+        }
+      }
+
+      .ss-container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 0 30px 0;
+      }
+      .ss-navbar-wrapper {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: rgba(244, 247, 240, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: var(--ss-shadow-soft);
+        transition: background-color 0.3s;
+        border-bottom: 1px solid var(--ss-border-color);
+      }
+      body.dark-mode .ss-navbar-wrapper {
+        background-color: rgba(38, 50, 56, 0.85);
+      }
+      .ss-navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2.5%;
+      }
+
+      .ss-navbar-logo-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
+      .ss-navbar-logo-img {
+        font-size: 2rem;
+        color: var(--ss-accent-deep);
+        margin-right: 10px;
+        transition: transform 0.3s ease-in-out;
+      }
+      .ss-navbar-logo-link:hover .ss-navbar-logo-img {
+        transform: rotate(15deg) scale(1.1);
+      }
+      .ss-navbar-logo-text {
+        font-family: var(--ss-font-family-headings);
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--ss-accent-deep);
+      }
+      .ss-navbar-logo-text span {
+        color: var(--ss-accent-medium);
+        transition: color 0.3s;
+      }
+
+      .ss-navbar-nav {
+        list-style: none;
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+        flex-grow: 1;
+        justify-content: center;
+      }
+      .ss-navbar-nav a.ss-nav-link-item {
+        text-decoration: none;
+        color: var(--ss-text-main);
+        font-weight: 500;
+        font-family: var(--ss-font-family-main);
+        transition: color 0.3s ease, border-color 0.3s ease;
+        padding: 0.5rem 0.25rem;
+        white-space: nowrap;
+        font-size: 0.95rem;
+        border-bottom: 3px solid transparent;
+        position: relative;
+      }
+      .ss-navbar-nav a.ss-nav-link-item::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 3px;
+        bottom: -3px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: var(--ss-accent-medium);
+        transition: width 0.3s ease-in-out;
+      }
+      .ss-navbar-nav.ss-desktop-nav a.ss-nav-link-item:hover::after,
+      .ss-navbar-nav.ss-desktop-nav a.ss-nav-link-item.active::after {
+        width: 70%;
+      }
+      .ss-navbar-nav.ss-desktop-nav a.ss-nav-link-item:hover,
+      .ss-navbar-nav.ss-desktop-nav a.ss-nav-link-item.active {
+        color: var(--ss-accent-deep);
+      }
+
+      .ss-navbar-actions-group {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-left: auto;
+        position: relative; /* For profile popup */
+      }
+      .ss-navbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .ss-navbar-actions .ss-btn {
+        background-color: var(--ss-button-primary-bg);
+        color: var(--ss-button-primary-text);
+        padding: 0.7rem 1.2rem;
+        border-radius: var(--ss-border-radius-soft);
+        text-decoration: none;
+        font-weight: 600;
+        font-family: var(--ss-font-family-main);
+        transition: background-color 0.3s ease, transform 0.2s ease,
+          box-shadow 0.3s ease;
+        box-shadow: var(--ss-shadow-soft);
+        font-size: 0.9rem;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .ss-navbar-actions .ss-btn .ss-btn-text {
+        display: inline;
+      }
+      .ss-navbar-actions .ss-btn:hover {
+        background-color: var(--ss-accent-deep);
+        transform: translateY(-3px);
+        box-shadow: var(--ss-shadow-medium);
+      }
+      body.dark-mode .ss-navbar-actions .ss-btn:hover {
+        background-color: var(--ss-accent-deep-dark);
+      }
+
+      .ss-profile-section {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-left: 1rem;
+      }
+      .ss-profile-info-icon,
+      .ss-logout-icon-btn,
+      .ss-theme-toggle-btn {
+        font-size: 1.4rem;
+        color: var(--ss-text-muted);
+        background: none;
+        border: none;
+        padding: 0.5rem;
+        cursor: pointer;
+        transition: color 0.3s ease, background-color 0.2s ease,
+          transform 0.2s ease;
+        border-radius: 50%;
+      }
+      body.dark-mode .ss-profile-info-icon,
+      body.dark-mode .ss-logout-icon-btn,
+      body.dark-mode .ss-theme-toggle-btn {
+        color: var(--ss-text-muted-dark);
+      }
+      .ss-profile-info-icon:hover,
+      .ss-logout-icon-btn:hover,
+      .ss-theme-toggle-btn:hover {
+        color: var(--ss-accent-deep);
+        background-color: var(--ss-accent-light-green);
+        transform: scale(1.1);
+      }
+      body.dark-mode .ss-profile-info-icon:hover,
+      body.dark-mode .ss-logout-icon-btn:hover,
+      body.dark-mode .ss-theme-toggle-btn:hover {
+        color: var(--ss-accent-deep-dark);
+        background-color: var(--ss-accent-light-green-dark);
+      }
+
+      .ss-profile-info-text {
+        /* For Desktop */
+        font-size: 0.85rem;
+        color: var(--ss-text-muted);
+        margin-right: 0.3rem;
+        display: none;
+        white-space: nowrap;
+        font-family: var(--ss-font-family-main);
+      }
+      .ss-profile-popup {
+        /* For Mobile */
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: var(--ss-card-bg);
+        color: var(--ss-text-main);
+        border: 1px solid var(--ss-border-color);
+        border-radius: var(--ss-border-radius-soft);
+        padding: 1rem;
+        box-shadow: var(--ss-shadow-medium);
+        z-index: 1010;
+        min-width: 200px;
+        text-align: left;
+      }
+      .ss-profile-popup.active {
+        display: block;
+      }
+      .ss-profile-popup p {
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+      }
+      .ss-profile-popup p:last-child {
+        margin-bottom: 0;
+      }
+      .ss-profile-popup strong {
+        color: var(--ss-accent-deep);
+      }
+
+      .ss-mobile-nav-chips-container {
+        display: none;
+        padding: 1rem 2.5% 0.75rem 2.5%;
+        background-color: var(--ss-card-bg);
+        border-top: 1px solid var(--ss-border-color);
+        margin-bottom: 2rem;
+        transition: background-color 0.3s, border-color 0.3s;
+      }
+      .ss-mobile-nav-chips-container .ss-navbar-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.7rem 0.9rem;
+      }
+      .ss-mobile-nav-chips-container .ss-navbar-nav a.ss-nav-link-item {
+        background-color: var(--ss-primary-bg);
+        color: var(--ss-text-main);
+        padding: 0.5rem 1rem;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        border: 1px solid var(--ss-border-color);
+        border-bottom: 1px solid var(--ss-border-color);
+      }
+      .ss-mobile-nav-chips-container .ss-navbar-nav a.ss-nav-link-item::after {
+        display: none;
+      }
+      .ss-mobile-nav-chips-container .ss-navbar-nav a.ss-nav-link-item.active,
+      .ss-mobile-nav-chips-container .ss-navbar-nav a.ss-nav-link-item:hover {
+        background-color: var(--ss-accent-medium);
+        color: white;
+        border-color: var(--ss-accent-medium);
+      }
+
+      .ss-page-section {
+        padding: 2rem 0;
+      }
+      .ss-main-content-layout {
+        display: flex;
+        gap: 2.5rem;
+        padding: 0 5%;
+      }
+      .ss-hero-section-wrapper {
+        flex: 2.5;
+        min-width: 0;
+      }
+      .ss-sidebar-wrapper {
+        flex: 1;
+        min-width: 0;
+        position: sticky;
+        top: calc(1rem + 1rem + 35px + 1rem);
+        align-self: flex-start;
+        height: calc(100vh - (1rem + 1rem + 35px + 1rem) - 2rem);
+        overflow-y: auto;
+        padding-right: 5px;
+      }
+      .ss-sidebar-wrapper::-webkit-scrollbar {
+        width: 8px;
+      }
+      .ss-sidebar-wrapper::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .ss-sidebar-wrapper::-webkit-scrollbar-thumb {
+        background: var(--ss-accent-light);
+        border-radius: 10px;
+      }
+      .ss-sidebar-wrapper::-webkit-scrollbar-thumb:hover {
+        background: var(--ss-accent-medium);
+      }
+
+      .ss-hero-section {
+        padding: 2rem 0 2rem 0; /* Adjusted padding */
+        text-align: left;
+        position: relative;
+      }
+      .ss-hero-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -10%;
+        width: 120%;
+        height: 100%;
+        background: radial-gradient(
+          circle at 30% 50%,
+          rgba(174, 213, 129, 0.15),
+          transparent 70%
+        );
+        z-index: -1;
+        pointer-events: none;
+      }
+      .ss-hero-heading {
+        font-family: var(--ss-font-family-headings);
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+        color: var(--ss-accent-deep);
+      }
+      .ss-hero-heading .ss-highlight {
+        color: var(--ss-accent-medium);
+        font-style: italic;
+      }
+      .ss-hero-subtext {
+        font-size: 1.2rem;
+        color: var(--ss-text-muted);
+        margin-bottom: 2rem; /* Adjusted margin */
+        max-width: 650px;
+        font-family: var(--ss-font-family-body);
+      }
+      .ss-hero-section .ss-btn-hero {
+        background: linear-gradient(
+          45deg,
+          var(--ss-accent-medium),
+          var(--ss-accent-deep)
+        );
+        color: white;
+        padding: 1rem 2.2rem;
+        border-radius: var(--ss-border-radius-soft);
+        text-decoration: none;
+        font-size: 1.15rem;
+        font-weight: 600;
+        font-family: var(--ss-font-family-main);
+        box-shadow: var(--ss-shadow-medium);
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 1rem; /* Space for the new button */
+      }
+      .ss-hero-section .ss-btn-hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.4),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+      .ss-hero-section .ss-btn-hero:hover::before {
+        left: 150%;
+      }
+      .ss-hero-section .ss-btn-hero:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 12px 35px rgba(46, 125, 50, 0.25);
+      }
+      .ss-hero-illustration {
+        margin-top: 2rem;
+        text-align: center;
+      }
+      .ss-hero-illustration img {
+        max-width: 400px;
+        opacity: 0.8;
+      }
+
+      /* YouTubeSaver Link Button in Hero Section */
+      .btn-hero-youtubesaver {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: linear-gradient(
+          135deg,
+          #ff4b4b,
+          #cc0000
+        ); /* YouTube Red Gradient */
+        color: white;
+        padding: 0.7rem 1.5rem;
+        border-radius: var(--ss-border-radius-soft);
+        text-decoration: none;
+        font-size: 1.1rem;
+        font-weight: 600;
+        font-family: var(
+          --ss-font-family-youtube-saver
+        ); /* Caveat font for this button */
+        box-shadow: 0 4px 10px rgba(204, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        margin-top: 1rem; /* Space from Add New Site button */
+        width: auto;
+      }
+      .btn-hero-youtubesaver:hover {
+        background: linear-gradient(135deg, #e63939, #b30000);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 6px 15px rgba(204, 0, 0, 0.4);
+      }
+      .btn-hero-youtubesaver i {
+        font-size: 1.2em;
+      }
+
+      .ss-sidebar-best-of {
+        padding: 1.5rem;
+        background-color: var(--ss-card-bg);
+        border-radius: var(--ss-border-radius-large);
+        box-shadow: var(--ss-shadow-soft);
+        transition: background-color 0.3s, box-shadow 0.3s;
+        border: 1px solid var(--ss-border-color);
+      }
+      .ss-sidebar-title {
+        font-family: var(--ss-font-family-headings);
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        color: var(--ss-accent-deep);
+        display: flex;
+        align-items: center;
+      }
+      .ss-sidebar-title i {
+        margin-right: 10px;
+        color: var(--ss-accent-medium);
+      }
+      .ss-sidebar-tagline {
+        font-size: 0.95rem;
+        color: var(--ss-text-muted);
+        margin-bottom: 2rem;
+      }
+      .ss-sidebar-tagline i.fa-seedling {
+        color: var(--ss-accent-medium);
+        margin-left: 5px;
+      }
+      .ss-best-of-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+
+      .ss-sidebar-list-site-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background-color: var(--ss-primary-bg);
+        border-radius: var(--ss-border-radius-soft);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease,
+          background-color 0.3s;
+        cursor: pointer;
+        border-left: 4px solid var(--ss-accent-light);
+      }
+      .ss-sidebar-list-site-item:hover {
+        transform: translateX(5px) scale(1.02);
+        box-shadow: var(--ss-shadow-soft);
+        background-color: var(--ss-card-bg);
+        border-left-color: var(--ss-accent-medium);
+      }
+      .ss-sidebar-list-site-item-favicon {
+        width: 32px;
+        height: 32px;
+        object-fit: contain;
+        border-radius: 6px;
+        flex-shrink: 0;
+        background-color: var(--ss-card-bg);
+        padding: 2px;
+        border: 1px solid var(--ss-border-color);
+      }
+      .ss-sidebar-list-site-item-info {
+        flex-grow: 1;
+        min-width: 0;
+      }
+      .ss-sidebar-list-site-item-title {
+        font-weight: 600;
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 0.3rem;
+        color: var(--ss-text-main);
+      }
+      .ss-sidebar-list-site-item-url {
+        font-size: 0.8rem;
+        color: var(--ss-text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .ss-sidebar-list-site-item-added-by {
+        font-size: 0.75rem;
+        color: var(--ss-accent-medium);
+        margin-top: 3px;
+      }
+
+      .ss-tags-carousel-section {
+        padding: 3rem 5%;
+      }
+      .ss-tags-carousel-title {
+        font-family: var(--ss-font-family-headings);
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        color: var(--ss-accent-deep);
+      }
+      .ss-tags-carousel-title i {
+        color: var(--ss-accent-medium);
+        margin-right: 10px;
+      }
+      .ss-tags-carousel {
+        display: flex;
+        gap: 1rem;
+        overflow-x: auto;
+        padding-top: 1rem;
+        padding-bottom: 1.5rem; /* Extra padding for hover/focus states */
+        margin-bottom: 1.5rem;
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+      }
+      .ss-tags-carousel::-webkit-scrollbar {
+        height: 8px;
+      }
+      .ss-tags-carousel::-webkit-scrollbar-track {
+        background: var(--ss-primary-bg);
+        border-radius: 10px;
+      }
+      .ss-tags-carousel::-webkit-scrollbar-thumb {
+        background: var(--ss-accent-light);
+        border-radius: 10px;
+      }
+      .ss-tags-carousel::-webkit-scrollbar-thumb:hover {
+        background: var(--ss-accent-medium);
+      }
+
+      .ss-tag-chip {
+        background-color: var(--ss-card-bg);
+        color: var(--ss-accent-medium);
+        padding: 0.6rem 1.2rem;
+        border-radius: 30px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        font-family: var(--ss-font-family-main);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: var(--ss-shadow-soft);
+        border: 1px solid var(--ss-border-color);
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .ss-tag-chip.ss-user-tag {
+        background-color: var(--ss-accent-light);
+        color: var(--ss-accent-deep);
+        border-color: var(--ss-accent-medium);
+      }
+      .ss-tag-chip:hover,
+      .ss-tag-chip.active {
+        background-color: var(--ss-accent-medium);
+        color: white;
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: var(--ss-shadow-medium);
+        border-color: var(--ss-accent-medium);
+      }
+      .ss-tag-chip.ss-user-tag.active {
+        background-color: var(--ss-accent-deep);
+        color: white;
+      }
+
+      .ss-site-grid-section {
+        padding: 2rem 5%;
+      }
+      .ss-site-grid-title-container {
+        /* New container for title and column toggle */
+        display: flex;
+        justify-content: center; /* Center title by default */
+        align-items: center;
+        margin-bottom: 1.5rem;
+        position: relative; /* For absolute positioning of toggle */
+      }
+      .ss-site-grid-title {
+        font-family: var(--ss-font-family-headings);
+        font-size: 2.2rem;
+        font-weight: 700;
+        /* margin-bottom removed, handled by container */
+        text-align: center;
+        flex-grow: 1; /* Allow title to take space */
+        color: var(--ss-accent-deep);
+      }
+      .ss-site-grid-title i {
+        color: var(--ss-accent-medium);
+        margin-right: 10px;
+      }
+
+      .ss-column-toggle-btn {
+        background: var(--ss-card-bg);
+        border: 1px solid var(--ss-border-color);
+        color: var(--ss-text-muted);
+        padding: 0.5rem 0.8rem;
+        border-radius: var(--ss-border-radius-soft);
+        cursor: pointer;
+        font-size: 1.1rem; /* Slightly larger icon */
+        margin-left: 1rem;
+        box-shadow: var(--ss-shadow-soft);
+        transition: all 0.2s ease;
+        line-height: 1;
+      }
+      .ss-column-toggle-btn:hover {
+        background-color: var(--ss-primary-bg);
+        color: var(--ss-accent-deep);
+        box-shadow: var(--ss-shadow-medium);
+      }
+      .ss-column-options {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: var(--ss-card-bg);
+        border: 1px solid var(--ss-border-color);
+        border-radius: var(--ss-border-radius-soft);
+        box-shadow: var(--ss-shadow-medium);
+        z-index: 10;
+        overflow: hidden;
+        min-width: 120px;
+      }
+      .ss-column-options.active {
+        display: block;
+      }
+      .ss-column-options button {
+        display: block;
+        width: 100%;
+        padding: 0.6rem 1rem;
+        background: none;
+        border: none;
+        border-bottom: 1px solid var(--ss-border-color);
+        color: var(--ss-text-main);
+        text-align: left;
+        cursor: pointer;
+        font-family: var(--ss-font-family-main);
+        font-size: 0.9rem;
+      }
+      .ss-column-options button:last-child {
+        border-bottom: none;
+      }
+      .ss-column-options button:hover {
+        background-color: var(--ss-primary-bg);
+      }
+      .ss-column-options button.active {
+        background-color: var(--ss-accent-light);
+        color: var(--ss-accent-deep);
+        font-weight: 600;
+      }
+
+      .ss-site-grid {
+        display: grid;
+        gap: 2rem;
+        transition: grid-template-columns 0.5s ease-in-out;
+      }
+      .ss-site-grid.list-view .ss-site-card {
+        grid-column: 1 / -1; /* Span full width */
+        flex-direction: row;
+        align-items: center;
+        min-height: 80px; /* Adjust as needed */
+        padding: 0.75rem 1rem;
+      }
+      .ss-site-grid.list-view .ss-site-card-favicon-container {
+        padding: 0;
+        border-bottom: none;
+        background-color: transparent;
+        flex-basis: 60px; /* Fixed width for favicon area */
+        flex-shrink: 0;
+      }
+      .ss-site-grid.list-view .ss-site-card-favicon {
+        width: 32px;
+        height: 32px;
+      }
+      .ss-site-grid.list-view .ss-site-card-title-main {
+        -webkit-line-clamp: 1; /* Single line for title in list view */
+        font-size: 1.1rem;
+        margin-left: 0.5rem;
+      }
+      .ss-site-grid.list-view .ss-site-card-content {
+        padding: 0 0 0 1rem; /* Adjust padding for content */
+        flex-direction: row; /* Align items in a row */
+        align-items: center;
+        gap: 1rem;
+      }
+      .ss-site-grid.list-view .ss-site-card-description {
+        display: none; /* Hide description in list view by default */
+      }
+      .ss-site-grid.list-view .ss-site-card-url {
+        margin-bottom: 0;
+        flex-grow: 1; /* Allow URL to take space */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .ss-site-grid.list-view .ss-site-card-tags {
+        margin-top: 0;
+        margin-left: auto; /* Push tags to the right */
+        flex-shrink: 0; /* Prevent tags from shrinking too much */
+      }
+
+      .ss-site-card {
+        background-color: var(--ss-card-bg);
+        border-radius: var(--ss-border-radius-large);
+        box-shadow: var(--ss-shadow-soft);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease,
+          background-color 0.3s;
+        display: flex;
+        flex-direction: column;
+        /* cursor: pointer; REMOVED - card itself not clickable anymore */
+        border: 1px solid var(--ss-border-color);
+        position: relative;
+      }
+      .ss-site-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(
+          90deg,
+          var(--ss-accent-light),
+          var(--ss-accent-medium)
+        );
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .ss-site-card:hover::before {
+        opacity: 1;
+      }
+      .ss-site-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--ss-shadow-medium);
+      }
+      .ss-site-card-favicon-container {
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        border-bottom: 1px solid var(--ss-border-color);
+        background-color: var(--ss-primary-bg);
+        cursor: pointer; /* Make header clickable to open modal */
+      }
+      .ss-site-card-favicon {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+        border-radius: 8px;
+        flex-shrink: 0;
+        background-color: white;
+        padding: 4px;
+        border: 1px solid var(--ss-border-color);
+      }
+      .ss-site-card-title-main {
+        font-size: 1.2rem;
+        font-weight: 600;
+        font-family: var(--ss-font-family-headings);
+        color: var(--ss-accent-deep);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .ss-site-card-content {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        cursor: pointer; /* Make content area clickable to open modal */
+      }
+      .ss-site-card-description {
+        font-size: 0.95rem;
+        color: var(--ss-text-muted);
+        margin-bottom: 1rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex-grow: 1;
+      }
+      .ss-site-card-url {
+        font-size: 0.8rem;
+        color: var(--ss-accent-medium);
+        margin-bottom: 1rem;
+        word-break: break-all;
+      }
+      .ss-site-card-tags {
+        margin-bottom: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin-top: auto;
+      }
+      .ss-site-card-tags .ss-tag-item {
+        background-color: var(--ss-accent-light);
+        color: var(--ss-accent-deep);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-family: var(--ss-font-family-main);
+      }
+
+      .ss-modal {
+        display: none;
+        position: fixed;
+        z-index: 1001;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.6);
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+      }
+      .ss-modal.active {
+        display: flex;
+      }
+      .ss-modal-content {
+        background-color: var(--ss-card-bg);
+        padding: 2rem;
+        border-radius: var(--ss-border-radius-large);
+        box-shadow: var(--ss-shadow-medium);
+        width: 90%;
+        max-width: 550px;
+        position: relative;
+        animation: ssModalOpen 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        transition: background-color 0.3s;
+        border-top: 5px solid var(--ss-accent-medium);
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      @keyframes ssModalOpen {
+        from {
+          opacity: 0;
+          transform: scale(0.95) translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+      .ss-modal-close {
+        position: absolute;
+        top: 1.2rem;
+        right: 1.2rem;
+        font-size: 1.8rem;
+        color: var(--ss-text-muted);
+        cursor: pointer;
+        background: none;
+        border: none;
+        transition: color 0.3s, transform 0.3s;
+        line-height: 1;
+      }
+      .ss-modal-close:hover {
+        color: var(--ss-accent-deep);
+        transform: rotate(90deg);
+      }
+      .ss-modal-title {
+        font-family: var(--ss-font-family-headings);
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        color: var(--ss-accent-deep);
+        text-align: center;
+      }
+      .ss-modal-title i {
+        margin-right: 12px;
+        color: var(--ss-accent-medium);
+      }
+      .ss-form-group {
+        margin-bottom: 1.5rem;
+      }
+      .ss-form-group label {
+        display: block;
+        margin-bottom: 0.6rem;
+        font-weight: 600;
+        font-family: var(--ss-font-family-main);
+        color: var(--ss-text-main);
+      }
+      .ss-form-group input[type="text"],
+      .ss-form-group input[type="url"],
+      .ss-form-group textarea {
+        width: 100%;
+        padding: 0.85rem 1rem;
+        border: 1px solid var(--ss-border-color);
+        border-radius: var(--ss-border-radius-soft);
+        font-family: var(--ss-font-family-body);
+        font-size: 1rem;
+        background-color: var(--ss-primary-bg);
+        color: var(--ss-text-main);
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s,
+          box-shadow 0.3s;
+      }
+      .ss-form-group input:focus,
+      .ss-form-group textarea:focus {
+        outline: none;
+        border-color: var(--ss-accent-medium);
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        background-color: var(--ss-card-bg);
+      }
+      .ss-form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      .ss-modal-actions {
+        /* Container for multiple buttons */
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+      .ss-modal-btn {
+        background: linear-gradient(
+          45deg,
+          var(--ss-accent-medium),
+          var(--ss-accent-deep)
+        );
+        color: white;
+        padding: 0.85rem 1.8rem;
+        border: none;
+        border-radius: var(--ss-border-radius-soft);
+        font-size: 1.05rem;
+        font-family: var(--ss-font-family-main);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        /* margin-top removed as it's now in .ss-modal-actions */
+        width: 100%; /* Will take equal width if multiple buttons */
+        box-shadow: var(--ss-shadow-soft);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+      .ss-modal-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--ss-shadow-medium);
+        filter: brightness(1.1);
+      }
+      .ss-modal-btn.secondary {
+        /* For Copy Link button */
+        background: var(--ss-card-bg);
+        color: var(--ss-accent-deep);
+        border: 2px solid var(--ss-accent-deep);
+      }
+      .ss-modal-btn.secondary:hover {
+        background: var(--ss-primary-bg);
+        border-color: var(--ss-accent-medium);
+        color: var(--ss-accent-medium);
+        filter: none;
+      }
+      body.dark-mode .ss-modal-btn.secondary {
+        background: var(--ss-card-bg-dark);
+        color: var(--ss-accent-deep-dark);
+        border-color: var(--ss-accent-deep-dark);
+      }
+      body.dark-mode .ss-modal-btn.secondary:hover {
+        background: var(--ss-primary-bg-dark);
+        border-color: var(--ss-accent-medium-dark);
+        color: var(--ss-accent-medium-dark);
+      }
+
+      #ssAddSiteModal #ssSiteFaviconPreviewContainer {
+        margin-top: 1rem;
+        text-align: center;
+        min-height: 50px;
+      }
+      #ssAddSiteModal #ssSiteFaviconPreview {
+        max-width: 48px;
+        max-height: 48px;
+        border-radius: 8px;
+        box-shadow: var(--ss-shadow-soft);
+        border: 1px solid var(--ss-border-color);
+      }
+      #ssAddSiteModal #ssFetchDetailsSpinner {
+        margin-left: 10px;
+        display: none;
+        color: var(--ss-accent-medium);
+      }
+      #ssAddSiteModal #ssFetchDetailsSpinner.fa-spin {
+        display: inline-block;
+      }
+
+      #ssInfoModal p {
+        margin-bottom: 1.2rem;
+        color: var(--ss-text-muted);
+        font-family: var(--ss-font-family-body);
+        line-height: 1.8;
+      }
+      #ssInfoModal ul {
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 1.5rem;
+      }
+      #ssInfoModal ul li {
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: flex-start;
+        font-family: var(--ss-font-family-body);
+      }
+      #ssInfoModal ul li i {
+        color: var(--ss-accent-medium);
+        margin-right: 12px;
+        font-size: 1.3rem;
+        width: 25px;
+        text-align: center;
+        padding-top: 3px;
+      }
+      #ssInfoModal .ss-developer-credit {
+        font-size: 0.95rem;
+        text-align: center;
+        margin-top: 2rem;
+        color: var(--ss-text-main);
+        font-family: var(--ss-font-family-body);
+      }
+      #ssInfoModal .ss-developer-credit strong {
+        color: var(--ss-accent-deep);
+        font-weight: 700;
+      }
+      #ssInfoModal .ss-dev-image-container {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        position: relative;
+      }
+      #ssInfoModal .ss-dev-image {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        object-fit: cover;
+        cursor: pointer;
+        border: 4px solid var(--ss-accent-medium);
+        box-shadow: var(--ss-shadow-soft);
+      }
+      .ss-heart-particle {
+        position: absolute;
+        font-size: 1.2rem;
+        color: var(--ss-accent-light-green);
+        animation: ssFloatUpLeaf 1.5s ease-out forwards;
+        pointer-events: none;
+      }
+      @keyframes ssFloatUpLeaf {
+        0% {
+          transform: translateY(0) rotate(0deg) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-60px) rotate(720deg) scale(0.3);
+          opacity: 0;
+        }
+      }
+
+      #ssFeaturesViewContent .ss-section-title {
+        text-align: center;
+        font-family: var(--ss-font-family-headings);
+        font-size: 2.5rem;
+        margin-bottom: 2.5rem;
+        color: var(--ss-accent-deep);
+      }
+      #ssFeaturesViewContent ul {
+        list-style: none;
+        padding-left: 0;
+        max-width: 750px;
+        margin: 0 auto;
+      }
+      #ssFeaturesViewContent ul li {
+        margin-bottom: 1.2rem;
+        font-size: 1.1rem;
+        font-family: var(--ss-font-family-body);
+        display: flex;
+        align-items: center;
+        background: var(--ss-card-bg);
+        padding: 1.2rem 1.8rem;
+        border-radius: var(--ss-border-radius-soft);
+        box-shadow: var(--ss-shadow-soft);
+        transition: transform 0.2s ease, background-color 0.3s, box-shadow 0.3s;
+        border-left: 5px solid var(--ss-accent-light);
+      }
+      #ssFeaturesViewContent ul li:hover {
+        transform: translateY(-4px) scale(1.01);
+        border-left-color: var(--ss-accent-medium);
+        box-shadow: var(--ss-shadow-medium);
+      }
+      #ssFeaturesViewContent ul li i {
+        color: var(--ss-accent-medium);
+        margin-right: 18px;
+        font-size: 1.8rem;
+        width: 35px;
+        text-align: center;
+      }
+
+      #ssSiteDetailModal .ss-modal-content {
+        max-width: 600px;
+      }
+      #ssSiteDetailFaviconContainer {
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+      #ssSiteDetailFavicon {
+        width: 64px;
+        height: 64px;
+        border-radius: 12px;
+        border: 2px solid var(--ss-border-color);
+        box-shadow: var(--ss-shadow-soft);
+      }
+      #ssSiteDetailInfo #ssSiteDetailTitle {
+        font-family: var(--ss-font-family-headings);
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        text-align: center;
+        color: var(--ss-accent-deep);
+      }
+      #ssSiteDetailInfo #ssSiteDetailDescription {
+        font-size: 1rem;
+        color: var(--ss-text-muted);
+        margin-bottom: 1.5rem;
+        text-align: center;
+        max-height: 150px;
+        overflow-y: auto;
+      }
+      #ssSiteDetailInfo #ssSiteDetailTags {
+        margin-bottom: 1rem; /* Reduced margin before buttons */
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        justify-content: center;
+      }
+      #ssSiteDetailTags .ss-tag-item {
+        background-color: var(--ss-accent-light);
+        color: var(--ss-accent-deep);
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+      }
+
+      .ss-footer {
+        text-align: center;
+        padding: 2.5rem 5%;
+        background-color: var(--ss-card-bg);
+        margin-top: 4rem;
+        color: var(--ss-text-muted);
+        font-size: 0.95rem;
+        font-family: var(--ss-font-family-body);
+        box-shadow: 0 -5px 15px rgba(46, 125, 50, 0.08);
+        transition: background-color 0.3s, color 0.3s;
+        border-top: 1px solid var(--ss-border-color);
+      }
+      .ss-footer p i.fa-leaf {
+        color: var(--ss-accent-medium);
+      }
+      .ss-footer p i.fa-heart {
+        color: #e74c3c;
+      }
+      .ss-footer a {
+        color: var(--ss-accent-deep);
+        text-decoration: none;
+        font-weight: 700;
+      }
+      .ss-footer a:hover {
+        text-decoration: underline;
+        color: var(--ss-accent-medium);
+      }
+
+      .ss-login-prompt-modal .ss-modal-content {
+        max-width: 450px;
+        text-align: center;
+      }
+      .ss-login-prompt-modal .ss-modal-title i {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 1rem;
+        color: var(--ss-accent-medium);
+        animation: ssIconWobble 1.8s ease-in-out infinite;
+      }
+      @keyframes ssIconWobble {
+        0%,
+        100% {
+          transform: rotate(0deg) scale(1);
+        }
+        20% {
+          transform: rotate(-12deg) scale(1.12);
+        }
+        40% {
+          transform: rotate(12deg) scale(1.12);
+        }
+        60% {
+          transform: rotate(-7deg) scale(1.07);
+        }
+        80% {
+          transform: rotate(7deg) scale(1.07);
+        }
+      }
+      .ss-login-prompt-modal p {
+        margin-bottom: 1.8rem;
+        font-size: 1.05rem;
+      }
+      .ss-login-prompt-modal .ss-modal-btn {
+        width: auto;
+        padding: 0.8rem 2.2rem;
+      }
+
+      @media (min-width: 769px) {
+        .ss-profile-info-text {
+          display: inline;
+        }
+        .ss-mobile-nav-chips-container {
+          display: none !important;
+        }
+      }
+      @media (max-width: 768px) {
+        .ss-navbar {
+          flex-wrap: wrap;
+          align-items: center;
+          padding: 0.75rem 2.5%;
+        }
+        .ss-navbar-logo-link {
+          order: 1;
+          flex-basis: auto;
+          margin-right: auto;
+        }
+        .ss-navbar-nav-desktop {
+          display: none;
+        }
+        .ss-navbar-actions-group {
+          order: 2;
+          margin-left: 1rem;
+        }
+        .ss-mobile-nav-chips-container {
+          order: 3;
+          display: block;
+          width: 100%;
+        }
+        .ss-main-content-layout {
+          flex-direction: column;
+          padding: 0 2.5%;
+        }
+        .ss-sidebar-wrapper {
+          position: static;
+          max-height: none;
+          overflow-y: visible;
+          height: auto;
+          padding-right: 0;
+        }
+        .ss-sidebar-wrapper::-webkit-scrollbar {
+          display: none;
+        }
+        .ss-hero-heading {
+          font-size: 2.5rem;
+        }
+        .ss-sidebar-best-of {
+          margin-top: 2rem;
+          padding: 1.2rem;
+        }
+        .ss-profile-info-text {
+          display: none;
+        }
+        .ss-modal-content {
+          padding: 1.5rem;
+          max-width: 95%;
+        }
+        .ss-modal-title {
+          font-size: 1.6rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .ss-site-grid-title-container {
+          flex-direction: column;
+          gap: 0.5rem;
+          align-items: center; /* Center items when stacked */
+        }
+        .ss-column-toggle-btn {
+          margin-left: 0;
+        }
+      }
+      @media (max-width: 480px) {
+        .ss-navbar-logo-text {
+          font-size: 1.4rem;
+        }
+        .ss-navbar-logo-img {
+          font-size: 1.6rem;
+        }
+        .ss-navbar-actions .ss-btn .ss-btn-text {
+          display: none;
+        }
+        .ss-navbar-actions .ss-btn i {
+          margin-right: 0;
+        }
+        .ss-navbar-actions .ss-btn {
+          padding: 0.6rem 0.8rem;
+        }
+        .ss-profile-section {
+          gap: 0.4rem;
+        }
+        .ss-profile-info-icon,
+        .ss-logout-icon-btn,
+        .ss-theme-toggle-btn {
+          font-size: 1.2rem;
+          padding: 0.3rem;
+        }
+        .ss-mobile-nav-chips-container .ss-navbar-nav a.ss-nav-link-item {
+          font-size: 0.8rem;
+          padding: 0.4rem 0.8rem;
+        }
+        .ss-hero-heading {
+          font-size: 2rem;
+        }
+        .ss-hero-subtext {
+          font-size: 1rem;
+        }
+        .ss-hero-section .ss-btn-hero {
+          padding: 0.8rem 1.8rem;
+          font-size: 1rem;
+        }
+        .btn-hero-youtubesaver {
+          font-size: 1rem;
+          padding: 0.7rem 1.2rem;
+        }
+        .ss-tags-carousel-title,
+        .ss-site-grid-title {
+          font-size: 1.8rem;
+        }
+        #ssFeaturesViewContent .ss-section-title {
+          font-size: 2rem;
+        }
+        #ssFeaturesViewContent ul li {
+          font-size: 1rem;
+          padding: 1rem 1.2rem;
+        }
+        #ssFeaturesViewContent ul li i {
+          font-size: 1.5rem;
+          margin-right: 12px;
+        }
+        .ss-site-card-title-main {
+          font-size: 1.1rem;
+        }
+        .ss-site-card-description {
+          font-size: 0.9rem;
+        }
+        .ss-modal-content {
+          padding: 1.2rem;
+        }
+        .ss-modal-title {
+          font-size: 1.5rem;
+        }
+        .ss-form-group input,
+        .ss-form-group textarea {
+          padding: 0.75rem;
+          font-size: 0.95rem;
+        }
+        .ss-modal-btn {
+          padding: 0.75rem 1.5rem;
+          font-size: 0.95rem;
+        }
+        .ss-profile-popup {
+          min-width: 180px;
+          padding: 0.75rem;
+        }
+        .ss-profile-popup p {
+          font-size: 0.85rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ss-navbar-wrapper">
+      <nav class="ss-navbar">
+        <a href="#" class="ss-navbar-logo-link" data-filter="all">
+          <i class="fas fa-leaf ss-navbar-logo-img"></i>
+          <span class="ss-navbar-logo-text">Site<span>Saver</span></span>
+        </a>
+
+        <ul class="ss-navbar-nav ss-navbar-nav-desktop" id="ssNavDesktop">
+          <li>
+            <a href="#" class="ss-nav-link-item active" data-filter="all"
+              >Home</a
+            >
+          </li>
+          <li>
+            <a href="#" class="ss-nav-link-item" data-filter="features"
+              >Features</a
+            >
+          </li>
+          <li>
+            <a href="#" class="ss-nav-link-item" data-filter="tags_page"
+              >Explore Sites</a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              class="ss-nav-link-item ss-info-icon-trigger"
+              id="ssInfoNavTriggerDesktop"
+              >About <i class="fas fa-info-circle"></i
+            ></a>
+          </li>
+        </ul>
+
+        <div class="ss-navbar-actions-group">
+          <div class="ss-navbar-actions" id="ssNavbarActions">
+            <!-- Dynamically populated -->
+          </div>
+          <button
+            class="ss-theme-toggle-btn"
+            id="ssThemeToggleBtn"
+            title="Toggle Theme"
+          >
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </nav>
+      <div class="ss-mobile-nav-chips-container" id="ssMobileNavChips">
+        <ul class="ss-navbar-nav" id="ssMobileNavChipLinks">
+          <li>
+            <a href="#" class="ss-nav-link-item active" data-filter="all"
+              >Home</a
+            >
+          </li>
+          <li>
+            <a href="#" class="ss-nav-link-item" data-filter="features"
+              >Features</a
+            >
+          </li>
+          <li>
+            <a href="#" class="ss-nav-link-item" data-filter="tags_page"
+              >Explore</a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              class="ss-nav-link-item ss-info-icon-trigger"
+              id="ssInfoNavTriggerMobile"
+              >About</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ss-main-layout-wrapper ss-container">
+      <div id="ssHomeViewContent" class="ss-page-section">
+        <div class="ss-main-content-layout">
+          <div class="ss-hero-section-wrapper">
+            <section class="ss-hero-section" data-aos="fade-right">
+              <h1 class="ss-hero-heading">
+                Curate Your
+                <span class="ss-highlight">Digital World</span>,<br />One Link
+                at a Time.
+              </h1>
+              <p class="ss-hero-subtext">
+                Discover, save, and organize interesting websites, articles, and
+                tools. Build your personal knowledge base with SiteSaver.
+              </p>
+              <button class="ss-btn-hero" id="ssGetStartedBtnHero">
+                Login to Start Saving <i class="fas fa-arrow-right"></i>
+              </button>
+              <a
+                href="index.html"
+                class="btn-hero-youtubesaver"
+                id="youtubeSaverLinkHero"
+              >
+                <i class="fab fa-youtube"></i> Explore YouTube Links
+              </a>
+              <div
+                class="ss-hero-illustration"
+                data-aos="fade-up"
+                data-aos-delay="300"
+              >
+                <img
+                  src="https://www.svgrepo.com/show/484290/leaf.svg"
+                  alt="Leaf Illustration"
+                  style="width: 100px; opacity: 0.7"
+                />
+              </div>
+            </section>
+          </div>
+          <div
+            class="ss-sidebar-wrapper"
+            data-aos="fade-left"
+            data-aos-delay="200"
+          >
+            <aside class="ss-sidebar-best-of">
+              <h2 class="ss-sidebar-title">
+                <i class="fas fa-award"></i> Trending Sites
+              </h2>
+              <p class="ss-sidebar-tagline">
+                <span id="ssSidebarSavedCount">+0 Sites Saved</span>
+                <i class="fas fa-seedling"></i>
+              </p>
+              <div class="ss-best-of-list" id="ssBestOfWeekList">
+                <p
+                  style="
+                    font-size: 0.9rem;
+                    color: var(--ss-text-muted);
+                    text-align: center;
+                  "
+                >
+                  Loading trending sites...
+                </p>
+              </div>
+            </aside>
+          </div>
+        </div>
+        <section
+          class="ss-tags-carousel-section"
+          id="ssHomeTagsCarouselSection"
+          data-aos="fade-up"
+          style="display: none"
+        >
+          <h2 class="ss-tags-carousel-title">
+            <i class="fas fa-tags"></i> Filter Your Saved Sites
+          </h2>
+          <div class="ss-tags-carousel" id="ssHomeTagsCarousel"></div>
+        </section>
+        <section
+          class="ss-site-grid-section"
+          id="ssHomeSiteGridSection"
+          data-aos="fade-up"
+          style="display: none"
+        >
+          <div class="ss-site-grid-title-container">
+            <h2 class="ss-site-grid-title" id="ssHomeSiteGridTitle">
+              <i class="fas fa-stream"></i> Your Saved Sites
+            </h2>
+            <div id="ssColumnToggleContainer" style="position: relative">
+              <button class="ss-column-toggle-btn" id="ssColumnToggleBtn">
+                <i class="fas fa-th-large"></i>
+              </button>
+              <div class="ss-column-options" id="ssColumnOptions">
+                <button data-columns="1">1 Column</button>
+                <button data-columns="2">2 Columns</button>
+                <button data-columns="3" class="active">3 Columns</button>
+                <button data-columns="list">List View</button>
+              </div>
+            </div>
+          </div>
+          <div class="ss-site-grid" id="ssHomeSiteGrid" data-aos-delay="100">
+            <p
+              id="ssNoUserSitesMessage"
+              style="
+                text-align: center;
+                width: 100%;
+                color: var(--ss-text-muted);
+                padding: 2rem 0;
+              "
+            >
+              Login to save and view your curated sites!
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <div
+        id="ssFeaturesViewContent"
+        class="ss-page-section"
+        style="display: none"
+        data-aos="fade-in"
+      >
+        <h2 class="ss-section-title">
+          <i class="fas fa-cogs"></i> SiteSaver Features
+        </h2>
+        <ul>
+          <li>
+            <i class="fas fa-link"></i> Save any website link with a title &
+            description
+          </li>
+          <li>
+            <i class="fas fa-image"></i> Automatic favicon fetching for quick
+            recognition
+          </li>
+          <li>
+            <i class="fas fa-tags"></i> Organize with dynamic tags for easy
+            filtering
+          </li>
+          <li>
+            <i class="fas fa-user-shield"></i> Secure user accounts via Firebase
+          </li>
+          <li>
+            <i class="fas fa-cloud"></i> Links saved to your personal cloud
+            (Firestore)
+          </li>
+          <li>
+            <i class="fas fa-search-plus"></i> Explore sites shared by the
+            community
+          </li>
+          <li>
+            <i class="fas fa-mobile-alt"></i> Fully responsive for all devices
+          </li>
+          <li>
+            <i class="fas fa-leaf"></i> Beautiful, nature-inspired leaf theme
+          </li>
+          <li>
+            <i class="fas fa-palette"></i> Light/Dark Mode for your viewing
+            comfort
+          </li>
+          <li><i class="fas fa-rocket"></i> Smooth animations & modern UI</li>
+        </ul>
+      </div>
+
+      <div
+        id="ssTagsPageViewContent"
+        class="ss-page-section"
+        style="display: none"
+        data-aos="fade-in"
+      >
+        <section
+          class="ss-tags-carousel-section"
+          id="ssPublicTagsCarouselSection"
+          data-aos="fade-up"
+        >
+          <h2 class="ss-tags-carousel-title">
+            <i class="fas fa-globe-americas"></i> Explore Community Sites by
+            Tags
+          </h2>
+          <div class="ss-tags-carousel" id="ssPublicTagsCarousel"></div>
+        </section>
+        <section
+          class="ss-site-grid-section"
+          id="ssPublicSiteGridSection"
+          data-aos="fade-up"
+        >
+          <div class="ss-site-grid-title-container">
+            <h2 class="ss-site-grid-title" id="ssPublicSiteGridTitle">
+              <i class="fas fa-users"></i> Community Curated Sites
+            </h2>
+            <!-- You can add a column toggle for public grid here too if needed -->
+          </div>
+          <div class="ss-site-grid" id="ssPublicSiteGrid" data-aos-delay="100">
+            <p
+              id="ssNoPublicSitesMessage"
+              style="
+                text-align: center;
+                width: 100%;
+                color: var(--ss-text-muted);
+                padding: 2rem 0;
+              "
+            >
+              No public sites found, or no sites shared yet!
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer class="ss-footer">
+      <p>
+        <i class="fas fa-leaf"></i> SiteSaver ©
+        <span id="ssCurrentYear"></span>. Cultivating Curiosity with
+        <i class="fas fa-heart"></i> by <strong>Devan</strong>.
+      </p>
+      <p>Your personal corner of the web, beautifully organized.</p>
+    </footer>
+
+    <div id="ssAddSiteModal" class="ss-modal">
+      <div class="ss-modal-content">
+        <button class="ss-modal-close" id="ssCloseAddSiteModal">×</button>
+        <h2 class="ss-modal-title">
+          <i class="fas fa-plus-circle"></i> Add New Site Link
+        </h2>
+        <form id="ssAddSiteForm">
+          <div class="ss-form-group">
+            <label for="ssSiteUrl"
+              >Website URL <span style="color: red">*</span>
+              <i id="ssFetchDetailsSpinner" class="fas fa-spinner fa-spin"></i
+            ></label>
+            <input
+              type="url"
+              id="ssSiteUrl"
+              placeholder="e.g., https://www.example.com"
+              required
+            />
+          </div>
+          <div
+            id="ssSiteFaviconPreviewContainer"
+            style="display: none; margin-bottom: 1rem"
+          >
+            <img id="ssSiteFaviconPreview" src="#" alt="Site Favicon" />
+          </div>
+          <div class="ss-form-group">
+            <label for="ssSiteTitle"
+              >Site Title <span style="color: red">*</span></label
+            >
+            <input
+              type="text"
+              id="ssSiteTitle"
+              placeholder="e.g., Awesome Resource Site"
+              required
+            />
+          </div>
+          <div class="ss-form-group">
+            <label for="ssSiteDescription">Description (optional)</label>
+            <textarea
+              id="ssSiteDescription"
+              placeholder="A brief summary of the site..."
+            ></textarea>
+          </div>
+          <div class="ss-form-group">
+            <label for="ssSiteTags">Tags (comma-separated)</label>
+            <input
+              type="text"
+              id="ssSiteTags"
+              placeholder="e.g., tools, design, inspiration"
+            />
+          </div>
+          <button type="submit" class="ss-modal-btn">
+            Save Site <i class="fas fa-save"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div id="ssInfoModal" class="ss-modal">
+      <div class="ss-modal-content">
+        <button class="ss-modal-close" id="ssCloseInfoModal">×</button>
+        <h2 class="ss-modal-title">
+          <i class="fas fa-info-circle"></i> About SiteSaver
+        </h2>
+        <div class="ss-dev-image-container">
+          <img
+            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjwW5r2b6O2msVy1jyGGPg-jJMnWWKGRwR9Yz0ut3aaeBuL5IKdghn7ZragAeDq9xJ5xXesAbbO6wSVnmbSjirf-FStUR81pqvirdcAy7FbhFs06JQKBzj6uJRlFbCjpcCuhl1Hd-QgMO45ntR4Lxk-Fb8vJHAhRmr9HR4eSvHAmi5SOFG0UvfqjudFGmBN/s2013/1748876414837%20(1).jpg"
+            alt="Developer Devan"
+            class="ss-dev-image"
+            id="ssDevImage"
+          />
+        </div>
+        <p>
+          SiteSaver helps you collect and organize all the fascinating corners
+          of the web you discover. No more lost bookmarks or forgotten links.
+          Build your personal, tagged, and easily accessible library of
+          websites, articles, and tools.
+        </p>
+        <h3>
+          <i class="fas fa-seedling" style="color: var(--ss-accent-medium)"></i>
+          Key Features:
+        </h3>
+        <ul>
+          <li>
+            <i class="fas fa-link"></i> Save any web link with custom titles and
+            descriptions.
+          </li>
+          <li>
+            <i class="fas fa-image"></i> Auto-fetches favicons for visual cues.
+          </li>
+          <li>
+            <i class="fas fa-tags"></i> Organize with flexible tags for powerful
+            filtering.
+          </li>
+          <li>
+            <i class="fas fa-cloud-upload-alt"></i> Your curated links are saved
+            securely online.
+          </li>
+          <li>
+            <i class="fas fa-users"></i> Discover interesting sites shared by
+            the community.
+          </li>
+          <li>
+            <i class="fas fa-leaf"></i> Enjoy a clean, nature-inspired interface
+            with Light/Dark modes.
+          </li>
+        </ul>
+        <p class="ss-developer-credit">
+          <i class="fas fa-leaf"></i> Crafted with
+          <i class="fas fa-heart" style="color: var(--ss-accent-medium)"></i> by
+          <strong>Devan</strong>.
+        </p>
+      </div>
+    </div>
+
+    <div id="ssSiteDetailModal" class="ss-modal">
+      <div class="ss-modal-content">
+        <button class="ss-modal-close" id="ssCloseSiteDetailModal">×</button>
+        <h2 class="ss-modal-title" id="ssSiteDetailDialogTitle">
+          <i class="fas fa-external-link-alt"></i> Site Details
+        </h2>
+        <div id="ssSiteDetailFaviconContainer">
+          <img id="ssSiteDetailFavicon" src="#" alt="Site Favicon" />
+        </div>
+        <div id="ssSiteDetailInfo">
+          <h3 id="ssSiteDetailTitle">Site Title</h3>
+          <p id="ssSiteDetailDescription">Site description goes here...</p>
+          <div id="ssSiteDetailTags"></div>
+        </div>
+        <div class="ss-modal-actions">
+          <button id="ssCopyLinkBtn" class="ss-modal-btn secondary">
+            <i class="fas fa-copy"></i> Copy Link
+          </button>
+          <a href="#" id="ssVisitSiteBtn" target="_blank" class="ss-modal-btn"
+            >Visit Site <i class="fas fa-external-link-square-alt"></i
+          ></a>
+        </div>
+      </div>
+    </div>
+
+    <div id="ssLoginPromptModal" class="ss-modal ss-login-prompt-modal">
+      <div class="ss-modal-content">
+        <button class="ss-modal-close" id="ssCloseLoginPromptModal">×</button>
+        <h2 class="ss-modal-title" id="ssLoginPromptTitle">
+          <i class="fas fa-feather-alt"></i> NO NO NO Baby 👋
+        </h2>
+        <p id="ssLoginPromptMessage">
+          Please log in to curate your web and explore community gems!
+        </p>
+        <button id="ssLoginPromptGoToLoginBtn" class="ss-modal-btn">
+          Login / Sign Up
+        </button>
+      </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyBbrrbGswfzO3K67MivbRNgUS4viJ7s0EY",
+        authDomain: "devvl-31b06.firebaseapp.com",
+        projectId: "devvl-31b06",
+        storageBucket: "devvl-31b06.appspot.com",
+        messagingSenderId: "517697411890",
+        appId: "1:517697411890:web:4e8fa383838a8a2872552b",
+        measurementId: "G-CMNLTED9N0",
+      };
+      firebase.initializeApp(firebaseConfig);
+      const ssAuth = firebase.auth();
+      const ssDb = firebase.firestore();
+      const ssAnalytics = firebase.analytics();
+
+      AOS.init({ duration: 900, once: true, offset: 50 });
+
+      if (document.getElementById("ssGetStartedBtnHero")) {
+        new Typed(".ss-hero-heading .ss-highlight", {
+          strings: ["Digital World", "Knowledge Base", "Inspiration Hub"],
+          typeSpeed: 80,
+          backSpeed: 40,
+          backDelay: 1800,
+          loop: true,
+          smartBackspace: true,
+        });
+      }
+      document.getElementById("ssCurrentYear").textContent =
+        new Date().getFullYear();
+
+      const ssNavbarActions = document.getElementById("ssNavbarActions");
+      const ssGetStartedBtnHero = document.getElementById(
+        "ssGetStartedBtnHero"
+      );
+      const ssAddSiteModal = document.getElementById("ssAddSiteModal");
+      const ssCloseAddSiteModalBtn = document.getElementById(
+        "ssCloseAddSiteModal"
+      );
+      const ssAddSiteForm = document.getElementById("ssAddSiteForm");
+      const ssSiteUrlInput = document.getElementById("ssSiteUrl");
+      const ssSiteFaviconPreviewContainer = document.getElementById(
+        "ssSiteFaviconPreviewContainer"
+      );
+      const ssSiteFaviconPreview = document.getElementById(
+        "ssSiteFaviconPreview"
+      );
+      const ssSiteTitleInput = document.getElementById("ssSiteTitle");
+      const ssSiteDescriptionInput =
+        document.getElementById("ssSiteDescription");
+      const ssSiteTagsInput = document.getElementById("ssSiteTags");
+      const ssFetchDetailsSpinner = document.getElementById(
+        "ssFetchDetailsSpinner"
+      );
+      const ssInfoNavTriggerDesktop = document.getElementById(
+        "ssInfoNavTriggerDesktop"
+      );
+      const ssInfoNavTriggerMobile = document.getElementById(
+        "ssInfoNavTriggerMobile"
+      );
+      const ssInfoModal = document.getElementById("ssInfoModal");
+      const ssCloseInfoModalBtn = document.getElementById("ssCloseInfoModal");
+      const ssDevImage = document.getElementById("ssDevImage");
+      const ssAllNavLinks = document.querySelectorAll(
+        ".ss-navbar-logo-link, #ssNavDesktop .ss-nav-link-item, #ssMobileNavChipLinks .ss-nav-link-item"
+      );
+      const ssSidebarSavedCountEl = document.getElementById(
+        "ssSidebarSavedCount"
+      );
+      const ssBestOfWeekListEl = document.getElementById("ssBestOfWeekList");
+      const ssHomeViewContent = document.getElementById("ssHomeViewContent");
+      const ssFeaturesViewContent = document.getElementById(
+        "ssFeaturesViewContent"
+      );
+      const ssTagsPageViewContent = document.getElementById(
+        "ssTagsPageViewContent"
+      );
+      const ssHomeTagsCarouselSection = document.getElementById(
+        "ssHomeTagsCarouselSection"
+      );
+      const ssHomeSiteGridSection = document.getElementById(
+        "ssHomeSiteGridSection"
+      );
+      const ssHomeTagsCarousel = document.getElementById("ssHomeTagsCarousel");
+      const ssHomeSiteGrid = document.getElementById("ssHomeSiteGrid");
+      const ssNoUserSitesMessage = document.getElementById(
+        "ssNoUserSitesMessage"
+      );
+      const ssHomeSiteGridTitle = document.getElementById(
+        "ssHomeSiteGridTitle"
+      );
+      const ssPublicTagsCarousel = document.getElementById(
+        "ssPublicTagsCarousel"
+      );
+      const ssPublicSiteGrid = document.getElementById("ssPublicSiteGrid");
+      const ssNoPublicSitesMessage = document.getElementById(
+        "ssNoPublicSitesMessage"
+      );
+      const ssPublicSiteGridTitle = document.getElementById(
+        "ssPublicSiteGridTitle"
+      );
+      const ssSiteDetailModal = document.getElementById("ssSiteDetailModal");
+      const ssCloseSiteDetailModalBtn = document.getElementById(
+        "ssCloseSiteDetailModal"
+      );
+      const ssSiteDetailFavicon = document.getElementById(
+        "ssSiteDetailFavicon"
+      );
+      const ssSiteDetailTitle = document.getElementById("ssSiteDetailTitle");
+      const ssSiteDetailDescription = document.getElementById(
+        "ssSiteDetailDescription"
+      );
+      const ssSiteDetailTags = document.getElementById("ssSiteDetailTags");
+      const ssVisitSiteBtn = document.getElementById("ssVisitSiteBtn");
+      const ssCopyLinkBtn = document.getElementById("ssCopyLinkBtn");
+      const ssLoginPromptModal = document.getElementById("ssLoginPromptModal");
+      const ssCloseLoginPromptModalBtn = document.getElementById(
+        "ssCloseLoginPromptModal"
+      );
+      const ssLoginPromptGoToLoginBtn = document.getElementById(
+        "ssLoginPromptGoToLoginBtn"
+      );
+      const ssLoginPromptTitle = document.getElementById("ssLoginPromptTitle");
+      const ssLoginPromptMessage = document.getElementById(
+        "ssLoginPromptMessage"
+      );
+      const ssThemeToggleBtn = document.getElementById("ssThemeToggleBtn");
+      const ssColumnToggleBtn = document.getElementById("ssColumnToggleBtn");
+      const ssColumnOptionsEl = document.getElementById("ssColumnOptions");
+
+      let ssCurrentUser = null;
+      let ssUserSites = [];
+      let ssAllPublicSites = [];
+      let ssUserSitesUnsubscribe = null;
+      let ssPublicSitesUnsubscribe = null;
+      let ssBestOfWeekUnsubscribe = null;
+      let ssCurrentHomeFilter = "all";
+      let ssCurrentPublicFilter = "all";
+      let ssCurrentPublicFilterType = "tag";
+      let ssProfilePopup = null;
+
+      function ssCapitalizeFirstLetter(string) {
+        if (!string) return string;
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      }
+
+      function ssOpenModal(modal) {
+        modal.classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+      function ssCloseModal(modal) {
+        modal.classList.remove("active");
+        document.body.style.overflow = "";
+        if (modal === ssAddSiteModal) {
+          ssAddSiteForm.reset();
+          ssSiteFaviconPreviewContainer.style.display = "none";
+          ssSiteFaviconPreview.src = "#";
+          ssFetchDetailsSpinner.classList.remove("fa-spin");
+        }
+        if (modal === ssLoginPromptModal) {
+          ssLoginPromptTitle.innerHTML =
+            '<i class="fas fa-feather-alt"></i> NO NO NO Baby 👋!';
+          ssLoginPromptMessage.textContent =
+            "Please log in to curate your web and explore community gems!";
+        }
+        if (modal === ssSiteDetailModal && ssCopyLinkBtn) {
+          ssCopyLinkBtn.innerHTML = '<i class="fas fa-copy"></i> Copy Link'; // Reset copy button text
+        }
+      }
+
+      if (ssCloseAddSiteModalBtn)
+        ssCloseAddSiteModalBtn.addEventListener("click", () =>
+          ssCloseModal(ssAddSiteModal)
+        );
+      function ssHandleInfoTrigger(e) {
+        e.preventDefault();
+        ssOpenModal(ssInfoModal);
+      }
+      if (ssInfoNavTriggerDesktop)
+        ssInfoNavTriggerDesktop.addEventListener("click", ssHandleInfoTrigger);
+      if (ssInfoNavTriggerMobile)
+        ssInfoNavTriggerMobile.addEventListener("click", ssHandleInfoTrigger);
+      if (ssCloseInfoModalBtn)
+        ssCloseInfoModalBtn.addEventListener("click", () =>
+          ssCloseModal(ssInfoModal)
+        );
+      if (ssCloseSiteDetailModalBtn)
+        ssCloseSiteDetailModalBtn.addEventListener("click", () =>
+          ssCloseModal(ssSiteDetailModal)
+        );
+      if (ssCloseLoginPromptModalBtn)
+        ssCloseLoginPromptModalBtn.addEventListener("click", () =>
+          ssCloseModal(ssLoginPromptModal)
+        );
+
+      if (ssLoginPromptGoToLoginBtn) {
+        ssLoginPromptGoToLoginBtn.addEventListener("click", () => {
+          ssCloseModal(ssLoginPromptModal);
+          window.location.href = "loginsignup.html";
+        });
+      }
+      window.addEventListener("click", (event) => {
+        if (event.target === ssAddSiteModal) ssCloseModal(ssAddSiteModal);
+        if (event.target === ssInfoModal) ssCloseModal(ssInfoModal);
+        if (event.target === ssSiteDetailModal) ssCloseModal(ssSiteDetailModal);
+        if (event.target === ssLoginPromptModal)
+          ssCloseModal(ssLoginPromptModal);
+
+        if (
+          ssProfilePopup &&
+          ssProfilePopup.classList.contains("active") &&
+          !ssNavbarActions.contains(event.target) &&
+          event.target !== ssProfilePopup &&
+          !ssProfilePopup.contains(event.target)
+        ) {
+          ssProfilePopup.classList.remove("active");
+        }
+        if (
+          ssColumnOptionsEl &&
+          ssColumnOptionsEl.classList.contains("active") &&
+          !ssColumnToggleBtn.contains(event.target) &&
+          !ssColumnOptionsEl.contains(event.target)
+        ) {
+          ssColumnOptionsEl.classList.remove("active");
+        }
+      });
+
+      function ssShowLoginPrompt(userName = null) {
+        let greeting = '<i class="fas fa-feather-alt"></i> NO NO NO Baby 👋!';
+        if (userName)
+          greeting = `<i class="fas fa-feather-alt"></i> Hey ${ssCapitalizeFirstLetter(
+            userName
+          )}!`;
+        ssLoginPromptTitle.innerHTML = greeting;
+        ssOpenModal(ssLoginPromptModal);
+      }
+
+      function ssApplyTheme(theme) {
+        if (theme === "dark") {
+          document.body.classList.add("dark-mode");
+          ssThemeToggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+        } else {
+          document.body.classList.remove("dark-mode");
+          ssThemeToggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+        }
+      }
+      if (ssThemeToggleBtn) {
+        ssThemeToggleBtn.addEventListener("click", () => {
+          const currentTheme = document.body.classList.contains("dark-mode")
+            ? "light"
+            : "dark";
+          localStorage.setItem("ssTheme", currentTheme);
+          ssApplyTheme(currentTheme);
+        });
+      }
+      const ssSavedTheme = localStorage.getItem("ssTheme") || "light";
+      ssApplyTheme(ssSavedTheme);
+
+      if (ssDevImage) {
+        ssDevImage.addEventListener("click", (e) => {
+          for (let i = 0; i < 10; i++) {
+            const leaf = document.createElement("i");
+            const icons = [
+              "fa-leaf",
+              "fa-seedling",
+              "fa-feather-alt",
+              "fa-fan",
+            ];
+            leaf.classList.add(
+              "fas",
+              icons[Math.floor(Math.random() * icons.length)],
+              "ss-heart-particle"
+            );
+            const x =
+              e.clientX -
+              ssDevImage.getBoundingClientRect().left +
+              (Math.random() - 0.5) * 50;
+            const y =
+              e.clientY -
+              ssDevImage.getBoundingClientRect().top +
+              (Math.random() - 0.5) * 50;
+            leaf.style.left = `${x}px`;
+            leaf.style.top = `${y}px`;
+            leaf.style.fontSize = `${0.8 + Math.random() * 0.7}rem`;
+            leaf.style.color = `hsl(${100 + Math.random() * 40}, 60%, 60%)`;
+            ssDevImage.parentElement.appendChild(leaf);
+            setTimeout(() => leaf.remove(), 1500);
+          }
+        });
+      }
+
+      ssAuth.onAuthStateChanged((user) => {
+        ssCurrentUser = user;
+        ssUpdateNavbarForAuthState(user);
+        if (user) {
+          ssNoUserSitesMessage.textContent = "Loading your curated sites...";
+          ssAttachUserSitesListener();
+          if (ssGetStartedBtnHero) {
+            ssGetStartedBtnHero.textContent = "Add New Site Link";
+            ssGetStartedBtnHero.onclick = () => ssOpenModal(ssAddSiteModal);
+          }
+          if (ssHomeTagsCarouselSection)
+            ssHomeTagsCarouselSection.style.display = "block";
+          if (ssHomeSiteGridSection)
+            ssHomeSiteGridSection.style.display = "block";
+          if (ssColumnToggleBtn)
+            ssColumnToggleBtn.style.display = "inline-block";
+        } else {
+          if (ssUserSitesUnsubscribe) ssUserSitesUnsubscribe();
+          ssUserSites = [];
+          ssRenderUserSites();
+          ssRenderUserTags();
+          ssNoUserSitesMessage.textContent =
+            "Login to save and view your curated sites!";
+          if (ssGetStartedBtnHero) {
+            ssGetStartedBtnHero.textContent = "Login to Start Saving";
+            ssGetStartedBtnHero.onclick = () =>
+              (window.location.href = "loginsignup.html");
+          }
+          if (ssSidebarSavedCountEl)
+            ssSidebarSavedCountEl.textContent = "+0 Sites Saved";
+          if (ssHomeTagsCarouselSection)
+            ssHomeTagsCarouselSection.style.display = "none";
+          if (ssHomeSiteGridSection)
+            ssHomeSiteGridSection.style.display = "none";
+          if (ssColumnToggleBtn) ssColumnToggleBtn.style.display = "none";
+          if (ssColumnOptionsEl) ssColumnOptionsEl.classList.remove("active");
+        }
+        ssAttachPublicSitesListener();
+        ssAttachBestOfWeekSitesListener();
+        const ssActiveNavLinkDesktop = document.querySelector(
+          "#ssNavDesktop .ss-nav-link-item.active"
+        );
+        const ssActiveNavLinkMobile = document.querySelector(
+          "#ssMobileNavChipLinks .ss-nav-link-item.active"
+        );
+        const ssCurrentView = ssActiveNavLinkDesktop
+          ? ssActiveNavLinkDesktop.dataset.filter
+          : ssActiveNavLinkMobile
+          ? ssActiveNavLinkMobile.dataset.filter
+          : "all";
+        ssSwitchView(ssCurrentView, true);
+      });
+
+      function ssUpdateNavbarForAuthState(user) {
+        const ssNavbarActionsContainer =
+          document.getElementById("ssNavbarActions");
+        ssNavbarActionsContainer.innerHTML = "";
+        if (ssProfilePopup) {
+          ssProfilePopup.remove();
+          ssProfilePopup = null;
+        }
+
+        if (user) {
+          const addSiteButton = document.createElement("button");
+          addSiteButton.classList.add("ss-btn");
+          addSiteButton.innerHTML =
+            '<i class="fas fa-plus"></i><span class="ss-btn-text"> Add Site</span>';
+          addSiteButton.title = "Add New Site Link";
+          addSiteButton.onclick = () => ssOpenModal(ssAddSiteModal);
+
+          const profileSection = document.createElement("div");
+          profileSection.classList.add("ss-profile-section");
+          const profileIcon = document.createElement("button");
+          profileIcon.classList.add("ss-profile-info-icon");
+          profileIcon.innerHTML = '<i class="fas fa-user-circle"></i>';
+          const userNameForTitle = user.displayName || user.email.split("@")[0];
+          const profileTextDesktop = document.createElement("span");
+          profileTextDesktop.classList.add("ss-profile-info-text");
+          profileTextDesktop.innerHTML = `Hi, <strong>${ssCapitalizeFirstLetter(
+            userNameForTitle
+          )}</strong>`;
+          profileIcon.title = `Logged in as ${ssCapitalizeFirstLetter(
+            userNameForTitle
+          )}`;
+
+          ssProfilePopup = document.createElement("div");
+          ssProfilePopup.classList.add("ss-profile-popup");
+          ssProfilePopup.innerHTML = `
+              <p>Hi, <strong>${ssCapitalizeFirstLetter(
+                userNameForTitle
+              )}</strong>!</p>
+              <p style="font-size:0.8em; color: var(--ss-text-muted);">Logged in as: ${
+                user.email
+              }</p>`;
+          const navbarActionsGroup = document.querySelector(
+            ".ss-navbar-actions-group"
+          );
+          if (navbarActionsGroup)
+            navbarActionsGroup.appendChild(ssProfilePopup);
+
+          profileIcon.addEventListener("click", (e) => {
+            e.stopPropagation();
+            ssProfilePopup.classList.toggle("active");
+          });
+
+          const logoutButton = document.createElement("button");
+          logoutButton.id = "ssLogoutBtn";
+          logoutButton.classList.add("ss-logout-icon-btn");
+          logoutButton.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
+          logoutButton.title = "Logout";
+          logoutButton.addEventListener("click", ssLogoutUser);
+
+          ssNavbarActionsContainer.appendChild(addSiteButton);
+          profileSection.appendChild(profileIcon);
+          profileSection.appendChild(profileTextDesktop);
+          profileSection.appendChild(logoutButton);
+          ssNavbarActionsContainer.appendChild(profileSection);
+        } else {
+          const loginBtn = document.createElement("a");
+          loginBtn.href = "loginsignup.html";
+          loginBtn.classList.add("ss-btn");
+          loginBtn.innerHTML =
+            '<i class="fas fa-sign-in-alt"></i><span class="ss-btn-text"> Login/Up</span>';
+          ssNavbarActionsContainer.appendChild(loginBtn);
+        }
+      }
+
+      function ssLogoutUser() {
+        if (ssProfilePopup) ssProfilePopup.classList.remove("active");
+        ssAuth
+          .signOut()
+          .catch((error) => console.error("SiteSaver Sign out error", error));
+      }
+
+      function ssGetHostname(url) {
+        try {
+          return new URL(url).hostname;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      async function ssFetchSiteDetails(siteUrl) {
+        if (!ssSiteUrlInput.value) return;
+        ssFetchDetailsSpinner.classList.add("fa-spin");
+        ssSiteFaviconPreviewContainer.style.display = "none";
+        const hostname = ssGetHostname(siteUrl);
+        if (hostname) {
+          const faviconUrl = `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://${hostname}&size=64`;
+          try {
+            const response = await fetch(faviconUrl);
+            if (response.ok) {
+              const blob = await response.blob();
+              if (blob.size > 0 && blob.type.startsWith("image/")) {
+                ssSiteFaviconPreview.src = URL.createObjectURL(blob);
+                ssSiteFaviconPreviewContainer.style.display = "block";
+              } else {
+                ssSiteFaviconPreviewContainer.style.display = "none";
+              }
+            } else {
+              ssSiteFaviconPreviewContainer.style.display = "none";
+            }
+          } catch (error) {
+            console.error("Error fetching favicon:", error);
+            ssSiteFaviconPreviewContainer.style.display = "none";
+          }
+          if (!ssSiteTitleInput.value) {
+            let suggestedTitle = hostname.replace(/^www\./, "");
+            suggestedTitle = suggestedTitle.split(".")[0];
+            ssSiteTitleInput.value = ssCapitalizeFirstLetter(suggestedTitle);
+          }
+        } else {
+          alert("Invalid URL format.");
+        }
+        ssFetchDetailsSpinner.classList.remove("fa-spin");
+      }
+
+      if (ssSiteUrlInput)
+        ssSiteUrlInput.addEventListener("change", () =>
+          ssFetchSiteDetails(ssSiteUrlInput.value)
+        );
+
+      async function ssSaveSiteToFirestore(siteData) {
+        if (!ssCurrentUser || !ssCurrentUser.uid) {
+          ssLoginPromptMessage.textContent = "Please log in to save sites.";
+          ssShowLoginPrompt();
+          return;
+        }
+        try {
+          const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+          const siteId = siteData.id || ssDb.collection("dummy").doc().id;
+          const userSiteRef = ssDb
+            .collection("users")
+            .doc(ssCurrentUser.uid)
+            .collection("userSites")
+            .doc(siteId);
+          await userSiteRef.set({
+            ...siteData,
+            id: siteId,
+            userId: ssCurrentUser.uid,
+            addedAt: timestamp,
+          });
+          const publicSiteRef = ssDb.collection("publicSites").doc(siteId);
+          await publicSiteRef.set({
+            ...siteData,
+            id: siteId,
+            userId: ssCurrentUser.uid,
+            addedByUsername:
+              ssCurrentUser.displayName || ssCurrentUser.email.split("@")[0],
+            addedAt: timestamp,
+          });
+          console.log("Site saved to Firestore successfully!");
+        } catch (error) {
+          console.error("Error saving site to Firestore: ", error);
+          alert("Error saving site: " + error.message);
+        }
+      }
+
+      function ssAttachUserSitesListener() {
+        if (!ssCurrentUser) return;
+        if (ssUserSitesUnsubscribe) ssUserSitesUnsubscribe();
+        ssUserSitesUnsubscribe = ssDb
+          .collection("users")
+          .doc(ssCurrentUser.uid)
+          .collection("userSites")
+          .orderBy("addedAt", "desc")
+          .onSnapshot(
+            (snapshot) => {
+              ssUserSites = snapshot.docs.map((doc) => ({
+                firestoreId: doc.id,
+                ...doc.data(),
+              }));
+              if (ssHomeViewContent.style.display === "block") {
+                ssRenderUserSites();
+                ssRenderUserTags();
+              }
+              if (ssSidebarSavedCountEl)
+                ssSidebarSavedCountEl.textContent = `+${ssUserSites.length} Sites Saved`;
+              ssNoUserSitesMessage.style.display =
+                ssUserSites.length === 0 && ssCurrentUser ? "block" : "none";
+              if (ssUserSites.length === 0 && ssCurrentUser)
+                ssNoUserSitesMessage.textContent =
+                  'No sites saved yet. Click "Add Site" to start curating!';
+            },
+            (error) => {
+              console.error("User sites listener error: ", error);
+              ssNoUserSitesMessage.textContent = "Error loading your sites.";
+              ssNoUserSitesMessage.style.display = "block";
+            }
+          );
+      }
+
+      function ssAttachPublicSitesListener() {
+        if (ssPublicSitesUnsubscribe) ssPublicSitesUnsubscribe();
+        ssPublicSitesUnsubscribe = ssDb
+          .collection("publicSites")
+          .orderBy("addedAt", "desc")
+          .onSnapshot(
+            (snapshot) => {
+              ssAllPublicSites = snapshot.docs.map((doc) => ({
+                firestoreId: doc.id,
+                ...doc.data(),
+              }));
+              if (ssTagsPageViewContent.style.display === "block") {
+                ssRenderPublicTags();
+                ssFilterPublicSitesBy(
+                  ssCurrentPublicFilter,
+                  ssCurrentPublicFilterType
+                );
+              }
+            },
+            (error) => console.error("Public sites listener error:", error)
+          );
+      }
+
+      function ssAttachBestOfWeekSitesListener() {
+        if (ssBestOfWeekUnsubscribe) ssBestOfWeekUnsubscribe();
+        ssBestOfWeekUnsubscribe = ssDb
+          .collection("publicSites")
+          .orderBy("addedAt", "desc")
+          .limit(7)
+          .onSnapshot(
+            (snapshot) => {
+              const bestSites = snapshot.docs.map((doc) => ({
+                firestoreId: doc.id,
+                ...doc.data(),
+              }));
+              ssRenderBestOfTheWeekSites(bestSites);
+            },
+            (error) => {
+              console.error("Best of week sites listener error: ", error);
+              if (ssBestOfWeekListEl)
+                ssBestOfWeekListEl.innerHTML =
+                  '<p style="font-size: 0.9rem; color: var(--ss-text-muted); text-align: center;">Error loading sites.</p>';
+            }
+          );
+      }
+
+      if (ssAddSiteForm) {
+        ssAddSiteForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          if (!ssCurrentUser) {
+            ssLoginPromptMessage.textContent = "Please log in to add a site.";
+            ssShowLoginPrompt();
+            return;
+          }
+          const url = ssSiteUrlInput.value;
+          if (!url) {
+            alert("Please enter a valid website URL.");
+            return;
+          }
+          const newSite = {
+            url: url,
+            title: ssSiteTitleInput.value || "Untitled Site",
+            description: ssSiteDescriptionInput.value || "",
+            tags: ssSiteTagsInput.value
+              .split(",")
+              .map((tag) => tag.trim().toLowerCase())
+              .filter((tag) => tag),
+            favicon: ssSiteFaviconPreview.src.startsWith("blob:")
+              ? ssSiteFaviconPreview.src
+              : `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent(
+                  url
+                )}&size=64`,
+          };
+          await ssSaveSiteToFirestore(newSite);
+          ssCloseModal(ssAddSiteModal);
+        });
+      }
+
+      function ssOpenSiteDetailModal(site) {
+        ssSiteDetailFavicon.src =
+          site.favicon ||
+          `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent(
+            site.url
+          )}&size=64`;
+        ssSiteDetailFavicon.onerror = () => {
+          ssSiteDetailFavicon.src =
+            'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="%23B0BEC5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>';
+        };
+        ssSiteDetailTitle.textContent = site.title;
+        ssSiteDetailDescription.textContent =
+          site.description || "No description provided.";
+        ssSiteDetailTags.innerHTML = "";
+        if (site.tags && site.tags.length > 0) {
+          site.tags.forEach((tag) => {
+            const tagSpan = document.createElement("span");
+            tagSpan.classList.add("ss-tag-item");
+            tagSpan.textContent = ssCapitalizeFirstLetter(tag);
+            ssSiteDetailTags.appendChild(tagSpan);
+          });
+        } else {
+          ssSiteDetailTags.innerHTML =
+            '<span style="color: var(--ss-text-muted); font-style: italic;">No tags.</span>';
+        }
+        ssVisitSiteBtn.href = site.url;
+        if (ssCopyLinkBtn) {
+          ssCopyLinkBtn.dataset.urlToCopy = site.url; // Store URL for copy function
+          ssCopyLinkBtn.innerHTML = '<i class="fas fa-copy"></i> Copy Link'; // Reset button text
+        }
+        ssOpenModal(ssSiteDetailModal);
+      }
+
+      if (ssCopyLinkBtn) {
+        ssCopyLinkBtn.addEventListener("click", function () {
+          const urlToCopy = this.dataset.urlToCopy;
+          if (navigator.clipboard && urlToCopy) {
+            navigator.clipboard
+              .writeText(urlToCopy)
+              .then(() => {
+                this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                  this.innerHTML = '<i class="fas fa-copy"></i> Copy Link';
+                }, 2000);
+              })
+              .catch((err) => {
+                console.error("Failed to copy: ", err);
+                alert("Failed to copy link.");
+              });
+          } else {
+            alert("Clipboard API not available or no URL to copy.");
+          }
+        });
+      }
+
+      function ssSetGridColumns(viewType, numColumnsOrListView) {
+        const gridEl = viewType === "home" ? ssHomeSiteGrid : ssPublicSiteGrid;
+        if (!gridEl) return;
+
+        gridEl.classList.remove("list-view"); // Remove list view class first
+        let columnTemplate = "";
+
+        if (numColumnsOrListView === "list") {
+          gridEl.classList.add("list-view");
+          // CSS will handle list view styles, no specific grid-template-columns needed here for list
+          columnTemplate = "1fr"; // Fallback or can be empty if CSS handles it fully
+        } else {
+          const numCols = parseInt(numColumnsOrListView);
+          if (numCols > 0) {
+            columnTemplate = `repeat(${numCols}, 1fr)`;
+          } else {
+            // Default or fallback
+            columnTemplate = "repeat(auto-fill, minmax(300px, 1fr))";
+          }
+        }
+        gridEl.style.gridTemplateColumns = columnTemplate;
+
+        // Update active state on buttons (only for home grid for now as per request)
+        if (viewType === "home" && ssColumnOptionsEl) {
+          ssColumnOptionsEl.querySelectorAll("button").forEach((btn) => {
+            btn.classList.remove("active");
+            if (btn.dataset.columns === numColumnsOrListView.toString()) {
+              btn.classList.add("active");
+            }
+          });
+        }
+        if (viewType === "home") {
+          // Save preference only for home view
+          localStorage.setItem("ssSiteGridColumns", numColumnsOrListView);
+        }
+      }
+
+      if (ssColumnToggleBtn && ssColumnOptionsEl) {
+        ssColumnToggleBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          ssColumnOptionsEl.classList.toggle("active");
+        });
+        ssColumnOptionsEl.addEventListener("click", (e) => {
+          if (e.target.tagName === "BUTTON" && e.target.dataset.columns) {
+            const layoutValue = e.target.dataset.columns;
+            ssSetGridColumns("home", layoutValue);
+            ssColumnOptionsEl.classList.remove("active");
+          }
+        });
+        const ssSavedCols = localStorage.getItem("ssSiteGridColumns");
+        ssSetGridColumns("home", ssSavedCols || "3"); // Default to 3 columns if nothing saved
+      } else {
+        if (ssHomeSiteGrid)
+          ssHomeSiteGrid.style.gridTemplateColumns =
+            "repeat(auto-fill, minmax(300px, 1fr))";
+        if (ssPublicSiteGrid)
+          ssPublicSiteGrid.style.gridTemplateColumns =
+            "repeat(auto-fill, minmax(300px, 1fr))";
+      }
+
+      function ssRenderUserSites() {
+        ssHomeSiteGrid.innerHTML = "";
+        let sitesToDisplay = ssUserSites;
+        if (ssCurrentHomeFilter !== "all") {
+          sitesToDisplay = ssUserSites.filter(
+            (site) => site.tags && site.tags.includes(ssCurrentHomeFilter)
+          );
+        }
+        ssHomeSiteGridTitle.innerHTML =
+          ssCurrentHomeFilter !== "all"
+            ? `<i class="fas fa-tag"></i> Your Sites: "${ssCapitalizeFirstLetter(
+                ssCurrentHomeFilter
+              )}"`
+            : `<i class="fas fa-stream"></i> Your Saved Sites`;
+        if (!ssCurrentUser) {
+          ssNoUserSitesMessage.style.display = "block";
+          ssNoUserSitesMessage.textContent =
+            "Login to save and view your curated sites!";
+          ssHomeSiteGrid.innerHTML = "";
+          ssHomeTagsCarousel.innerHTML = "";
+          return;
+        }
+        if (sitesToDisplay.length === 0) {
+          ssNoUserSitesMessage.style.display = "block";
+          ssNoUserSitesMessage.innerHTML =
+            ssUserSites.length > 0 && ssCurrentHomeFilter !== "all"
+              ? `No sites for filter "${ssCapitalizeFirstLetter(
+                  ssCurrentHomeFilter
+                )}". <a href="#" onclick="ssClearHomeFilter(event); return false;">Clear</a>`
+              : 'No sites saved. Click "Add Site" to start curating!';
+        } else {
+          ssNoUserSitesMessage.style.display = "none";
+          sitesToDisplay.forEach((site) =>
+            ssHomeSiteGrid.appendChild(ssCreateSiteCard(site))
+          );
+        }
+        ssAddSiteCardEventListeners(ssHomeSiteGrid);
+      }
+      function ssClearHomeFilter(event) {
+        if (event) event.preventDefault();
+        ssFilterUserSitesByTag("all");
+      }
+
+      function ssRenderUserTags() {
+        ssHomeTagsCarousel.innerHTML = "";
+        const allTags = new Set();
+        ssUserSites.forEach(
+          (site) => site.tags && site.tags.forEach((tag) => allTags.add(tag))
+        );
+        if (ssCurrentUser && (ssUserSites.length > 0 || allTags.size > 0)) {
+          const allChip = document.createElement("button");
+          allChip.classList.add("ss-tag-chip");
+          allChip.textContent = "All Your Sites";
+          allChip.dataset.tag = "all";
+          if (ssCurrentHomeFilter === "all") allChip.classList.add("active");
+          allChip.addEventListener("click", () =>
+            ssFilterUserSitesByTag("all")
+          );
+          ssHomeTagsCarousel.appendChild(allChip);
+        } else if (!ssCurrentUser) {
+          ssHomeTagsCarousel.innerHTML = "";
+        }
+        allTags.forEach((tag) => {
+          const chip = document.createElement("button");
+          chip.classList.add("ss-tag-chip");
+          chip.textContent = ssCapitalizeFirstLetter(tag);
+          chip.dataset.tag = tag;
+          if (ssCurrentHomeFilter === tag) chip.classList.add("active");
+          chip.addEventListener("click", () => ssFilterUserSitesByTag(tag));
+          ssHomeTagsCarousel.appendChild(chip);
+        });
+      }
+      function ssFilterUserSitesByTag(tag) {
+        ssCurrentHomeFilter = tag;
+        ssRenderUserSites();
+        document
+          .querySelectorAll("#ssHomeTagsCarousel .ss-tag-chip")
+          .forEach((chip) =>
+            chip.classList.toggle("active", chip.dataset.tag === tag)
+          );
+      }
+
+      function ssRenderPublicSites() {
+        if (!ssPublicSiteGrid) return;
+        ssPublicSiteGrid.innerHTML = "";
+        let sitesToDisplay = ssAllPublicSites;
+        if (
+          ssCurrentPublicFilterType === "tag" &&
+          ssCurrentPublicFilter !== "all"
+        ) {
+          sitesToDisplay = ssAllPublicSites.filter(
+            (site) => site.tags && site.tags.includes(ssCurrentPublicFilter)
+          );
+        } else if (
+          ssCurrentPublicFilterType === "user" &&
+          ssCurrentPublicFilter !== "all"
+        ) {
+          sitesToDisplay = ssAllPublicSites.filter(
+            (site) =>
+              site.addedByUsername &&
+              site.addedByUsername.toLowerCase() ===
+                ssCurrentPublicFilter.toLowerCase()
+          );
+        }
+        ssPublicSiteGridTitle.innerHTML =
+          ssCurrentPublicFilter === "all"
+            ? `<i class="fas fa-users"></i> All Community Sites`
+            : ssCurrentPublicFilterType === "user"
+            ? `<i class="fas fa-user-edit"></i> Sites by ${ssCapitalizeFirstLetter(
+                ssCurrentPublicFilter
+              )}`
+            : `<i class="fas fa-tag"></i> Sites: "${ssCapitalizeFirstLetter(
+                ssCurrentPublicFilter
+              )}"`;
+        if (sitesToDisplay.length === 0) {
+          ssNoPublicSitesMessage.style.display = "block";
+          ssNoPublicSitesMessage.innerHTML =
+            ssAllPublicSites.length > 0 && ssCurrentPublicFilter !== "all"
+              ? `No public sites for filter "${ssCapitalizeFirstLetter(
+                  ssCurrentPublicFilter
+                )}". <a href="#" onclick="ssClearPublicFilter(event); return false;">Clear</a>`
+              : "No public sites or matching filter.";
+        } else {
+          ssNoPublicSitesMessage.style.display = "none";
+          sitesToDisplay.forEach((site) =>
+            ssPublicSiteGrid.appendChild(ssCreateSiteCard(site, true))
+          );
+        }
+        ssAddSiteCardEventListeners(ssPublicSiteGrid);
+      }
+      function ssClearPublicFilter(event) {
+        if (event) event.preventDefault();
+        ssFilterPublicSitesBy("all", "tag");
+      }
+
+      function ssRenderPublicTags() {
+        if (!ssPublicTagsCarousel) return;
+        ssPublicTagsCarousel.innerHTML = "";
+        const allRegularTags = new Set();
+        const allUsernames = new Set();
+        ssAllPublicSites.forEach((site) => {
+          if (site.tags) site.tags.forEach((tag) => allRegularTags.add(tag));
+          if (site.addedByUsername) allUsernames.add(site.addedByUsername);
+        });
+        const allChip = document.createElement("button");
+        allChip.classList.add("ss-tag-chip");
+        allChip.textContent = "All Public";
+        allChip.dataset.tag = "all";
+        allChip.dataset.filterType = "tag";
+        if (
+          ssCurrentPublicFilter === "all" &&
+          ssCurrentPublicFilterType === "tag"
+        )
+          allChip.classList.add("active");
+        allChip.addEventListener("click", () =>
+          ssFilterPublicSitesBy("all", "tag")
+        );
+        ssPublicTagsCarousel.appendChild(allChip);
+        allRegularTags.forEach((tag) => {
+          const chip = document.createElement("button");
+          chip.classList.add("ss-tag-chip");
+          chip.textContent = ssCapitalizeFirstLetter(tag);
+          chip.dataset.tag = tag;
+          chip.dataset.filterType = "tag";
+          if (
+            ssCurrentPublicFilter === tag &&
+            ssCurrentPublicFilterType === "tag"
+          )
+            chip.classList.add("active");
+          chip.addEventListener("click", () =>
+            ssFilterPublicSitesBy(tag, "tag")
+          );
+          ssPublicTagsCarousel.appendChild(chip);
+        });
+        allUsernames.forEach((username) => {
+          const chip = document.createElement("button");
+          chip.classList.add("ss-tag-chip", "ss-user-tag");
+          chip.textContent = `by: ${ssCapitalizeFirstLetter(username)}`;
+          chip.dataset.tag = username;
+          chip.dataset.filterType = "user";
+          if (
+            ssCurrentPublicFilter === username &&
+            ssCurrentPublicFilterType === "user"
+          )
+            chip.classList.add("active");
+          chip.addEventListener("click", () =>
+            ssFilterPublicSitesBy(username, "user")
+          );
+          ssPublicTagsCarousel.appendChild(chip);
+        });
+      }
+
+      function ssFilterPublicSitesBy(filterValue, type) {
+        ssCurrentPublicFilter = filterValue;
+        ssCurrentPublicFilterType = type;
+        ssRenderPublicSites();
+        document
+          .querySelectorAll("#ssPublicTagsCarousel .ss-tag-chip")
+          .forEach((chip) => {
+            chip.classList.toggle(
+              "active",
+              chip.dataset.tag === filterValue &&
+                chip.dataset.filterType === type
+            );
+          });
+      }
+
+      function ssCreateSiteCard(site, isPublicCard = false) {
+        const card = document.createElement("div");
+        card.classList.add("ss-site-card");
+        card.setAttribute("data-aos", "zoom-in-up");
+        card.dataset.siteId = site.id;
+        Object.keys(site).forEach((key) => {
+          if (typeof site[key] === "object")
+            card.dataset[key] = JSON.stringify(site[key]);
+          else card.dataset[key] = site[key];
+        });
+        let faviconSrc =
+          site.favicon ||
+          `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent(
+            site.url
+          )}&size=64`;
+        const placeholderFavicon =
+          'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="%23B0BEC5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>';
+        const siteTitleText = site.title
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+
+        const cardHeader = document.createElement("div");
+        cardHeader.classList.add("ss-site-card-favicon-container");
+        cardHeader.innerHTML = `<img src="${faviconSrc}" alt="${siteTitleText} Favicon" class="ss-site-card-favicon" onerror="this.src='${placeholderFavicon}'"> <h3 class="ss-site-card-title-main" title="${siteTitleText}">${siteTitleText}</h3>`;
+
+        const cardContent = document.createElement("div");
+        cardContent.classList.add("ss-site-card-content");
+        cardContent.innerHTML = `
+            ${
+              site.description
+                ? `<p class="ss-site-card-description">${site.description}</p>`
+                : '<p class="ss-site-card-description" style="font-style: italic; color: var(--ss-text-muted);">No description provided.</p>'
+            }
+            <p class="ss-site-card-url">${
+              site.url.length > 50
+                ? site.url.substring(0, 47) + "..."
+                : site.url
+            }</p>
+            ${
+              isPublicCard && site.addedByUsername
+                ? `<small style="font-size:0.8em; color:var(--ss-text-muted); margin-bottom: 0.5rem; display:block;">Added by: ${ssCapitalizeFirstLetter(
+                    site.addedByUsername
+                  )}</small>`
+                : ""
+            }
+            ${
+              site.tags && site.tags.length > 0
+                ? `<div class="ss-site-card-tags">${site.tags
+                    .map(
+                      (tag) =>
+                        `<span class="ss-tag-item">${ssCapitalizeFirstLetter(
+                          tag
+                        )}</span>`
+                    )
+                    .join("")}</div>`
+                : '<div class="ss-site-card-tags"><span class="ss-tag-item" style="background-color: transparent; color: var(--ss-text-muted); font-style:italic; padding-left:0;">No tags</span></div>'
+            }
+        `;
+
+        cardHeader.addEventListener("click", () => ssOpenSiteDetailModal(site));
+        cardContent.addEventListener("click", () =>
+          ssOpenSiteDetailModal(site)
+        );
+
+        card.appendChild(cardHeader);
+        card.appendChild(cardContent);
+        return card;
+      }
+
+      function ssAddSiteCardEventListeners(gridElement) {
+        // Event listeners are now added directly in ssCreateSiteCard for header and content
+        // This function can be kept empty or removed if not used for other purposes later.
+      }
+
+      function ssRenderBestOfTheWeekSites(bestSitesArray) {
+        if (!ssBestOfWeekListEl) return;
+        ssBestOfWeekListEl.innerHTML = "";
+        if (!bestSitesArray || bestSitesArray.length === 0) {
+          ssBestOfWeekListEl.innerHTML =
+            '<p style="font-size: 0.9rem; color: var(--ss-text-muted); text-align: center;">No trending sites yet!</p>';
+          return;
+        }
+        bestSitesArray.forEach((site) => {
+          const item = document.createElement("div");
+          item.classList.add("ss-sidebar-list-site-item");
+          let faviconSrc =
+            site.favicon ||
+            `https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent(
+              site.url
+            )}&size=32`;
+          const placeholderFavicon =
+            'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="%23B0BEC5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>';
+          const siteTitleText = site.title
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+          item.innerHTML = `
+              <img src="${faviconSrc}" alt="${siteTitleText} Favicon" class="ss-sidebar-list-site-item-favicon" onerror="this.src='${placeholderFavicon}'">
+              <div class="ss-sidebar-list-site-item-info">
+                  <h4 class="ss-sidebar-list-site-item-title" title="${siteTitleText}">${siteTitleText}</h4>
+                  <p class="ss-sidebar-list-site-item-url">${
+                    site.url.length > 30
+                      ? site.url.substring(0, 27) + "..."
+                      : site.url
+                  }</p>
+                  ${
+                    site.addedByUsername
+                      ? `<p class="ss-sidebar-list-site-item-added-by">By: ${ssCapitalizeFirstLetter(
+                          site.addedByUsername
+                        )}</p>`
+                      : ""
+                  }
+              </div>`;
+          item.addEventListener("click", () => {
+            if (!ssCurrentUser) {
+              ssLoginPromptMessage.textContent =
+                "Pehle sign in bacha, then explore karo baby 😉";
+              ssOpenModal(ssLoginPromptModal);
+              return;
+            }
+            ssOpenSiteDetailModal(site);
+          });
+          ssBestOfWeekListEl.appendChild(item);
+        });
+      }
+
+      function ssSwitchView(viewName, isInitialLoad = false) {
+        ssHomeViewContent.style.display = "none";
+        ssFeaturesViewContent.style.display = "none";
+        ssTagsPageViewContent.style.display = "none";
+        const heroAndSidebar = ssHomeViewContent.querySelector(
+          ".ss-main-content-layout"
+        );
+        const homeTagsSect = document.getElementById(
+          "ssHomeTagsCarouselSection"
+        );
+        const homeGridSect = document.getElementById("ssHomeSiteGridSection");
+
+        if (viewName === "all") {
+          ssHomeViewContent.style.display = "block";
+          if (heroAndSidebar) heroAndSidebar.style.display = "flex";
+          if (ssCurrentUser) {
+            if (homeTagsSect) homeTagsSect.style.display = "block";
+            if (homeGridSect) homeGridSect.style.display = "block";
+            if (!isInitialLoad || ssUserSites.length > 0)
+              ssFilterUserSitesByTag(ssCurrentHomeFilter);
+          } else {
+            if (homeTagsSect) homeTagsSect.style.display = "none";
+            if (homeGridSect) homeGridSect.style.display = "none";
+            ssRenderUserSites();
+          }
+        } else if (viewName === "features") {
+          ssFeaturesViewContent.style.display = "block";
+        } else if (viewName === "tags_page") {
+          if (!ssCurrentUser && !isInitialLoad) {
+            ssLoginPromptMessage.textContent =
+              "Pehle sign in bacha, then explore community sites baby 😉";
+            ssOpenModal(ssLoginPromptModal);
+            ssAllNavLinks.forEach((l) => l.classList.remove("active"));
+            document
+              .querySelectorAll('.ss-nav-link-item[data-filter="all"]')
+              .forEach((l) => l.classList.add("active"));
+            ssSwitchView("all", true);
+            return;
+          }
+          ssTagsPageViewContent.style.display = "block";
+          if (!isInitialLoad || ssAllPublicSites.length > 0) {
+            ssRenderPublicTags();
+            ssFilterPublicSitesBy(
+              ssCurrentPublicFilter,
+              ssCurrentPublicFilterType
+            );
+          } else if (!ssCurrentUser && isInitialLoad) {
+            ssNoPublicSitesMessage.textContent =
+              "Login to explore sites by tags and users!";
+            ssNoPublicSitesMessage.style.display = "block";
+            if (ssPublicTagsCarousel) ssPublicTagsCarousel.innerHTML = "";
+            if (ssPublicSiteGrid) ssPublicSiteGrid.innerHTML = "";
+          }
+        }
+      }
+
+      ssAllNavLinks.forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const filterValue = e.currentTarget.dataset.filter;
+          if (e.currentTarget.classList.contains("ss-info-icon-trigger")) {
+            ssOpenModal(ssInfoModal);
+            return;
+          }
+          if (filterValue === "tags_page" && !ssCurrentUser) {
+            ssLoginPromptMessage.textContent =
+              "Pehle sign in bacha, then explore community sites baby 😉";
+            ssOpenModal(ssLoginPromptModal);
+            return;
+          }
+          ssAllNavLinks.forEach((l) => l.classList.remove("active"));
+          document
+            .querySelectorAll(`.ss-nav-link-item[data-filter="${filterValue}"]`)
+            .forEach((matchingLink) => {
+              matchingLink.classList.add("active");
+            });
+          if (e.currentTarget.classList.contains("ss-navbar-logo-link")) {
+            document
+              .querySelectorAll(`.ss-nav-link-item[data-filter="all"]`)
+              .forEach((homeLink) => homeLink.classList.add("active"));
+          }
+          ssSwitchView(filterValue);
+        });
+      });
+    </script>
+  </body>
+</html>

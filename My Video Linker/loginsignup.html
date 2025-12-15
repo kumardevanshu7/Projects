@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login / Sign Up - YouTubeSaver</title>
+    <link
+      rel="shortcut icon"
+      href="/assets/login logo.png"
+      type="image/x-icon"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <style>
+      :root {
+        --primary-bg: #f3f9f3;
+        --accent-green-light: #a3d9a5;
+        --accent-green-medium: #77c179;
+        --accent-green-dark: #4caf50;
+        --card-bg: #ffffff;
+        --button-dark-bg: #2c3e50;
+        --button-dark-text: #ffffff;
+        --text-main: #34495e;
+        --text-light: #5f8575;
+        --border-color: #dce8dc;
+        --border-radius-soft: 16px;
+        --border-radius-large: 24px;
+        --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.07);
+        --shadow-medium: 0 8px 24px rgba(0, 0, 0, 0.1);
+        --leaf-icon-color: var(--accent-green-medium);
+        --font-family-main: "Poppins", sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: var(--font-family-main);
+        background-color: var(--primary-bg);
+        color: var(--text-main);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .auth-container {
+        background-color: var(--card-bg);
+        border-radius: var(--border-radius-large);
+        box-shadow: var(--shadow-medium);
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        max-width: 780px;
+        min-height: 520px;
+        display: flex;
+      }
+      .form-container {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        transition: all 0.6s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0 40px;
+        text-align: center;
+      }
+      .form-container form {
+        background-color: var(--card-bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px;
+        height: 100%;
+        width: 100%;
+      }
+      .form-container h1 {
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--accent-green-dark);
+        font-size: 2rem;
+      }
+      .form-container h1 i {
+        margin-right: 10px;
+      }
+      .form-container span {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        margin-bottom: 1rem;
+      }
+      .input-group {
+        background-color: var(--primary-bg);
+        border-radius: var(--border-radius-soft);
+        padding: 0.75rem 1rem;
+        margin: 0.5rem 0;
+        width: 100%;
+        max-width: 320px;
+        display: flex;
+        align-items: center;
+        border: 1px solid var(--border-color);
+      }
+      .input-group i {
+        color: var(--accent-green-medium);
+        margin-right: 10px;
+      }
+      .input-group input {
+        background: none;
+        border: none;
+        outline: none;
+        width: 100%;
+        font-family: var(--font-family-main);
+        font-size: 0.95rem;
+        color: var(--text-main);
+      }
+      .input-group input::placeholder {
+        color: var(--text-light);
+      }
+      .form-container a.forgot-password {
+        color: var(--text-light);
+        font-size: 0.85rem;
+        text-decoration: none;
+        margin: 1rem 0;
+      }
+      .form-container a.forgot-password:hover {
+        color: var(--accent-green-dark);
+        text-decoration: underline;
+      }
+      .form-container button {
+        /* Main form buttons */
+        background-color: var(--accent-green-medium);
+        color: white;
+        font-size: 0.9rem;
+        font-weight: 600;
+        padding: 0.8rem 2.5rem;
+        border: none;
+        border-radius: var(--border-radius-soft);
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        margin-top: 1rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+      .form-container button:hover {
+        background-color: var(--accent-green-dark);
+        transform: translateY(-2px);
+      }
+      .form-container button:active {
+        transform: scale(0.95);
+      }
+      .form-container button:disabled {
+        background-color: var(--text-light);
+        cursor: not-allowed;
+      }
+      .sign-in-container {
+        left: 0;
+        width: 50%;
+        z-index: 2;
+      }
+      .sign-up-container {
+        left: 0;
+        width: 50%;
+        opacity: 0;
+        z-index: 1;
+      }
+      .overlay-container {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        transition: transform 0.6s ease-in-out;
+        z-index: 100;
+      }
+      .overlay {
+        background: linear-gradient(
+          to right,
+          var(--accent-green-medium),
+          var(--accent-green-dark)
+        );
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 0 0;
+        color: #fff;
+        position: relative;
+        left: -100%;
+        height: 100%;
+        width: 200%;
+        transform: translateX(0);
+        transition: transform 0.6s ease-in-out;
+      }
+      .overlay-panel {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 40px;
+        text-align: center;
+        top: 0;
+        height: 100%;
+        width: 50%;
+        transform: translateX(0);
+        transition: transform 0.6s ease-in-out;
+      }
+      .overlay-panel h1 {
+        font-weight: 700;
+        margin-bottom: 1rem;
+        font-size: 2.2rem;
+      }
+      .overlay-panel p {
+        font-size: 0.95rem;
+        font-weight: 300;
+        line-height: 1.5;
+        letter-spacing: 0.5px;
+        margin: 1.5rem 0 2rem;
+      }
+
+      /* --- Enhanced Ghost Button Styling --- */
+      button.ghost-button {
+        background-color: transparent;
+        border: 2px solid #fff;
+        color: #fff;
+        font-size: 0.9rem; /* Match form buttons */
+        font-weight: 600; /* Match form buttons */
+        padding: 0.8rem 2.5rem; /* Match form buttons */
+        border-radius: var(--border-radius-soft); /* Match form buttons */
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease,
+          border-color 0.3s ease;
+        letter-spacing: 0.5px; /* Match form buttons */
+        text-transform: uppercase; /* Match form buttons */
+      }
+      button.ghost-button:hover {
+        background-color: rgba(255, 255, 255, 0.15); /* Subtle hover */
+        border-color: rgba(255, 255, 255, 0.8);
+        transform: translateY(-2px); /* Match form buttons */
+      }
+      button.ghost-button:active {
+        transform: scale(0.95); /* Match form buttons */
+      }
+
+      .overlay-left {
+        transform: translateX(-20%);
+      }
+      .overlay-right {
+        right: 0;
+        transform: translateX(0);
+      }
+      .auth-container.right-panel-active .sign-in-container {
+        transform: translateX(100%);
+      }
+      .auth-container.right-panel-active .sign-up-container {
+        transform: translateX(100%);
+        opacity: 1;
+        z-index: 5;
+        animation: show 0.6s;
+      }
+      .auth-container.right-panel-active .overlay-container {
+        transform: translateX(-100%);
+      }
+      .auth-container.right-panel-active .overlay {
+        transform: translateX(50%);
+      }
+      .auth-container.right-panel-active .overlay-left {
+        transform: translateX(0);
+      }
+      .auth-container.right-panel-active .overlay-right {
+        transform: translateX(20%);
+      }
+      @keyframes show {
+        0%,
+        49.99% {
+          opacity: 0;
+          z-index: 1;
+        }
+        50%,
+        100% {
+          opacity: 1;
+          z-index: 5;
+        }
+      }
+      .back-to-home {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        color: var(--accent-green-dark);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        padding: 8px 12px;
+        background-color: var(--card-bg);
+        border-radius: var(--border-radius-soft);
+        box-shadow: var(--shadow-soft);
+        transition: all 0.3s ease;
+        z-index: 500; /* Below loading popup */
+      }
+      .back-to-home:hover {
+        background-color: var(--accent-green-light);
+        color: var(--text-main);
+        transform: translateX(-3px);
+      }
+      .back-to-home i {
+        margin-right: 5px;
+      }
+      .error-message {
+        color: #e74c3c;
+        font-size: 0.8rem;
+        margin-top: -0.5rem;
+        margin-bottom: 0.5rem;
+        max-width: 320px;
+        text-align: center;
+      }
+
+      /* --- Loading Popup Styles --- */
+      .loading-popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.75);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000; /* Highest z-index */
+        opacity: 0;
+        transition: opacity 0.4s ease-in-out;
+        pointer-events: none;
+      }
+      .loading-popup-overlay.visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .loading-popup-content {
+        background-color: var(--card-bg);
+        padding: 35px 45px;
+        border-radius: var(--border-radius-large);
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        color: var(--text-main);
+        transform: scale(0.8) translateY(20px);
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+          opacity 0.3s ease-in-out;
+        opacity: 0;
+        max-width: 400px;
+      }
+      .loading-popup-overlay.visible .loading-popup-content {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
+      .dev-pic-loader {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 15px;
+        border: 4px solid var(--accent-green-dark);
+        box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+      }
+      .loading-popup-content h2 {
+        color: var(--accent-green-dark);
+        margin-bottom: 10px;
+        font-size: 1.7rem;
+        font-weight: 600;
+      }
+      .loading-popup-content p {
+        font-size: 0.95rem;
+        color: var(--text-light);
+        margin-bottom: 25px;
+        line-height: 1.6;
+      }
+      .loading-popup-content small {
+        display: block;
+        margin-top: 10px;
+        font-size: 0.9rem;
+        color: var(--accent-green-medium);
+      }
+      .leaf-loading-bar-container {
+        width: 100%;
+        max-width: 300px;
+        height: 28px;
+        background-color: var(--primary-bg);
+        border-radius: var(--border-radius-soft);
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+        position: relative;
+        margin: 0 auto 10px auto;
+      }
+      .leaf-loading-bar-progress {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          var(--accent-green-light),
+          var(--accent-green-dark)
+        );
+        border-radius: var(--border-radius-soft);
+        transition: width 0.15s linear;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
+      .leaf-loading-bar-progress .leaf-trail {
+        position: absolute;
+        right: 8px;
+        font-size: 18px;
+        color: white;
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+        transform: scale(0.8);
+      }
+      .leaf-loading-bar-progress .leaf-trail.show {
+        opacity: 0.9;
+        transform: scale(1);
+      }
+      .leaf-loading-bar-progress .leaf-trail::before {
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        content: "\f06c"; /* fa-leaf */
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      }
+
+      @media (max-width: 768px) {
+        .auth-container {
+          max-width: 95%;
+          min-height: auto;
+        }
+        .form-container {
+          width: 100%;
+          position: relative;
+          padding: 20px;
+          min-height: 400px;
+        }
+        .sign-in-container,
+        .sign-up-container {
+          width: 100%;
+          opacity: 1;
+          transform: none !important;
+        }
+        .sign-up-container {
+          display: none;
+        }
+        .overlay-container {
+          display: none;
+        }
+        .auth-container.right-panel-active .sign-in-container {
+          display: none;
+        }
+        .auth-container.right-panel-active .sign-up-container {
+          display: flex;
+        }
+        .mobile-toggle {
+          display: block;
+          text-align: center;
+          margin-top: 1.5rem;
+          font-size: 0.9rem;
+          color: var(--accent-green-dark);
+          cursor: pointer;
+          font-weight: 500;
+        }
+        .mobile-toggle:hover {
+          text-decoration: underline;
+        }
+        /* Loading Popup Responsive */
+        .loading-popup-content {
+          padding: 25px;
+          width: 90%;
+        }
+        .loading-popup-content h2 {
+          font-size: 1.5rem;
+        }
+        .loading-popup-content p {
+          font-size: 0.9rem;
+        }
+      }
+      @media (min-width: 769px) {
+        .mobile-toggle {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="auth-container" id="authContainer">
+      <div class="form-container sign-up-container">
+        <form id="signUpForm" action="#">
+          <h1><i class="fas fa-user-plus"></i> Create Account</h1>
+          <span>Enter your details for registration</span>
+          <div
+            id="signUpError"
+            class="error-message"
+            style="display: none"
+          ></div>
+          <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input
+              type="text"
+              id="signUpUsername"
+              placeholder="Username (unique)"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="signUpEmail" placeholder="Email" required />
+          </div>
+          <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input
+              type="password"
+              id="signUpPassword"
+              placeholder="Password (min. 6 chars)"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <i class="fas fa-check-circle"></i>
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Confirm Password"
+              required
+            />
+          </div>
+          <button type="submit" id="signUpSubmitButton">Sign Up</button>
+          <p class="mobile-toggle" id="mobileSignInLink">
+            Already have an account? Login
+          </p>
+        </form>
+      </div>
+
+      <div class="form-container sign-in-container">
+        <form id="loginForm" action="#">
+          <h1><i class="fas fa-sign-in-alt"></i> Login</h1>
+          <span>Access your saved links</span>
+          <div
+            id="loginError"
+            class="error-message"
+            style="display: none"
+          ></div>
+          <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="loginEmail" placeholder="Email" required />
+          </div>
+          <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input
+              type="password"
+              id="loginPassword"
+              placeholder="Password"
+              required
+            />
+          </div>
+          <a href="#" class="forgot-password">Forgot your password?</a>
+          <button type="submit" id="loginSubmitButton">Login</button>
+          <p class="mobile-toggle" id="mobileSignUpLink">
+            Don't have an account? Sign Up
+          </p>
+        </form>
+      </div>
+
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h1>Welcome Back!</h1>
+            <p>
+              Already have an account? Login to access your saved YouTube links.
+            </p>
+            <button class="ghost-button" id="signInButtonOverlay">Login</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h1>Hello, Friend!</h1>
+            <p>
+              New here? Sign up to start saving and organizing your favorite
+              YouTube videos.
+            </p>
+            <button class="ghost-button" id="signUpButtonOverlay">
+              Sign Up
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="index.html" class="back-to-home"
+      ><i class="fas fa-arrow-left"></i> Back to Home</a
+    >
+
+    <!-- Loading Popup HTML -->
+    <div id="loadingPopup" class="loading-popup-overlay">
+      <div class="loading-popup-content">
+        <!-- !!! REPLACE THIS SRC WITH YOUR ACTUAL PICTURE URL FROM ABOUT PAGE !!! -->
+        <img
+          src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjwW5r2b6O2msVy1jyGGPg-jJMnWWKGRwR9Yz0ut3aaeBuL5IKdghn7ZragAeDq9xJ5xXesAbbO6wSVnmbSjirf-FStUR81pqvirdcAy7FbhFs06JQKBzj6uJRlFbCjpcCuhl1Hd-QgMO45ntR4Lxk-Fb8vJHAhRmr9HR4eSvHAmi5SOFG0UvfqjudFGmBN/s2013/1748876414837%20(1).jpg"
+          alt="Dev"
+          class="dev-pic-loader"
+          onerror="this.src='https://via.placeholder.com/80/4CAF50/FFFFFF?Text=Dev'; this.onerror=null;"
+        />
+        <h2>Thanks for using Dev Site!</h2>
+        <p>We're preparing your awesome experience... Lots of love! 😘</p>
+        <div class="leaf-loading-bar-container">
+          <div class="leaf-loading-bar-progress" id="leafProgressBar">
+            <span class="leaf-trail"></span>
+          </div>
+        </div>
+        <small id="loadingPercentage">Loading... 0%</small>
+      </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+    <script>
+      // Your Firebase Configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBbrrbGswfzO3K67MivbRNgUS4viJ7s0EY", // Your actual API Key
+        authDomain: "devvl-31b06.firebaseapp.com",
+        projectId: "devvl-31b06",
+        storageBucket: "devvl-31b06.firebasestorage.app",
+        messagingSenderId: "517697411890",
+        appId: "1:517697411890:web:4e8fa383838a8a2872552b",
+        measurementId: "G-CMNLTED9N0",
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+
+      const signUpButtonOverlay = document.getElementById(
+        "signUpButtonOverlay"
+      );
+      const signInButtonOverlay = document.getElementById(
+        "signInButtonOverlay"
+      );
+      const authContainer = document.getElementById("authContainer");
+
+      if (signUpButtonOverlay)
+        signUpButtonOverlay.addEventListener("click", () =>
+          authContainer.classList.add("right-panel-active")
+        );
+      if (signInButtonOverlay)
+        signInButtonOverlay.addEventListener("click", () =>
+          authContainer.classList.remove("right-panel-active")
+        );
+
+      const mobileSignUpLink = document.getElementById("mobileSignUpLink");
+      const mobileSignInLink = document.getElementById("mobileSignInLink");
+      const signInFormContainer = document.querySelector(".sign-in-container");
+      const signUpFormContainer = document.querySelector(".sign-up-container");
+
+      function toggleMobileForms(showSignUp) {
+        if (window.innerWidth <= 768) {
+          signInFormContainer.style.display = showSignUp ? "none" : "flex";
+          signUpFormContainer.style.display = showSignUp ? "flex" : "none";
+          if (showSignUp) authContainer.classList.add("right-panel-active");
+          else authContainer.classList.remove("right-panel-active");
+        }
+      }
+      if (mobileSignUpLink)
+        mobileSignUpLink.addEventListener("click", () =>
+          toggleMobileForms(true)
+        );
+      if (mobileSignInLink)
+        mobileSignInLink.addEventListener("click", () =>
+          toggleMobileForms(false)
+        );
+      function handleResponsiveFormDisplay() {
+        if (window.innerWidth <= 768)
+          toggleMobileForms(
+            authContainer.classList.contains("right-panel-active")
+          );
+        else {
+          signInFormContainer.style.display = "";
+          signUpFormContainer.style.display = "";
+        }
+      }
+      window.addEventListener("resize", handleResponsiveFormDisplay);
+      document.addEventListener(
+        "DOMContentLoaded",
+        handleResponsiveFormDisplay
+      );
+
+      const loginForm = document.getElementById("loginForm");
+      const signUpForm = document.getElementById("signUpForm");
+      const loginErrorDiv = document.getElementById("loginError");
+      const signUpErrorDiv = document.getElementById("signUpError");
+      const loginSubmitButton = document.getElementById("loginSubmitButton");
+      const signUpSubmitButton = document.getElementById("signUpSubmitButton");
+
+      function displayError(element, message) {
+        element.textContent = message;
+        element.style.display = "block";
+      }
+      function clearError(element) {
+        element.textContent = "";
+        element.style.display = "none";
+      }
+      function disableButton(button) {
+        button.disabled = true;
+        button.innerHTML += ' <i class="fas fa-spinner fa-spin"></i>';
+      }
+      function enableButton(button, originalText) {
+        button.disabled = false;
+        button.innerHTML = originalText;
+      }
+
+      // --- Loading Popup Elements & Function ---
+      const loadingPopupEl = document.getElementById("loadingPopup");
+      const leafProgressBarEl = document.getElementById("leafProgressBar");
+      const loadingPercentageTextEl =
+        document.getElementById("loadingPercentage");
+
+      function showLoadingPopupAndRedirect(redirectUrl) {
+        if (!loadingPopupEl || !leafProgressBarEl || !loadingPercentageTextEl) {
+          console.warn(
+            "Loading popup elements not found. Redirecting directly."
+          );
+          if (redirectUrl) window.location.href = redirectUrl;
+          return;
+        }
+
+        loadingPopupEl.style.display = "flex"; // Make overlay flex to center content
+        setTimeout(() => loadingPopupEl.classList.add("visible"), 10); // Trigger fade-in class
+
+        let progress = 0;
+        const duration = 4000; // 4 seconds
+        const intervalTime = 40; // Update progress roughly 25 times per second (1000/40)
+        const leafTrail = leafProgressBarEl.querySelector(".leaf-trail");
+
+        if (leafTrail) leafTrail.classList.remove("show"); // Reset leaf trail
+        leafProgressBarEl.style.width = "0%"; // Reset progress bar
+        loadingPercentageTextEl.textContent = "Loading... 0%";
+
+        const interval = setInterval(() => {
+          progress += (intervalTime / duration) * 100;
+          if (progress >= 100) {
+            progress = 100;
+            clearInterval(interval);
+            setTimeout(() => {
+              // Hold 100% for a moment
+              loadingPopupEl.classList.remove("visible");
+              setTimeout(() => {
+                // After fade out animation completes
+                loadingPopupEl.style.display = "none";
+                // Reset for next potential use (though unlikely on this page without reload)
+                leafProgressBarEl.style.width = "0%";
+                loadingPercentageTextEl.textContent = "Loading... 0%";
+                if (leafTrail) leafTrail.classList.remove("show");
+
+                if (redirectUrl) window.location.href = redirectUrl;
+              }, 500); // Match opacity transition duration
+            }, 700); // Show 100% for 0.7s
+          }
+          leafProgressBarEl.style.width = progress + "%";
+          loadingPercentageTextEl.textContent = `Loading... ${Math.round(
+            progress
+          )}%`;
+          if (
+            leafTrail &&
+            progress > 2 &&
+            !leafTrail.classList.contains("show")
+          ) {
+            // Show leaf trail after a bit of progress
+            leafTrail.classList.add("show");
+          }
+        }, intervalTime);
+      }
+
+      if (loginForm) {
+        loginForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          clearError(loginErrorDiv);
+          const originalButtonText = loginSubmitButton.textContent;
+          disableButton(loginSubmitButton);
+          const email = document.getElementById("loginEmail").value;
+          const password = document.getElementById("loginPassword").value;
+          try {
+            await auth.signInWithEmailAndPassword(email, password);
+            // Instead of direct redirect, show loading popup
+            showLoadingPopupAndRedirect("index.html");
+            // The login button remains disabled, page will navigate after popup.
+          } catch (error) {
+            console.error("Login error:", error);
+            displayError(loginErrorDiv, error.message);
+            enableButton(loginSubmitButton, originalButtonText); // Re-enable only on error
+          }
+        });
+      }
+
+      if (signUpForm) {
+        signUpForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          clearError(signUpErrorDiv);
+          const originalButtonText = signUpSubmitButton.textContent;
+          disableButton(signUpSubmitButton);
+          const username = document
+            .getElementById("signUpUsername")
+            .value.trim();
+          const email = document.getElementById("signUpEmail").value;
+          const password = document.getElementById("signUpPassword").value;
+          const confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+          if (password !== confirmPassword) {
+            displayError(signUpErrorDiv, "Passwords do not match!");
+            enableButton(signUpSubmitButton, originalButtonText);
+            return;
+          }
+          if (password.length < 6) {
+            displayError(
+              signUpErrorDiv,
+              "Password must be at least 6 characters long."
+            );
+            enableButton(signUpSubmitButton, originalButtonText);
+            return;
+          }
+          if (!username) {
+            displayError(signUpErrorDiv, "Username cannot be empty.");
+            enableButton(signUpSubmitButton, originalButtonText);
+            return;
+          }
+
+          try {
+            const usernameQuery = await db
+              .collection("usernames")
+              .doc(username.toLowerCase())
+              .get();
+            if (usernameQuery.exists) {
+              displayError(signUpErrorDiv, "Username already taken.");
+              enableButton(signUpSubmitButton, originalButtonText);
+              return;
+            }
+            const userCredential = await auth.createUserWithEmailAndPassword(
+              email,
+              password
+            );
+            const user = userCredential.user;
+            await user.updateProfile({ displayName: username });
+            await db.collection("usernames").doc(username.toLowerCase()).set({
+              userId: user.uid,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+            await db.collection("users").doc(user.uid).set({
+              username: username,
+              email: user.email,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+            // For sign-up, redirect directly as requested (no loading popup)
+            window.location.href = "index.html";
+          } catch (error) {
+            console.error("Sign up error:", error);
+            displayError(signUpErrorDiv, error.message);
+            enableButton(signUpSubmitButton, originalButtonText);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
